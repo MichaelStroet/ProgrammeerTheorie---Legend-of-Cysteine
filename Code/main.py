@@ -64,21 +64,22 @@ Pseudo-code:
 
             for each site a in M_k:
 
-                if monomer k = P:                                               # next monomer is Polar
+                Compute new E_k for monomer k at a
+
+                if k == n:                                                  # Protein is now finished, k == n
                     place monomer k at a
-                    Call Searching(E_k-1, k+1)                                  # the new E_k will always be E_k-1
+
+                    if E_k < E_min:                                         # New lowest energy configuration found
+                        E_min = E_k
+
+                        ¿Een datastructuur voor visualisatie opslaan hier?
+                        (niet noodzakelijk dezelfde als in graph.py)
+
+                if monomer k == P:                                              # next monomer is Polar
+                    place monomer k at a
+                    Call Searching(E_k, k+1)
 
                 else:                                                           # next monomer is Hydrophobic
-                    Compute new E_k for monomer k at a
-
-                    if k == n:                                                  # Protein is now finished, k == n
-                        place monomer k at a
-
-                        if E_k < E_min:                                         # New lowest energy configuration found
-                            E_min = E_k
-
-                            ¿Een datastructuur voor visualisatie opslaan hier?
-                            (niet noodzakelijk dezelfde als in graph.py)
 
                     elif E_k <= U_k:                                            # New energy is lower than the lowest energy yet, very promising!
                         place monomer k at a
