@@ -19,6 +19,6 @@ Eiwitten zijn strengen van aminozuren. Deze kunnen op allerlei manieren gevouwen
 
 In dit experiment proberen wij een eiwit zo stabiel mogelijk te vouwen. Dit gebeurt als de hydrofobe of Cysteine aminozuren tegen over elkaar geplaatst zijn. Polaire aminozuren hebben geen invloed op stabiliteit.
 
-Everts, S. 2017. "Protein folding: Much more intricate than we thought".
+Engstler, J., & Giovambattista, N. (2018). Comparative Study of the Effects of Temperature and Pressure on the Water-Mediated Interactions between Apolar Nanoscale Solutes. The Journal of Physical Chemistry B, 123(5), 1116-1128.
 
-Selkoe, D., J. 2003. "Folding proteins in fatal ways".
+Selkoe, D. J. (2003). Folding proteins in fatal ways. Nature, 426(6968), 900.
