@@ -2,6 +2,14 @@
 # Sophie Stiekema 10992499
 # Michael Stroet  11293284
 
+# voeg de huidige structuur toe aan path
+import os, sys
+
+directory = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(directory, "code"))
+#sys.path.append(os.path.join(directory, "code", "classes"))
+#sys.path.append(os.path.join(directory, "code", "algoritmes"))
+
 from graph import draw_graph
 
 if __name__ == "__main__":
