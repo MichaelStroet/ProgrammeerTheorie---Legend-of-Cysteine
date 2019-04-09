@@ -30,17 +30,8 @@ def read_input():
     return file_lines
 
 
-def create_matrix(length):
-	"""
-	Create a matrix from protein length
-	"""
-
-	pass
-
-
 if __name__ == "__main__":
 	string = 0 
 
 	proteins = read_input()
-	protein_lenght = len(proteins[string])
 
