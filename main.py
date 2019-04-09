@@ -12,7 +12,8 @@ sys.path.append(os.path.join(directory, "code", "algorithms"))
 
 sys.path.append(os.path.join(directory, "data"))
 
-# from graph import draw_graph
+
+from graph import visualise
 from branch_n_bound import branch_n_bound# as bnb
 
 

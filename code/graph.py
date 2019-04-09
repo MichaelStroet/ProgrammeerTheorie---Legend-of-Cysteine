@@ -5,7 +5,7 @@
 import matplotlib.pyplot as plt
 
 
-def draw_graph(protein):
+def visualise(protein):
 
     colors = {
         "H" : "red",
@@ -44,4 +44,4 @@ def draw_graph(protein):
 
 if __name__ == "__main__":
     test_protein = [["H",0,0], ["P",0,1], ["P",1,1], ["H",2,1], ["H",2,0], ["C",2,-1], ["H",1,-1], ["P",0, -1], ["H",-1,-1]]
-    draw_graph(test_protein)
+    visualise(test_protein)
