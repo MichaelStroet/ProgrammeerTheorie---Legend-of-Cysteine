@@ -10,9 +10,10 @@ directory = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(directory, "code"))
 sys.path.append(os.path.join(directory, "code", "algorithms"))
 
+# Add the data
 sys.path.append(os.path.join(directory, "data"))
 
-
+# Import 
 from graph import visualise
 from branch_n_bound import branch_n_bound# as bnb
 
@@ -26,8 +27,11 @@ def read_input():
         file_content = f.read()
         file_lines = file_content.split()
         print(f'lines: {file_lines}\nnumber of lines: {len(file_lines)}\nline 3: {file_lines[2]}')
-
+    return file_lines
 
 
 if __name__ == "__main__":
-	read_input()
+	string = 0 
+
+	proteins = read_input()
+
