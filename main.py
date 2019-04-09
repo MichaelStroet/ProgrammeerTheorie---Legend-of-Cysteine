@@ -10,8 +10,10 @@ directory = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(directory, "code"))
 sys.path.append(os.path.join(directory, "code", "algorithms"))
 
+# Add the data
 sys.path.append(os.path.join(directory, "data"))
 
+# Import 
 from graph import visualise
 from branch_n_bound import branch_n_bound# as bnb
 
@@ -23,10 +25,22 @@ def read_input():
 
     with open("data/input.txt", "r") as f:
         file_content = f.read()
-        print(file_content)
-        print(len(file_content), file_content[2])
+        file_lines = file_content.split()
+        print(f'lines: {file_lines}\nnumber of lines: {len(file_lines)}\nline 3: {file_lines[2]}')
+    return file_lines
 
+
+def create_matrix(length):
+	"""
+	Create a matrix from protein length
+	"""
+
+	pass
 
 
 if __name__ == "__main__":
-    pass
+	string = 0 
+
+	proteins = read_input()
+	protein_lenght = len(proteins[string])
+
