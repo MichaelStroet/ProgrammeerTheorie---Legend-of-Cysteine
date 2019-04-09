@@ -12,7 +12,7 @@ sys.path.append(os.path.join(directory, "code", "algorithms"))
 
 sys.path.append(os.path.join(directory, "data"))
 
-from graph import draw_graph
+# from graph import draw_graph
 from branch_n_bound import branch_n_bound# as bnb
 
 
@@ -23,10 +23,10 @@ def read_input():
 
     with open("data/input.txt", "r") as f:
         file_content = f.read()
-        print(file_content)
-        print(len(file_content), file_content[2])
+        file_lines = file_content.split()
+        print(f'lines: {file_lines}\nnumber of lines: {len(file_lines)}\nline 3: {file_lines[2]}')
 
 
 
 if __name__ == "__main__":
-    pass
+	read_input()
