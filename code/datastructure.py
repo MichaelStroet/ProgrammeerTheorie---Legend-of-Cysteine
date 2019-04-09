@@ -14,6 +14,7 @@ class protein():
         matrix_size = 2 * protein_length - 1
 
         self.acids = np.zeros((matrix_size, matrix_size))
+        self.acids[1][2] = 12
 
     def __str__(self):
         """Returns a string representation of the item"""
@@ -35,6 +36,20 @@ Representatie?
     Coordinaten
 '''
 
+
+def matrix_location(i, protein_length):
+	"""
+	Retrieve the matrix location from number
+	"""
+	column = i % protein_length
+	row = np.floor(i / protein_length)
+	return(column, row)
+
+
 if __name__ == "__main__":
-    lol = protein(5)
-    print(lol)
+	location = 12
+	protein_length = 5
+	matrix = protein(protein_length)
+	print(matrix)
+	print(matrix_location(location, protein_length))
+
