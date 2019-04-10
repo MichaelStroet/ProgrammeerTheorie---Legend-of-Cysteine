@@ -4,7 +4,7 @@
 
 import numpy as np
 
-class protein():
+class protein:
 
     def __init__(self, protein_length):
         '''
@@ -19,6 +19,15 @@ class protein():
 
         print(self.acids)
         return ""
+
+    def add_acid(self, type, position, connection):
+        pass
+
+    def get_acid(self, postition):
+        pass
+
+    def visualise(self):
+        pass
 
 
 class acid:
@@ -38,6 +47,12 @@ class acid:
 
         return f"Amino acid of type {self.type} at matrix point {self.position} and is connected to other acids in the {self.connections} direction(s)."
 
+    def check_energy(self):
+        pass
+
+    def add_connection(self, connection):
+        if not connection in self.connections:
+            self.connections.append(connection)
 
 
 def matrix_location(i, protein_length):
