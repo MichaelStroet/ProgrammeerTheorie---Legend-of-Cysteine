@@ -17,8 +17,17 @@ class protein:
 
     def __str__(self):
 
-        print(self.acids)
-        return ""
+        string_matrix = ""
+        length = len(self.acids[0])
+
+        for row in self.acids:
+            string_matrix += f"[{row[0]}"
+            for i in range(1, length):
+                string_matrix += f" {row[i]}"
+
+            string_matrix += "]\n"
+            
+        return string_matrix
 
     def add_acid(self, type, position, connection):
         pass
@@ -44,8 +53,7 @@ class acid:
         """
         Returns a string representation of the amino acid
         """
-
-        return f"Amino acid of type {self.type} at matrix point {self.position} and is connected to other acids in the {self.connections} direction(s)."
+        return self.type
 
     def check_energy(self):
         pass
@@ -78,4 +86,4 @@ if __name__ == "__main__":
     print(matrix.acids[2, 2])
 
     matrix.acids[1,1] = aminozuur
-    print(matrix.acids)
+    print(matrix)
