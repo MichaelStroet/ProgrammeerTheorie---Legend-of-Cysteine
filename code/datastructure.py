@@ -5,7 +5,6 @@
 import numpy as np
 
 class protein():
-    pass
 
     def __init__(self, protein_length):
         '''
@@ -17,24 +16,28 @@ class protein():
         self.acids[1][2] = 12
 
     def __str__(self):
-        """Returns a string representation of the item"""
 
-        test = self.acids.tostring()
-        test2 = np.fromstring(test)
-        print(test)
-        print(test2)
         print(self.acids)
-        return "nope"
+        return ""
 
 
 class acid:
-    pass
 
-'''
-Representatie?
-    Matrix
-    Coordinaten
-'''
+    def __init__(self, type, position, connection):
+        '''
+        Initialise an amino acid
+        '''
+        self.type = type
+        self.position = position
+        self.connections = [connection]
+
+    def __str__(self):
+        """
+        Returns a string representation of the amino acid
+        """
+
+        return f"Amino acid of type {self.type} at matrix point {self.position} and is connected to other acids in the {self.connections} direction(s)."
+
 
 
 def matrix_location(i, protein_length):
@@ -52,4 +55,3 @@ if __name__ == "__main__":
 	matrix = protein(protein_length)
 	print(matrix)
 	print(matrix_location(location, protein_length))
-
