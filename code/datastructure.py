@@ -12,8 +12,8 @@ class protein():
         '''
         matrix_size = 2 * protein_length - 1
 
-        self.acids = np.zeros((matrix_size, matrix_size))
-        self.acids[1][2] = 12
+        self.acids = np.zeros((matrix_size, matrix_size), dtype = acid)
+        self.acids[2][2] = 12
 
     def __str__(self):
 
@@ -50,8 +50,17 @@ def matrix_location(i, protein_length):
 
 
 if __name__ == "__main__":
-	location = 12
-	protein_length = 5
-	matrix = protein(protein_length)
-	print(matrix)
-	print(matrix_location(location, protein_length))
+    location = 12
+    protein_length = 5
+    matrix = protein(protein_length)
+    print(matrix)
+    print(matrix_location(location, protein_length))
+
+    aminozuur = acid("H", location, "up")
+    print(aminozuur)
+
+    print(matrix.acids[2][2])
+    print(matrix.acids[2, 2])
+
+    matrix.acids[1,1] = aminozuur
+    print(matrix.acids)
