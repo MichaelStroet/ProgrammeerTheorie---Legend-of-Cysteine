@@ -4,49 +4,15 @@
 
 import numpy as np
 
-class protein:
 
-    def __init__(self, protein_length):
-        '''
-        Initialise a n x n matrix
-        '''
-        matrix_size = 2 * protein_length - 1
-
-        self.acids = np.zeros((matrix_size, matrix_size), dtype = acid)
-        self.acids[2][2] = 12
-
-    def __str__(self):
-
-        string_matrix = ""
-        length = len(self.acids[0])
-
-        for row in self.acids:
-            string_matrix += f"[{row[0]}"
-            for i in range(1, length):
-                string_matrix += f" {row[i]}"
-
-            string_matrix += "]\n"
-            
-        return string_matrix
-
-    def add_acid(self, type, position, connection):
-        pass
-
-    def get_acid(self, postition):
-        pass
-
-    def visualise(self):
-        pass
-
-
-class acid:
+class Acid:
 
     def __init__(self, type, position, connection):
         '''
         Initialise an amino acid
         '''
         self.type = type
-        self.position = position
+        self.position = [position[0], position[1]] # [row,column]
         self.connections = [connection]
 
     def __str__(self):
@@ -63,27 +29,62 @@ class acid:
             self.connections.append(connection)
 
 
+class Protein:
+
+    def __init__(self, protein_length):
+        '''
+        Initialise a n x n matrix
+        '''
+        matrix_size = 2 * protein_length - 1
+
+        self.acids = np.zeros((matrix_size, matrix_size), dtype = Acid)
+
+    def __str__(self):
+
+        string_matrix = ""
+        length = len(self.acids[0])
+
+        for row in self.acids:
+            string_matrix += f"[{row[0]}"
+            for i in range(1, length):
+                string_matrix += f" {row[i]}"
+
+            string_matrix += "]\n"
+
+        return string_matrix
+
+    def add_acid(self, type, position, connection):
+        acid = Acid(type, position, connection)
+        self.acids[position[0], position[1]] = acid
+
+    def get_acid(self, postition):
+        pass
+
+    def visualise(self):
+        pass
+
+
 def matrix_location(i, protein_length):
 	"""
 	Retrieve the matrix location from number
 	"""
 	column = i % protein_length
 	row = np.floor(i / protein_length)
-	return(column, row)
+	return [row, column]
 
 
 if __name__ == "__main__":
-    location = 12
-    protein_length = 5
-    matrix = protein(protein_length)
-    print(matrix)
-    print(matrix_location(location, protein_length))
 
-    aminozuur = acid("H", location, "up")
-    print(aminozuur)
+    test_protein = [["H",0,0], ["P",0,1], ["P",1,1], ["H",2,1], ["H",2,0], ["C",2,-1], ["H",1,-1], ["P",0, -1], ["H",-1,-1]]
+    length_total = len(test_protein)
 
-    print(matrix.acids[2][2])
-    print(matrix.acids[2, 2])
+    protein = Protein(length_total)
+    start_location = length_total - 1
 
-    matrix.acids[1,1] = aminozuur
-    print(matrix)
+    for acid in test_protein:
+        type = acid[0]
+        row = start_location - acid[2]
+        column = start_location + acid[1]
+        protein.add_acid(type, [row, column], "up")
+
+    print(protein)
