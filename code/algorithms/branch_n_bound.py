@@ -46,20 +46,21 @@ def searching(amino_acid, energy_current, length_partial, energy_min_all, energy
 
         #see possible_sites for monomer k (see whether matrix box left, up & right are empty, if so store adresses in list)
 
-        possible_sites = []
+        locations = []
         location_bottom = [previous_location[0]+1 ,previous_location[1]]
+        locations.append(location_bottom)
         location_top = [previous_location[0]-1 ,previous_location[1]]
+        locations.append(location_top)
         location_right = [previous_location[0] ,previous_location[1]+1]
+        locations.append(location_right)
         location_left = [previous_location[0] ,previous_location[1]-1]
+        locations.append(location_left)
 
-    #if location_bottom == 0:
-        possible_sites.append(location_bottom)
-    #if location_top == 0:
-        possible_sites.append(location_top)
-    #if location_right == 0:
-        possible_sites.append(location_right)
-    #if location_left == 0:
-        possible_sites.append(location_left)
+        possible_sites = []
+
+        for loc in locations:
+            #if loc == 0:
+            possible_sites.append(loc)
 
         print(possible_sites)
 
