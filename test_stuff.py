@@ -16,7 +16,6 @@ sys.path.append(os.path.join(directory, "data"))
 # Import
 from graph import visualise
 from branch_n_bound import branch_n_bound
-from datastructure import protein, acid
 
 def read_input():
     '''

@@ -1,5 +1,6 @@
 import numpy as np
 
+from datastructure import Protein, Acid
 '''
 09/04
 ಠ_ಠ
