@@ -6,7 +6,6 @@ import numpy as np
 TO DO:
     get matrix positions for possible_sites
     implement energy function
-    update energy_min_partial & energy_average_partial each time
     ¬_¬
 '''
 
@@ -15,23 +14,53 @@ def branch_n_bound(protein_string):
     global protein, length_total, prob_1, prob_2
     protein = protein_string
     length_partial = 3
-    amino_acid = protein[length_partial - 1]
+    amino_acid = protein[2]
     length_total = len(protein)
     energy_current = 0
     energy_min_all = 0
-    energy_min_partial = 0
-    energy_average_partial = 0
+    energy_min_partial = [0] * length_total
+    average_list = [[] for i in range(length_total)]
+
     prob_1 = 0.8
     prob_2 = 0.5
-    searching(amino_acid, energy_current, length_partial, energy_min_all, energy_min_partial, energy_average_partial)
+
+    start_location = [length_total - 1, length_total - 1]
+
+    #place first & second amino acid underneath [row, column]
+    place(protein[0], start_location)
+    previous_location = start_location
+    location = [previous_location[0] + 1, previous_location[1]]
+    place(protein[1], location)
+    previous_location = location
+
+    #call searching function
+    searching(amino_acid, energy_current, length_partial, energy_min_all, energy_min_partial, average_list, previous_location)
 
 def place(amino_acid, site):
         print("place ",amino_acid," at ",site)
 
-def searching(amino_acid, energy_current, length_partial, energy_min_all, energy_min_partial, energy_average_partial):
+
+def searching(amino_acid, energy_current, length_partial, energy_min_all, energy_min_partial, average_list, previous_location):
+
 
         #see possible_sites for monomer k (see whether matrix box left, up & right are empty, if so store adresses in list)
-        possible_sites = [48,38,50]
+
+        possible_sites = []
+        location_bottom = [previous_location[0]+1 ,previous_location[1]]
+        location_top = [previous_location[0]-1 ,previous_location[1]]
+        location_right = [previous_location[0] ,previous_location[1]+1]
+        location_left = [previous_location[0] ,previous_location[1]-1]
+
+    #if location_bottom == 0:
+        possible_sites.append(location_bottom)
+    #if location_top == 0:
+        possible_sites.append(location_top)
+    #if location_right == 0:
+        possible_sites.append(location_right)
+    #if location_left == 0:
+        possible_sites.append(location_left)
+
+        print(possible_sites)
 
         if possible_sites:
 
@@ -40,11 +69,17 @@ def searching(amino_acid, energy_current, length_partial, energy_min_all, energy
                 print(site)
                 energy_current +=1
 
+                #update list for average energy & calculate average
+                average_list[length_partial - 1].append(energy_current)
+                energy_average_partial = np.average(average_list[length_partial - 1])
+                print(average_list, energy_average_partial)
+
                 #place the monomer and update the energy
 
                 #if it is the last monomer
                 if length_partial == length_total:
                     place(amino_acid, site)
+                    previous_location = site
                     length_partial +=1
 
                     #update lowest energy among all completed proteins
@@ -55,19 +90,23 @@ def searching(amino_acid, energy_current, length_partial, energy_min_all, energy
                 #if it is a polar monomer
                 elif amino_acid == "P":
                     place(amino_acid, site)
+                    previous_location = site
                     length_partial +=1
                     amino_acid = protein[length_partial - 1]
-                    searching(amino_acid, energy_current, length_partial, energy_min_all, energy_min_partial, energy_average_partial)
+                    searching(amino_acid, energy_current, length_partial, energy_min_all, energy_min_partial, average_list, previous_location)
 
                 #if it is a hydrophobic monomer
                 else:
 
                     #if the curent energy is equal to or below the lowest energy of the partial protein
-                    if energy_current <= energy_min_partial:
+                    if energy_current <= energy_min_partial[length_partial - 1]:
+                        energy_min_partial[length_partial - 1] = energy_current
+                        print(energy_min_partial)
                         place(amino_acid, site)
+                        previous_location = site
                         length_partial +=1
                         amino_acid = protein[length_partial - 1]
-                        searching(amino_acid, energy_current, length_partial, energy_min_all, energy_min_partial, energy_average_partial)
+                        searching(amino_acid, energy_current, length_partial, energy_min_all, energy_min_partial, average_list, previous_location)
 
                     #if the curent energy is equal to or below the average energy of all partial proteins
                     elif energy_current <= energy_average_partial:
@@ -75,18 +114,20 @@ def searching(amino_acid, energy_current, length_partial, energy_min_all, energy
 
                         if r > prob_2:
                             place(amino_acid, site)
+                            previous_location = site
                             length_partial +=1
                             amino_acid = protein[length_partial - 1]
-                            searching(amino_acid, energy_current, length_partial, energy_min_all, energy_min_partial, energy_average_partial)
+                            searching(amino_acid, energy_current, length_partial, energy_min_all, energy_min_partial, average_list, previous_location)
 
                     #if the curent energy is bigger than the average energy of all partial proteins
                     else:
                         r = np.random.random(1)[0]
                         if r > prob_1:
                             place(amino_acid, site)
+                            previous_location = site
                             length_partial +=1
                             amino_acid = protein[length_partial - 1]
-                            searching(amino_acid, energy_current, length_partial, energy_min_all, energy_min_partial, energy_average_partial)
+                            searching(amino_acid, energy_current, length_partial, energy_min_all, energy_min_partial, average_list, previous_location)
 
 
 
