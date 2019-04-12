@@ -44,7 +44,6 @@ def branch_n_bound(protein_string):
 
     print(protein)
 
-    protein.length = 2
     amino_acid = protein_string[2]
     new_protein = copy.deepcopy(protein)
 
@@ -54,7 +53,6 @@ def branch_n_bound(protein_string):
 def searching(protein, amino_acid, energy_min_all, energy_min_partial, average_list, previous_location):
 
         new_protein = copy.deepcopy(protein)
-        new_protein.length +=1
         print("length:",new_protein.length)
 
         #see possible_sites for monomer k (see whether matrix box left, up & right are empty, if so store adresses in list)
@@ -97,19 +95,19 @@ def searching(protein, amino_acid, energy_min_all, energy_min_partial, average_l
                 #if it is the last monomer
                 if new_protein.length == length_total:
                     new_protein.add_acid(amino_acid, site, "")
-                    print(new_protein)
+                    print("last",new_protein)
 
                     previous_location = site
 
                     #update lowest energy among all completed proteins
                     if new_protein.energy < energy_min_all:
                         energy_min_all = new_protein.energy
-                    return
+                        return
 
                 #if it is a polar monomer
                 elif amino_acid == "P":
                     new_protein.add_acid(amino_acid, site, "")
-                    print(new_protein)
+                    print("p",new_protein)
 
                     previous_location = site
                     amino_acid = protein_str[new_protein.length - 1]
@@ -123,7 +121,7 @@ def searching(protein, amino_acid, energy_min_all, energy_min_partial, average_l
                         energy_min_partial[new_protein.length - 1] = new_protein.energy
                         #print(energy_min_partial)
                         new_protein.add_acid(amino_acid, site, "")
-                        print(new_protein)
+                        print("h",new_protein)
 
                         previous_location = site
                         amino_acid = protein_str[new_protein.length - 1]
@@ -135,7 +133,7 @@ def searching(protein, amino_acid, energy_min_all, energy_min_partial, average_l
 
                         if r > prob_below_average:
                             new_protein.add_acid(amino_acid, site, "")
-                            print(new_protein)
+                            print("h",new_protein)
 
                             previous_location = site
                             amino_acid = protein_str[new_protein.length - 1]
@@ -146,12 +144,14 @@ def searching(protein, amino_acid, energy_min_all, energy_min_partial, average_l
                         r = np.random.random()
                         if r > prob_above_average:
                             new_protein.add_acid(amino_acid, site, "")
-                            print(new_protein)
+                            print("h",new_protein)
 
                             previous_location = site
                             amino_acid = protein_str[new_protein.length - 1]
                             searching(new_protein, amino_acid, energy_min_all, energy_min_partial, average_list, previous_location)
 
+        else:
+            print("no sites")
 
 
 if __name__ == "__main__":
