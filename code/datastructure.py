@@ -20,6 +20,7 @@ class Acid:
         Returns a string representation of the amino acid
         """
         arrows = {
+            "" : "",
             "up" : "↑",
             "down" : "↓",
             "left" : "←",

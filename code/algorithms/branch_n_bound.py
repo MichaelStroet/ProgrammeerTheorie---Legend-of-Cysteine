@@ -36,10 +36,10 @@ def branch_n_bound(protein_string):
 
     #place first & second amino acid underneath [row, column]
     start_location = [length_total - 1, length_total - 1]
-    protein.add_acid(protein_string[0], start_location, "connection")
+    protein.add_acid(protein_string[0], start_location,"")
     previous_location = start_location
     location = [previous_location[0] + 1, previous_location[1]]
-    protein.add_acid(protein_string[1], location, "connection")
+    protein.add_acid(protein_string[1], location, "")
     previous_location = location
 
     print(protein)
@@ -68,8 +68,9 @@ def searching(protein, amino_acid, energy_current, length_partial, energy_min_al
         possible_sites = []
 
         for loc in locations:
-            #if loc == 0:
-            possible_sites.append(loc)
+            print(loc)
+            if loc == 0:
+                possible_sites.append(loc)
 
         print(possible_sites)
 
@@ -89,7 +90,7 @@ def searching(protein, amino_acid, energy_current, length_partial, energy_min_al
 
                 #if it is the last monomer
                 if length_partial == length_total:
-                    protein.add_acid(amino_acid, site, "connection")
+                    protein.add_acid(amino_acid, site, "up")
                     print(protein)
 
                     previous_location = site
@@ -102,7 +103,7 @@ def searching(protein, amino_acid, energy_current, length_partial, energy_min_al
 
                 #if it is a polar monomer
                 elif amino_acid == "P":
-                    protein.add_acid(amino_acid, site, "connection")
+                    protein.add_acid(amino_acid, site, "down")
                     print(protein)
 
                     previous_location = site
@@ -117,7 +118,7 @@ def searching(protein, amino_acid, energy_current, length_partial, energy_min_al
                     if energy_current <= energy_min_partial[length_partial - 1]:
                         energy_min_partial[length_partial - 1] = energy_current
                         print(energy_min_partial)
-                        protein.add_acid(amino_acid, site, "connection")
+                        protein.add_acid(amino_acid, site, "")
                         print(protein)
 
                         previous_location = site
@@ -130,7 +131,7 @@ def searching(protein, amino_acid, energy_current, length_partial, energy_min_al
                         r = np.random.random()
 
                         if r > prob_below_average:
-                            protein.add_acid(amino_acid, site, "connection")
+                            protein.add_acid(amino_acid, site, "")
                             print(protein)
 
                             previous_location = site
@@ -142,7 +143,7 @@ def searching(protein, amino_acid, energy_current, length_partial, energy_min_al
                     else:
                         r = np.random.random()
                         if r > prob_above_average:
-                            protein.add_acid(amino_acid, site, "connection")
+                            protein.add_acid(amino_acid, site, "")
                             print(protein)
 
                             previous_location = site
