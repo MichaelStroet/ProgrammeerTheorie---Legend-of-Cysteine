@@ -116,7 +116,7 @@ def searching(amino_acid, energy_current, length_partial, energy_min_all, energy
 
                     #if the curent energy is equal to or below the average energy of all partial proteins
                     elif energy_current <= energy_average_partial:
-                        r = np.random.random(1)[0]
+                        r = np.random.random()
 
                         if r > prob_below_average:
                             place(amino_acid, site)
@@ -127,7 +127,7 @@ def searching(amino_acid, energy_current, length_partial, energy_min_all, energy
 
                     #if the curent energy is bigger than the average energy of all partial proteins
                     else:
-                        r = np.random.random(1)[0]
+                        r = np.random.random()
                         if r > prob_above_average:
                             place(amino_acid, site)
                             previous_location = site
