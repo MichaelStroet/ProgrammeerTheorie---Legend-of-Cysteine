@@ -66,13 +66,15 @@ def searching(protein, amino_acid, energy_current, length_partial, energy_min_al
         locations.append(location_left)
 
         possible_sites = []
+        print(locations)
 
         for loc in locations:
             print(loc)
-            if loc == 0:
+            print(protein.acids[loc[0],loc[1]])
+            if protein.acids[loc[0],loc[1]] == 0:
                 possible_sites.append(loc)
 
-        print(possible_sites)
+        print("possible sites are",possible_sites)
 
         if possible_sites:
 
@@ -90,7 +92,7 @@ def searching(protein, amino_acid, energy_current, length_partial, energy_min_al
 
                 #if it is the last monomer
                 if length_partial == length_total:
-                    protein.add_acid(amino_acid, site, "up")
+                    protein.add_acid(amino_acid, site, "")
                     print(protein)
 
                     previous_location = site
@@ -103,7 +105,7 @@ def searching(protein, amino_acid, energy_current, length_partial, energy_min_al
 
                 #if it is a polar monomer
                 elif amino_acid == "P":
-                    protein.add_acid(amino_acid, site, "down")
+                    protein.add_acid(amino_acid, site, "")
                     print(protein)
 
                     previous_location = site
