@@ -16,6 +16,7 @@ sys.path.append(os.path.join(directory, "data"))
 # Import
 from graph import visualise
 from branch_n_bound import branch_n_bound
+from random_walk import random_walk
 
 def read_input():
     '''
@@ -30,4 +31,4 @@ def read_input():
 
 
 if __name__ == "__main__":
-    branch_n_bound("HHPHHHPH")
+    random_walk("HHPHHHPH")
