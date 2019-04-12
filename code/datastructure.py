@@ -4,7 +4,6 @@
 
 import numpy as np
 
-
 class Acid:
 
     def __init__(self, type, position, connection):
@@ -16,9 +15,9 @@ class Acid:
         self.connections = [connection]
 
     def __str__(self):
-        """
+        '''
         Returns a string representation of the amino acid
-        """
+        '''
         arrows = {
             "" : "",
             "up" : "↑",
@@ -27,9 +26,6 @@ class Acid:
             "right" : "→",
         }
         return f"{self.type}{arrows[self.connections[0]]}"
-
-    def check_energy(self):
-        pass
 
     def add_connection(self, connection):
         if not connection in self.connections:
@@ -49,7 +45,9 @@ class Protein:
         self.length = 0
 
     def __str__(self):
-
+        '''
+        Returns a string representation of the acids matrix
+        '''
         string_matrix = ""
         length = len(self.acids[0])
 
@@ -63,21 +61,54 @@ class Protein:
         return string_matrix
 
     def add_acid(self, type, position, connection):
+        '''
+        Adds an acid object to the acids matrix
+        '''
         acid = Acid(type, position, connection)
         self.acids[position[0], position[1]] = acid
         self.length += 1
 
+    def neighbors(self, location):
+        '''
+        Gets the four neighboring acid objects from a central acids
+        '''
+        directions = ["up", "down", "left", "right"]
+        neighbor_acids = []
+
+        for direction in directions:
+            if direction == "up":
+                new_location = [location[0] - 1, location[1]]
+            elif direction == "down":
+                new_location = [location[0] + 1, location[1]]
+            elif direction == "left":
+                new_location = [location[0], location[1] - 1]
+            else:
+                new_location = [location[0], location[1] + 1]
+
+            acid = self.acids[new_location[0], new_location[1]]
+
+            neighbor_acids.append([direction, acid])
+
+        return neighbor_acids
+
+    def check_energy(self, location):
+        '''
+        Calculates the energy of a specific amino acids
+        '''
+        central_acid = self.acids[location[0], location[1]]
+        central_type = central_acid.type
+
+        acids = self.neighbors(location)
+        print(acids)
+
+        for acid in acids:
+            if acid[0] in central_acid.connections:
+                acids.remove(acid)
+
+        return acids
+
     def visualise(self):
         pass
-
-
-def matrix_location(i, protein_length):
-	"""
-	Retrieve the matrix location from number
-	"""
-	column = i % protein_length
-	row = np.floor(i / protein_length)
-	return [row, column]
 
 
 if __name__ == "__main__":
