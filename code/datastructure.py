@@ -45,6 +45,8 @@ class Protein:
         matrix_size = 2 * protein_length - 1
 
         self.acids = np.zeros((matrix_size, matrix_size), dtype = Acid)
+        self.energy = 0
+        self.length = 0
 
     def __str__(self):
 
