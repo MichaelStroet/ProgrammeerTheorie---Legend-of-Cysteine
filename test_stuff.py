@@ -13,9 +13,10 @@ sys.path.append(os.path.join(directory, "code", "algorithms"))
 # Add the data
 sys.path.append(os.path.join(directory, "data"))
 
-# Import
+# Import classes
 from graph import visualise
 from branch_n_bound import branch_n_bound
+from datastructure import protein, acid
 
 def read_input():
     '''
@@ -25,9 +26,12 @@ def read_input():
     with open("data/input.txt", "r") as f:
         file_content = f.read()
         file_lines = file_content.split()
-        print(f'lines: {file_lines}\nnumber of lines: {len(file_lines)}\nline 3: {file_lines[2]}')
+        # print(f'lines: {file_lines}\nnumber of lines: {len(file_lines)}\nline 3: {file_lines[2]}')
     return file_lines
 
 
 if __name__ == "__main__":
-    branch_n_bound("HHPHHHPH")
+
+	proteins = read_input()
+    print(proteins)
+    branch_n_bound(proteins[0])
