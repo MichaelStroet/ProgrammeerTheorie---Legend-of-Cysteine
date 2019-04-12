@@ -43,5 +43,8 @@ def visualise(protein):
 
 
 if __name__ == "__main__":
+    '''
+    protein als txt file opslaan en hier parsen en plotten?
+    '''
     test_protein = [["H",0,0], ["P",0,1], ["P",1,1], ["H",2,1], ["H",2,0], ["C",2,-1], ["H",1,-1], ["P",0, -1], ["H",-1,-1]]
     visualise(test_protein)

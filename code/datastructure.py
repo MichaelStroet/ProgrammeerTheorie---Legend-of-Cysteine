@@ -65,6 +65,7 @@ class Protein:
     def add_acid(self, type, position, connection):
         acid = Acid(type, position, connection)
         self.acids[position[0], position[1]] = acid
+        self.length += 1
 
     def visualise(self):
         pass
