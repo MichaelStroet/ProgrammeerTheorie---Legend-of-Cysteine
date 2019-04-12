@@ -26,8 +26,8 @@ def branch_n_bound(protein_string):
     energy_min_partial = [0] * length_total
     average_list = [[] for i in range(length_total)]
 
-    prob_1 = 0.8
-    prob_2 = 0.5
+    prob_below_average = 0.8
+    prob_above_average = 0.5
 
     start_location = [length_total - 1, length_total - 1]
 
@@ -118,7 +118,7 @@ def searching(amino_acid, energy_current, length_partial, energy_min_all, energy
                     elif energy_current <= energy_average_partial:
                         r = np.random.random(1)[0]
 
-                        if r > prob_2:
+                        if r > prob_below_average:
                             place(amino_acid, site)
                             previous_location = site
                             length_partial +=1
@@ -128,7 +128,7 @@ def searching(amino_acid, energy_current, length_partial, energy_min_all, energy
                     #if the curent energy is bigger than the average energy of all partial proteins
                     else:
                         r = np.random.random(1)[0]
-                        if r > prob_1:
+                        if r > prob_above_average:
                             place(amino_acid, site)
                             previous_location = site
                             length_partial +=1
