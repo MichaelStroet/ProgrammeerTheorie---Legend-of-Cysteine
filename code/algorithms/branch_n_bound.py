@@ -52,7 +52,7 @@ def branch_n_bound(protein_string):
 
 def searching(protein, amino_acid, energy_current, length_partial, energy_min_all, energy_min_partial, average_list, previous_location):
 
-        #new_protein = deepcopy oldprotein
+        #new_protein = copy.deepcopy(oldprotein)
         #see possible_sites for monomer k (see whether matrix box left, up & right are empty, if so store adresses in list)
 
         locations = []
