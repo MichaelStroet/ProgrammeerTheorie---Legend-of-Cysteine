@@ -19,7 +19,13 @@ class Acid:
         """
         Returns a string representation of the amino acid
         """
-        return self.type
+        arrows = {
+            "up" : "↑",
+            "down" : "↓",
+            "left" : "←",
+            "right" : "→",
+        }
+        return f"{self.type}{arrows[self.connections[0]]}"
 
     def check_energy(self):
         pass
@@ -82,6 +88,6 @@ if __name__ == "__main__":
         type = acid[0]
         row = start_location - acid[2]
         column = start_location + acid[1]
-        protein.add_acid(type, [row, column], "up")
+        protein.add_acid(type, [row, column], "left")
 
     print(protein)
