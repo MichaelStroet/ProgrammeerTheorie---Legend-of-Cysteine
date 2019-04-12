@@ -57,9 +57,6 @@ class Protein:
         acid = Acid(type, position, connection)
         self.acids[position[0], position[1]] = acid
 
-    def get_acid(self, postition):
-        pass
-
     def visualise(self):
         pass
 
