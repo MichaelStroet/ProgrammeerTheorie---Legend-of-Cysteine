@@ -56,15 +56,12 @@ def searching(protein, amino_acid, energy_min_all, energy_min_partial, average_l
 
         #see possible_sites for monomer k (see whether matrix box left, up & right are empty, if so store adresses in list)
 
-        locations = []
         location_bottom = [previous_location[0] + 1 ,previous_location[1]]
-        locations.append(location_bottom)
         location_top = [previous_location[0] - 1 ,previous_location[1]]
-        locations.append(location_top)
         location_right = [previous_location[0] ,previous_location[1] + 1]
-        locations.append(location_right)
         location_left = [previous_location[0] ,previous_location[1] - 1]
-        locations.append(location_left)
+
+        locations = [location_bottom, location_top, location_right, location_left]
 
         possible_sites = []
         #print(locations)
@@ -74,6 +71,7 @@ def searching(protein, amino_acid, energy_min_all, energy_min_partial, average_l
             #print(new_protein.acids[loc[0],loc[1]])
             print(loc[0])
             print(len(protein_str) *2 - 2)
+            #if not at the borders of the matrix
             if 0 <= loc[0] <= (len(protein_str) *2 - 2) and 0 <= loc[1] <= (len(protein_str) *2 - 2):
                 if new_protein.acids[loc[0],loc[1]] == 0:
                     print("ok")
@@ -107,7 +105,7 @@ def searching(protein, amino_acid, energy_min_all, energy_min_partial, average_l
                     #update lowest energy among all completed proteins
                     if new_protein.energy < energy_min_all:
                         energy_min_all = new_protein.energy
-                        return
+                    return
 
                 #if it is a polar monomer
                 elif amino_acid == "P":
