@@ -10,7 +10,6 @@ from datastructure import Protein, Acid
 09/04
 ಠ_ಠ
 TO DO:
-    get matrix positions for possible_sites
     implement energy function
     ¬_¬
 '''
@@ -73,8 +72,14 @@ def searching(protein, amino_acid, energy_min_all, energy_min_partial, average_l
         for loc in locations:
             #print(loc)
             #print(new_protein.acids[loc[0],loc[1]])
-            if new_protein.acids[loc[0],loc[1]] == 0:
-                possible_sites.append(loc)
+            print(loc[0])
+            print(len(protein_str) *2 - 2)
+            if 0 <= loc[0] <= (len(protein_str) *2 - 2) and 0 <= loc[1] <= (len(protein_str) *2 - 2):
+                if new_protein.acids[loc[0],loc[1]] == 0:
+                    print("ok")
+                    possible_sites.append(loc)
+            else:
+                print("stop")
 
         print("possible sites are",possible_sites)
 
@@ -83,7 +88,7 @@ def searching(protein, amino_acid, energy_min_all, energy_min_partial, average_l
             #calculate energy of current partial protein for each site (when pseudo placing)
             for site in possible_sites:
                 #print(site)
-                new_protein.energy +=1
+                new_protein.energy -=1
 
                 #update list for average energy & calculate average
                 average_list[new_protein.length - 1].append(new_protein.energy)
