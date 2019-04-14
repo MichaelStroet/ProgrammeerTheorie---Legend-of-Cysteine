@@ -81,12 +81,30 @@ def searching(protein, amino_acid, energy_min_all, energy_min_partial, average_l
 
         print("possible sites are",possible_sites)
 
-        if possible_sites:
+        if len(possible_sites) > 0:
 
             #calculate energy of current partial protein for each site (when pseudo placing)
             for site in possible_sites:
-                #print(site)
-                new_protein.energy -=1
+                print(site)
+
+                #get neighbor locations
+                neighbor_bottom = [previous_location[0] + 1 ,previous_location[1]]
+                neighbor_top = [previous_location[0] - 1 ,previous_location[1]]
+                neighbor_right = [previous_location[0] ,previous_location[1] + 1]
+                neighbor_left = [previous_location[0] ,previous_location[1] - 1]
+
+                neighbors = [neighbor_bottom, neighbor_top, neighbor_right, neighbor_left]
+
+                print(neighbors)
+
+                #only look at the acids that are not directly connected
+                for neighbor in neighbors:
+                    if neighbor != previous_location and 0 <= neighbor[0] <= (len(protein_str) *2 - 2) and 0 <= neighbor[1] <= (len(protein_str) *2 - 2):
+                        print(new_protein.acids[neighbor[0],neighbor[1]])
+                        if str(new_protein.acids[neighbor[0],neighbor[1]]) == 'H':
+                            print('h-bond')
+                            new_protein.energy -=1
+                            print(new_protein.energy)
 
                 #update list for average energy & calculate average
                 average_list[new_protein.length - 1].append(new_protein.energy)
@@ -155,6 +173,8 @@ def searching(protein, amino_acid, energy_min_all, energy_min_partial, average_l
 
         else:
             print("no sites")
+
+        print(energy_min_partial)
 
 
 if __name__ == "__main__":
