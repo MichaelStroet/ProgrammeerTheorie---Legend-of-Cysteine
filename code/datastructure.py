@@ -83,14 +83,15 @@ class Protein:
 
         neighbor_acids = {}
 
-        #if 0 <= location[0] <= (len(self.acids) - 2) and 0 <= location[1] <= (len(self.acids) - 2):
-
-            for direction, location in zip(directions, locations):
+        print(f"row: {location[0]}, column: {location[1]}")
+        for direction, location in zip(directions, locations):
+            if 0 <= location[0] <= (len(self.acids) - 1) and 0 <= location[1] <= (len(self.acids) - 1):
+                print(f"direction: {direction}, location: {location}")
                 acid = self.acids[location[0], location[1]]
 
                 neighbor_acids[direction] = location
 
-        print(neighbor_acids)
+        print(f"neighbor_acids: {neighbor_acids}")
         return neighbor_acids
 
     def check_energy(self, location, type):
