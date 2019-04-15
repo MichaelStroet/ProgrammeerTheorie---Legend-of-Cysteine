@@ -87,21 +87,15 @@ def searching(protein, amino_acid, energy_min_all, energy_min_partial, average_l
             for site in possible_sites:
                 print(site)
 
-                #get neighbor locations
-                neighbor_bottom = [previous_location[0] + 1 ,previous_location[1]]
-                neighbor_top = [previous_location[0] - 1 ,previous_location[1]]
-                neighbor_right = [previous_location[0] ,previous_location[1] + 1]
-                neighbor_left = [previous_location[0] ,previous_location[1] - 1]
-
-                neighbors = [neighbor_bottom, neighbor_top, neighbor_right, neighbor_left]
-
-                print(neighbors)
+                neighbors = new_protein.neighbors(site)
+                #new_protein.check_energy(site)
 
                 #only look at the acids that are not directly connected
                 for neighbor in neighbors:
-                    if neighbor != previous_location and 0 <= neighbor[0] <= (len(protein_str) *2 - 2) and 0 <= neighbor[1] <= (len(protein_str) *2 - 2):
-                        print(new_protein.acids[neighbor[0],neighbor[1]])
-                        if str(new_protein.acids[neighbor[0],neighbor[1]]) == 'H':
+                    #print(neighbors[neighbor])
+                    if neighbors[neighbor] != previous_location and 0 <= neighbors[neighbor][0] <= (len(protein_str) *2 - 2) and 0 <= neighbors[neighbor][1] <= (len(protein_str) *2 - 2):
+                        print(new_protein.acids[neighbors[neighbor][0],neighbors[neighbor][1]])
+                        if str(new_protein.acids[neighbors[neighbor][0],neighbors[neighbor][1]]) == 'H':
                             print('h-bond')
                             new_protein.energy -=1
                             print(new_protein.energy)

@@ -83,10 +83,12 @@ class Protein:
 
         neighbor_acids = {}
 
-        for direction, location in zip(directions, locations):
-            acid = self.acids[location[0], location[1]]
+        #if 0 <= location[0] <= (len(self.acids) - 2) and 0 <= location[1] <= (len(self.acids) - 2):
 
-            neighbor_acids[direction] = location
+            for direction, location in zip(directions, locations):
+                acid = self.acids[location[0], location[1]]
+
+                neighbor_acids[direction] = location
 
         print(neighbor_acids)
         return neighbor_acids
