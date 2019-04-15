@@ -25,7 +25,11 @@ class Acid:
             "left" : "←",
             "right" : "→",
         }
-        return f"{self.type}{arrows[self.connections[0]]}"
+        if len(self.connections) > 1:
+            return f"{self.type}{arrows[self.connections[1]]}"
+
+        else:
+            return f"{self.type} "
 
     def add_connection(self, connection):
         if not connection in self.connections:
@@ -60,11 +64,20 @@ class Protein:
 
         return string_matrix
 
-    def add_acid(self, type, position, connection):
+    def add_acid(self, type, position, direction_new_acid):
         '''
         Adds an acid object to the acids matrix
         '''
-        acid = Acid(type, position, connection)
+
+        opposite_directions = {
+            "" : "",
+            "up" : "down",
+            "down" : "up",
+            "left" : "right",
+            "right" : "left"
+            }
+
+        acid = Acid(type, position, opposite_directions[direction_new_acid])
         self.acids[position[0], position[1]] = acid
         self.length += 1
 
