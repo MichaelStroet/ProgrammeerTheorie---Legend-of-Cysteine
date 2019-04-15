@@ -72,23 +72,23 @@ class Protein:
         '''
         Gets the four neighboring acid objects from a central acids
         '''
+
+        loc_up = [location[0] - 1, location[1]]
+        loc_down = [location[0] + 1, location[1]]
+        loc_left = [location[0], location[1] - 1]
+        loc_right = [location[0], location[1] + 1]
+
         directions = ["up", "down", "left", "right"]
-        neighbor_acids = []
+        locations = [loc_up, loc_down, loc_left, loc_right]
 
-        for direction in directions:
-            if direction == "up":
-                new_location = [location[0] - 1, location[1]]
-            elif direction == "down":
-                new_location = [location[0] + 1, location[1]]
-            elif direction == "left":
-                new_location = [location[0], location[1] - 1]
-            else:
-                new_location = [location[0], location[1] + 1]
+        neighbor_acids = {}
 
-            acid = self.acids[new_location[0], new_location[1]]
+        for direction, location in zip(directions, locations):
+            acid = self.acids[location[0], location[1]]
 
-            neighbor_acids.append([direction, acid])
+            neighbor_acids[direction] = location
 
+        print(neighbor_acids)
         return neighbor_acids
 
     def check_energy(self, location):
