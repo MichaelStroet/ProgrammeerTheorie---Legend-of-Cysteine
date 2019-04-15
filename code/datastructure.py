@@ -91,21 +91,35 @@ class Protein:
         print(neighbor_acids)
         return neighbor_acids
 
-    def check_energy(self, location):
+    def check_energy(self, location, type):
         '''
         Calculates the energy of a specific amino acids
         '''
-        central_acid = self.acids[location[0], location[1]]
-        central_type = central_acid.type
 
-        acids = self.neighbors(location)
-        print(acids)
+        if type == "P":
+            return 0
 
-        for acid in acids:
-            if acid[0] in central_acid.connections:
-                acids.remove(acid)
+        elif type == "H":
 
-        return acids
+            central_acid = self.acids[location[0], location[1]]
+            acids = self.neighbors(location)
+            print(acids)
+
+            for direction in central_acid.connections:
+                if direction in acids:
+                    del acids[direction]
+
+            print(acids)
+
+            return acids
+
+        elif type == "C":
+            print("Not yet inplemented")
+            return 0
+
+        else:
+            print(f"Unknown amino acid type: '{type}'")
+            exit(1)
 
     def visualise(self):
         pass
@@ -125,4 +139,5 @@ if __name__ == "__main__":
         column = start_location + acid[1]
         protein.add_acid(type, [row, column], "left")
 
+    protein.check_energy([start_location,start_location], "H")
     print(protein)
