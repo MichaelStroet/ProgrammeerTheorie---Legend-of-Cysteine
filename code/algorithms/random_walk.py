@@ -10,9 +10,13 @@ from datastructure import Protein, Acid
 
 def random_walk(protein_string):
     '''
-    Folds a protein by randomly placing the next amino acid
+    Input is a string representing the protein by its amino acids
+    Then folds a protein by randomly placing the next amino acid
+    Calls a walk function that returns a single folded protein solution
     (future): runs for a given time and remembers the best solution
     '''
+
+    # Use lenght to establish location of the first amino acid 
     protein_length = len(protein_string)
     protein = Protein(protein_length)
 
@@ -23,21 +27,23 @@ def random_walk(protein_string):
     location = [location[0] + 1, location[1]]
     protein.add_acid(protein_string[1], location, "")
 
+    # Keep folding proteins until one is completed
     solution_found = False
-
-    # Keep folding proteins untill one is completed
     while not solution_found:
         new_protein = copy.deepcopy(protein)
-
         (solution_found, protein_result) = walk(new_protein, protein_string, location)
 
 
 def walk(protein, protein_string, previous_location):
     '''
+    Input is a protein object, the string representing that object and the location of the previous amino acid
     Folds a protein by randomly placing the next amino acid
+    Returns 
     '''
-    for length in range(3, len(protein_string) + 1):
-        acid_type = protein_string[length - 1]
+
+    # check possible locations to place new amino acid startin from the third
+    for length in range(2, len(protein_string)):
+        acid_type = protein_string[length]
 
         location_bottom = [previous_location[0] + 1, previous_location[1]]
         location_top = [previous_location[0] - 1, previous_location[1]]
