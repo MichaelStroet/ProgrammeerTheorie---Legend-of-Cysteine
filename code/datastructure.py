@@ -122,7 +122,7 @@ class Protein:
 
             central_acid = self.acids[location[0], location[1]]
             acids = self.neighbors(location)
-            print(acids)
+            #print(acids)
 
             for direction in ["up", "down", "left", "right"]:
                 location = acids[direction]

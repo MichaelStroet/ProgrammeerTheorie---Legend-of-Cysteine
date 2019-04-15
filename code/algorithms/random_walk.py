@@ -75,14 +75,17 @@ def walk(protein, protein_string, previous_location):
 
                     previous_acid = protein.acids[previous_location[0], previous_location[1]]
                     previous_acid.add_connection(direction)
+                    print(f"previous acid connections: {previous_acid.connections}")
 
                     location = possible_sites[direction]
 
                     protein.add_acid(acid_type, location, direction)
                     previous_location = location
 
-                    test = protein.check_energy(location, acid_type)
-                    print(f"energy: {test}")
+                    new_energy = protein.check_energy(location, acid_type)
+                    protein.energy += new_energy
+
+                    print(f"energy change: {new_energy}, new total energy: {protein.energy}")
                     break
 
                 # This shouldn't happen
