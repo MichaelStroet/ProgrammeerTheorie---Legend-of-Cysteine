@@ -122,14 +122,32 @@ class Protein:
 
             central_acid = self.acids[location[0], location[1]]
             acids = self.neighbors(location)
-            #print(acids)
+
+            print("\nChecking energy\n")
+            print(f"central_acid: {central_acid}")
+            print(f"neighbors: {acids}")
+
+            print("\n deleting neighbors\n")
 
             for direction in ["up", "down", "left", "right"]:
                 location = acids[direction]
                 acid = self.acids[location[0], location[1]]
 
-                if acid == 0 or direction in acid.connections:
+                print(f"looking at: {direction} with acid {acid}")
+                print(f"is zero? {acid == 0}")
+                if not acid == 0:
+                    print(f"is connected? {direction in acid.connections}")
+                    print(f"direction: {direction}")
+                    print(f"connections: {acid.connections}")
+                else:
+                    print("yup, so it cant have connections")
+
+                if acid == 0 or direction in central_acid.connections:
+                    print("deleting neighbor...")
                     del acids[direction]
+                print(f"neighbors now: {acids}")
+
+            print(f"\nneighbors after deletion: {acids}")
 
             new_energy = 0
 
@@ -137,17 +155,24 @@ class Protein:
                 location = acids[direction]
                 acid = self.acids[location[0], location[1]]
 
+                print(f"Checking direction: {direction}")
+                print(f"This spot contains a {acid}")
+
                 if type == "H":
                     if acid.type == "H" or acid.type == "C":
+                        print("Detected a H-H or H-C bond")
                         new_energy -= 1
 
                 else:
                     if acid.type == "H":
+                        print("Detected a C-H bond")
                         new_energy -= 1
 
                     elif acid.type == "C":
+                        print("Detected a C-C bond")
                         new_energy -= 5
 
+            print(f"Energy change: {new_energy}\n")
             return new_energy
 
         else:

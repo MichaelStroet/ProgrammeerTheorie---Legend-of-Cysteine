@@ -44,6 +44,7 @@ def walk(protein, protein_string, previous_location):
 
     # check possible locations to place new amino acid startin from the third
     for length in range(2, len(protein_string)):
+        print("\nPLACING NEW ACID\n")
         acid_type = protein_string[length]
 
         neighbors = protein.neighbors(previous_location)
@@ -57,7 +58,6 @@ def walk(protein, protein_string, previous_location):
                 possible_sites[direction] = location
 
         print("possible sites are",possible_sites)
-        print(f"possible sites: {len(possible_sites)}")
 
         if len(possible_sites) > 0:
             divider = 1. / len(possible_sites)
@@ -79,13 +79,19 @@ def walk(protein, protein_string, previous_location):
 
                     location = possible_sites[direction]
 
+                    # Add the acid object to the protein and connect it to the previous acid
                     protein.add_acid(acid_type, location, direction)
                     previous_location = location
+
+                    print(f"new acid connections: {protein.acids[location[0], location[1]].connections}")
+                    print("new protein matrix:")
+                    print(protein)
 
                     new_energy = protein.check_energy(location, acid_type)
                     protein.energy += new_energy
 
                     print(f"energy change: {new_energy}, new total energy: {protein.energy}")
+
                     break
 
                 # This shouldn't happen
