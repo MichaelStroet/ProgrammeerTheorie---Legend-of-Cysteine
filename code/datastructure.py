@@ -93,29 +93,42 @@ class Protein:
 
     def check_energy(self, location, type):
         '''
-        Calculates the energy of a specific amino acids
+        Calculates the energy of a amino acid and its unconnected neighbors
         '''
 
         if type == "P":
             return 0
 
-        elif type == "H":
+        elif type == "H" or type == "C":
 
             central_acid = self.acids[location[0], location[1]]
             acids = self.neighbors(location)
             print(acids)
 
             for direction in central_acid.connections:
-                if direction in acids:
+                location = acids[direction]
+
+                if direction in acids or self.acids[location[0], location[1]] == 0:
                     del acids[direction]
 
-            print(acids)
+            new_energy = 0
 
-            return acids
+            for direction in acids:
+                location = acids[direction]
+                acid = self.acids[location[0], location[1]]
 
-        elif type == "C":
-            print("Not yet inplemented")
-            return 0
+                if type == "H":
+                    if acid.type == "H" or acid.type == "C":
+                        new_energy -= 1
+
+                else:
+                    if acid.type == "H":
+                        new_energy -= 1
+
+                    elif acid.type == "C":
+                        new_energy -= 5
+
+            return new_energy
 
         else:
             print(f"Unknown amino acid type: '{type}'")
