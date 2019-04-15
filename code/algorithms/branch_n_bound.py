@@ -56,63 +56,74 @@ def searching(protein, amino_acid, energy_min_all, energy_min_partial, average_l
 
         #see possible_sites for monomer k (see whether matrix box left, up & right are empty, if so store adresses in list)
 
-        location_bottom = [previous_location[0] + 1 ,previous_location[1]]
-        location_top = [previous_location[0] - 1 ,previous_location[1]]
-        location_right = [previous_location[0] ,previous_location[1] + 1]
-        location_left = [previous_location[0] ,previous_location[1] - 1]
+        locations = new_protein.neighbors(previous_location)
+        possible_sites = {}
 
-        locations = [location_bottom, location_top, location_right, location_left]
+        for direction in locations:
+            location = locations[direction]
+            acid = new_protein.acids[location[0],location[1]]
+            print(acid)
 
-        possible_sites = []
-        #print(locations)
+            if acid == 0:
+                possible_sites[direction] = location
 
-        for loc in locations:
-            #print(loc)
-            #print(new_protein.acids[loc[0],loc[1]])
-            print(loc[0])
-            print(len(protein_str) *2 - 2)
-            #if not at the borders of the matrix
-            if 0 <= loc[0] <= (len(protein_str) *2 - 2) and 0 <= loc[1] <= (len(protein_str) *2 - 2):
-                if new_protein.acids[loc[0],loc[1]] == 0:
-                    print("ok")
-                    possible_sites.append(loc)
-            else:
-                print("stop")
 
         print("possible sites are",possible_sites)
 
         if len(possible_sites) > 0:
 
             #calculate energy of current partial protein for each site (when pseudo placing)
-            for site in possible_sites:
-                print(site)
+            for key in possible_sites:
+                print("amino: ",amino_acid)
+                print("direction: ",key)
 
-                neighbors = new_protein.neighbors(site)
+                previous_acid = new_protein.acids[previous_location[0], previous_location[1]]
+                print("previous: ",previous_acid)
+                previous_acid.add_connection(key)
+
+                location = possible_sites[direction]
+                print("possible location: ",location)
+
+                # Add the acid object to the protein and connect it to the previous acid
+                #new_protein.add_acid(amino_acid, location, direction)
+                #previous_location = location
+
+                new_energy = new_protein.check_energy(previous_location, amino_acid)
+                new_protein.energy += new_energy
+                print("energy:",new_energy)
+
+
+                #neighbors = new_protein.neighbors(site)
+                #print(neighbors)
                 #new_protein.check_energy(site)
 
+                #new_protein.add_acid(amino_acid, site, direction)
+
+                #new_energy = new_protein.check_energy(site, amino_acid)
+                #protein.energy += new_energy
+
                 #only look at the acids that are not directly connected
-                for neighbor in neighbors:
-                    #print(neighbors[neighbor])
-                    if neighbors[neighbor] != previous_location and 0 <= neighbors[neighbor][0] <= (len(protein_str) *2 - 2) and 0 <= neighbors[neighbor][1] <= (len(protein_str) *2 - 2):
-                        print(new_protein.acids[neighbors[neighbor][0],neighbors[neighbor][1]])
-                        if str(new_protein.acids[neighbors[neighbor][0],neighbors[neighbor][1]]) == 'H':
-                            print('h-bond')
-                            new_protein.energy -=1
-                            print(new_protein.energy)
+                # for neighbor in neighbors:
+                #     print(neighbors[neighbor])
+                #     print(new_protein.acids[neighbors[neighbor][0],neighbors[neighbor][1]])
+                #     if str(new_protein.acids[neighbors[neighbor][0],neighbors[neighbor][1]]) == 'H':
+                #         print('h-bond')
+                #         new_protein.energy -=1
+                #         print(new_protein.energy)
 
                 #update list for average energy & calculate average
                 average_list[new_protein.length - 1].append(new_protein.energy)
                 energy_average_partial = np.average(average_list[new_protein.length - 1])
-                #print(average_list, energy_average_partial)
+                print(average_list, energy_average_partial)
 
                 #place the monomer and update the energy
 
                 #if it is the last monomer
                 if new_protein.length == length_total:
-                    new_protein.add_acid(amino_acid, site, "")
+                    new_protein.add_acid(amino_acid, location, "")
                     print("last",new_protein)
 
-                    previous_location = site
+                    previous_location = location
 
                     #update lowest energy among all completed proteins
                     if new_protein.energy < energy_min_all:
@@ -121,10 +132,10 @@ def searching(protein, amino_acid, energy_min_all, energy_min_partial, average_l
 
                 #if it is a polar monomer
                 elif amino_acid == "P":
-                    new_protein.add_acid(amino_acid, site, "")
+                    new_protein.add_acid(amino_acid, location, "")
                     print("p",new_protein)
 
-                    previous_location = site
+                    previous_location = location
                     amino_acid = protein_str[new_protein.length - 1]
                     searching(new_protein, amino_acid, energy_min_all, energy_min_partial, average_list, previous_location)
 
@@ -135,10 +146,10 @@ def searching(protein, amino_acid, energy_min_all, energy_min_partial, average_l
                     if new_protein.energy <= energy_min_partial[new_protein.length - 1]:
                         energy_min_partial[new_protein.length - 1] = new_protein.energy
                         #print(energy_min_partial)
-                        new_protein.add_acid(amino_acid, site, "")
+                        new_protein.add_acid(amino_acid, location, "")
                         print("h",new_protein)
 
-                        previous_location = site
+                        previous_location = location
                         amino_acid = protein_str[new_protein.length - 1]
                         searching(new_protein, amino_acid, energy_min_all, energy_min_partial, average_list, previous_location)
 
@@ -147,10 +158,10 @@ def searching(protein, amino_acid, energy_min_all, energy_min_partial, average_l
                         r = np.random.random()
 
                         if r > prob_below_average:
-                            new_protein.add_acid(amino_acid, site, "")
+                            new_protein.add_acid(amino_acid, location, "")
                             print("h",new_protein)
 
-                            previous_location = site
+                            previous_location = location
                             amino_acid = protein_str[new_protein.length - 1]
                             searching(new_protein, amino_acid, energy_min_all, energy_min_partial, average_list, previous_location)
 
@@ -158,15 +169,15 @@ def searching(protein, amino_acid, energy_min_all, energy_min_partial, average_l
                     else:
                         r = np.random.random()
                         if r > prob_above_average:
-                            new_protein.add_acid(amino_acid, site, "")
+                            new_protein.add_acid(amino_acid, location, "")
                             print("h",new_protein)
 
-                            previous_location = site
+                            previous_location = location
                             amino_acid = protein_str[new_protein.length - 1]
                             searching(new_protein, amino_acid, energy_min_all, energy_min_partial, average_list, previous_location)
 
         else:
-            print("no sites")
+            print("no locations")
 
         print(energy_min_partial)
 

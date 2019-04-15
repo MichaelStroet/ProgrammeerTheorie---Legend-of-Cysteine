@@ -121,11 +121,13 @@ class Protein:
             acids = self.neighbors(location)
 
             for direction in ["up", "down", "left", "right"]:
-                location = acids[direction]
-                acid = self.acids[location[0], location[1]]
+                #NEW IF#
+                if direction in acids:
+                    location = acids[direction]
+                    acid = self.acids[location[0], location[1]]
 
-                if acid == 0 or direction in central_acid.connections:
-                    del acids[direction]
+                    if acid == 0 or direction in central_acid.connections:
+                        del acids[direction]
 
             new_energy = 0
 
