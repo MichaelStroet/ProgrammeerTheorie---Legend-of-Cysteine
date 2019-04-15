@@ -85,10 +85,10 @@ class Protein:
 
         print(f"row: {location[0]}, column: {location[1]}")
         for direction, location in zip(directions, locations):
-            if 0 <= location[0] <= (len(self.acids) - 1) and 0 <= location[1] <= (len(self.acids) - 1):
-                print(f"direction: {direction}, location: {location}")
-                acid = self.acids[location[0], location[1]]
+            print(f"direction: {direction}, location: {location}")
 
+            if 0 <= location[0] <= (len(self.acids) - 1) and 0 <= location[1] <= (len(self.acids) - 1):
+                acid = self.acids[location[0], location[1]]
                 neighbor_acids[direction] = location
 
         print(f"neighbor_acids: {neighbor_acids}")
@@ -108,10 +108,11 @@ class Protein:
             acids = self.neighbors(location)
             print(acids)
 
-            for direction in central_acid.connections:
+            for direction in ["up", "down", "left", "right"]:
                 location = acids[direction]
+                acid = self.acids[location[0], location[1]]
 
-                if direction in acids or self.acids[location[0], location[1]] == 0:
+                if acid == 0 or direction in acid.connections:
                     del acids[direction]
 
             new_energy = 0
