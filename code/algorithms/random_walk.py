@@ -91,7 +91,7 @@ def walk(protein, protein_string, previous_location):
             break
 
     # Protein completed, end the random walks
-    if protein.length == len(protein_string):
+    if protein.length == len(protein_string) and protein.energy < 0:
         print(f"Total energy: {protein.energy}")
         print(protein)
         return (True, protein)
