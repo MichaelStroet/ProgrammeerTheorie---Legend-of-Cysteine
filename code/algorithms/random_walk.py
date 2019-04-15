@@ -44,7 +44,6 @@ def walk(protein, protein_string, previous_location):
 
     # check possible locations to place new amino acid startin from the third
     for length in range(2, len(protein_string)):
-        print("\nPLACING NEW ACID\n")
         acid_type = protein_string[length]
 
         neighbors = protein.neighbors(previous_location)
@@ -57,13 +56,10 @@ def walk(protein, protein_string, previous_location):
             if acid == 0:
                 possible_sites[direction] = location
 
-        print("possible sites are",possible_sites)
-
         if len(possible_sites) > 0:
             divider = 1. / len(possible_sites)
 
             number = np.random.random()
-            #print(number)
 
             for direction, i in zip(possible_sites, range(len(possible_sites))):
                 # Determine the maximum random number for this site
@@ -71,11 +67,9 @@ def walk(protein, protein_string, previous_location):
 
                 # Add an acid object to the randomly selected site
                 if number <= site_probability:
-                    print(f"We chose direction: {direction}")
 
                     previous_acid = protein.acids[previous_location[0], previous_location[1]]
                     previous_acid.add_connection(direction)
-                    print(f"previous acid connections: {previous_acid.connections}")
 
                     location = possible_sites[direction]
 
@@ -83,14 +77,8 @@ def walk(protein, protein_string, previous_location):
                     protein.add_acid(acid_type, location, direction)
                     previous_location = location
 
-                    print(f"new acid connections: {protein.acids[location[0], location[1]].connections}")
-                    print("new protein matrix:")
-                    print(protein)
-
                     new_energy = protein.check_energy(location, acid_type)
                     protein.energy += new_energy
-
-                    print(f"energy change: {new_energy}, new total energy: {protein.energy}")
 
                     break
 
@@ -104,6 +92,7 @@ def walk(protein, protein_string, previous_location):
 
     # Protein completed, end the random walks
     if protein.length == len(protein_string):
+        print(f"Total energy: {protein.energy}")
         print(protein)
         return (True, protein)
 

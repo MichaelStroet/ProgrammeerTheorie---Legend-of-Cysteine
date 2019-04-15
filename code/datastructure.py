@@ -96,15 +96,12 @@ class Protein:
 
         neighbor_acids = {}
 
-        #print(f"row: {location[0]}, column: {location[1]}")
         for direction, location in zip(directions, locations):
-            #print(f"direction: {direction}, location: {location}")
 
             if 0 <= location[0] <= (len(self.acids) - 1) and 0 <= location[1] <= (len(self.acids) - 1):
                 acid = self.acids[location[0], location[1]]
                 neighbor_acids[direction] = location
 
-        #print(f"neighbor_acids: {neighbor_acids}")
         return neighbor_acids
 
     def check_energy(self, location, type):
@@ -123,31 +120,12 @@ class Protein:
             central_acid = self.acids[location[0], location[1]]
             acids = self.neighbors(location)
 
-            print("\nChecking energy\n")
-            print(f"central_acid: {central_acid}")
-            print(f"neighbors: {acids}")
-
-            print("\n deleting neighbors\n")
-
             for direction in ["up", "down", "left", "right"]:
                 location = acids[direction]
                 acid = self.acids[location[0], location[1]]
 
-                print(f"looking at: {direction} with acid {acid}")
-                print(f"is zero? {acid == 0}")
-                if not acid == 0:
-                    print(f"is connected? {direction in acid.connections}")
-                    print(f"direction: {direction}")
-                    print(f"connections: {acid.connections}")
-                else:
-                    print("yup, so it cant have connections")
-
                 if acid == 0 or direction in central_acid.connections:
-                    print("deleting neighbor...")
                     del acids[direction]
-                print(f"neighbors now: {acids}")
-
-            print(f"\nneighbors after deletion: {acids}")
 
             new_energy = 0
 
@@ -155,24 +133,17 @@ class Protein:
                 location = acids[direction]
                 acid = self.acids[location[0], location[1]]
 
-                print(f"Checking direction: {direction}")
-                print(f"This spot contains a {acid}")
-
                 if type == "H":
                     if acid.type == "H" or acid.type == "C":
-                        print("Detected a H-H or H-C bond")
                         new_energy -= 1
 
                 else:
                     if acid.type == "H":
-                        print("Detected a C-H bond")
                         new_energy -= 1
 
                     elif acid.type == "C":
-                        print("Detected a C-C bond")
                         new_energy -= 5
 
-            print(f"Energy change: {new_energy}\n")
             return new_energy
 
         else:
