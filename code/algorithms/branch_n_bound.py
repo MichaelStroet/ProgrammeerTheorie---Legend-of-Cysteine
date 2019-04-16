@@ -156,7 +156,7 @@ def searching(protein, amino_acid, energy_min_all, energy_min_partial,
                         print("h",new_protein)
 
                         #previous_location = location
-                        amino_acid = protein_str[new_protein.length - 1]
+                        amino_acid = protein_str[new_protein.length]
                         searching(new_protein, amino_acid, energy_min_all, energy_min_partial, average_list, location)
 
                     #if the curent energy is equal to or below the average energy of all partial proteins
@@ -167,7 +167,7 @@ def searching(protein, amino_acid, energy_min_all, energy_min_partial,
                             print("h",new_protein)
 
                             #previous_location = location
-                            amino_acid = protein_str[new_protein.length - 1]
+                            amino_acid = protein_str[new_protein.length]
                             searching(new_protein, amino_acid, energy_min_all, energy_min_partial, average_list, location)
 
                     #if the curent energy is bigger than the average energy of all partial proteins
@@ -177,7 +177,7 @@ def searching(protein, amino_acid, energy_min_all, energy_min_partial,
                             print("h",new_protein)
 
                             #previous_location = location
-                            amino_acid = protein_str[new_protein.length - 1]
+                            amino_acid = protein_str[new_protein.length]
                             searching(new_protein, amino_acid, energy_min_all, energy_min_partial, average_list, location)
 
         else:
