@@ -90,31 +90,10 @@ def searching(protein, energy_min_all, energy_min_partial, average_list, previou
                 print("possible location: ",location)
 
                 # Add the acid object to the protein and connect it to the previous acid
-                #new_protein.add_acid(amino_acid, location, direction)
-                #previous_location = location
 
                 new_energy = new_protein.check_energy(location, amino_acid)
                 new_protein.energy += new_energy
                 print("energy:",new_energy)
-
-
-                #neighbors = new_protein.neighbors(site)
-                #print(neighbors)
-                #new_protein.check_energy(site)
-
-                #new_protein.add_acid(amino_acid, site, direction)
-
-                #new_energy = new_protein.check_energy(site, amino_acid)
-                #protein.energy += new_energy
-
-                #only look at the acids that are not directly connected
-                # for neighbor in neighbors:
-                #     print(neighbors[neighbor])
-                #     print(new_protein.acids[neighbors[neighbor][0],neighbors[neighbor][1]])
-                #     if str(new_protein.acids[neighbors[neighbor][0],neighbors[neighbor][1]]) == 'H':
-                #         print('h-bond')
-                #         new_protein.energy -=1
-                #         print(new_protein.energy)
 
                 #update list for average energy & calculate average
                 print(new_protein.length)
@@ -133,7 +112,6 @@ def searching(protein, energy_min_all, energy_min_partial, average_list, previou
                     #update lowest energy among all completed proteins
                     if new_protein.energy < energy_min_all:
                         energy_min_all = new_protein.energy
-                    #return
 
                 #if it is a polar monomer
                 elif amino_acid == "P":
@@ -141,7 +119,6 @@ def searching(protein, energy_min_all, energy_min_partial, average_list, previou
                     print("placed at: ",location)
                     print(new_protein)
 
-                    #previous_location = location
                     print(previous_location)
                     searching(new_protein, energy_min_all, energy_min_partial, average_list, location)
 
@@ -151,8 +128,8 @@ def searching(protein, energy_min_all, energy_min_partial, average_list, previou
                     #if the curent energy is equal to or below the lowest energy of the partial protein
                     if new_protein.energy <= energy_min_partial[new_protein.length - 1]:
                         energy_min_partial[new_protein.length - 1] = new_protein.energy
-                        #print(energy_min_partial)
-                        print("h",new_protein)
+                        print("min partial: ",energy_min_partial)
+                        print("h\n",new_protein)
 
                         #previous_location = location
                         searching(new_protein, energy_min_all, energy_min_partial, average_list, location)
@@ -162,7 +139,7 @@ def searching(protein, energy_min_all, energy_min_partial, average_list, previou
                         r = np.random.random()
 
                         if r > prob_below_average:
-                            print("h",new_protein)
+                            print("h\n",new_protein)
 
                             #previous_location = location
                             searching(new_protein, energy_min_all, energy_min_partial, average_list, location)
@@ -171,7 +148,7 @@ def searching(protein, energy_min_all, energy_min_partial, average_list, previou
                     else:
                         r = np.random.random()
                         if r > prob_above_average:
-                            print("h",new_protein)
+                            print("h\n",new_protein)
 
                             #previous_location = location
                             searching(new_protein, energy_min_all, energy_min_partial, average_list, location)
