@@ -29,7 +29,7 @@ class Acid:
             return f"{self.type}{arrows[self.connections[1]]}"
 
         else:
-            return f"{self.type} "
+            return f"{self.type}"
 
     def add_connection(self, connection):
         if not connection in self.connections:
