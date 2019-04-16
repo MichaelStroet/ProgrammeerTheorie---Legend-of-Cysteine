@@ -106,15 +106,15 @@ class Protein:
 
     def check_energy(self, location, type):
         '''
-        input is the location of the acid you want to check the energy of, type is the acid type "P"/"H"/"C"
-        Calculates the energy of a amino acid and its unconnected neighbors
+        input is the location of the acid you want to check the energy of, type is the acid type: "P"/"H"/"C"
+        Calculates the energy of an amino acid and its unconnected neighbors
         '''
 
-        # If acid is polair energy is 0
+        # If acid is polair energy does not change
         if type == "P":
             return 0
 
-        # If acid is hydrofobic energy
+        # If acid is hydrofobic energy is decreased by -1 (type = "H") or -5 (type = "C")
         elif type == "H" or type == "C":
 
             central_acid = self.acids[location[0], location[1]]
