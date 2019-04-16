@@ -50,18 +50,17 @@ def branch_n_bound(protein_string):
 def searching(protein, amino_acid, energy_min_all, energy_min_partial,
               average_list, previous_location):
 
-        new_protein = copy.deepcopy(protein)
-        print("length:",new_protein.length)
+        print("length:",protein.length)
 
         #see possible_sites for monomer k (see whether matrix box left, up & right are empty, if so store adresses in list)
 
-        locations = new_protein.neighbors(previous_location)
+        locations = protein.neighbors(previous_location)
         print("loc: ",locations)
         possible_sites = {}
 
         for direction in locations:
             location = locations[direction]
-            acid = new_protein.acids[location[0],location[1]]
+            acid = protein.acids[location[0],location[1]]
             print(acid)
 
             if acid == 0:
@@ -74,6 +73,9 @@ def searching(protein, amino_acid, energy_min_all, energy_min_partial,
 
             #calculate energy of current partial protein for each site (when pseudo placing)
             for key_direction in possible_sites:
+
+                new_protein = copy.deepcopy(protein)
+
                 print("amino: ",amino_acid)
                 print("direction: ",key_direction)
 
