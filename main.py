@@ -35,4 +35,4 @@ def read_input():
 
 if __name__ == "__main__":
     proteins = read_input()
-    branch_n_bound(proteins[0])
+    branch_n_bound("HPPH")
