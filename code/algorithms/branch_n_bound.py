@@ -9,9 +9,8 @@ from datastructure import Protein, Acid
 '''
 09/04
 ಠ_ಠ
-TO DO:
-    implement energy function
-    ¬_¬
+16/04
+ new version
 '''
 
 
@@ -31,7 +30,6 @@ def branch_n_bound(protein_string):
     #set probabilities for pruning
     prob_below_average = 0.8
     prob_above_average = 0.5
-
 
     #place first & second amino acid underneath [row, column]
     start_location = [length_total - 1, length_total - 1]
@@ -73,22 +71,26 @@ def searching(protein, amino_acid, energy_min_all, energy_min_partial, average_l
         if len(possible_sites) > 0:
 
             #calculate energy of current partial protein for each site (when pseudo placing)
-            for key in possible_sites:
+            for key_direction in possible_sites:
                 print("amino: ",amino_acid)
-                print("direction: ",key)
+                print("direction: ",key_direction)
 
                 previous_acid = new_protein.acids[previous_location[0], previous_location[1]]
-                print("previous: ",previous_acid)
-                previous_acid.add_connection(key)
+                print("previous: ",previous_acid, " loc:", previous_location)
+                previous_acid.add_connection(key_direction)
 
-                location = possible_sites[direction]
+                location = possible_sites[key_direction]
+
+
+                new_protein.add_acid(amino_acid, location, key_direction)
+
                 print("possible location: ",location)
 
                 # Add the acid object to the protein and connect it to the previous acid
                 #new_protein.add_acid(amino_acid, location, direction)
-                #previous_location = location
+                previous_location = location
 
-                new_energy = new_protein.check_energy(previous_location, amino_acid)
+                new_energy = new_protein.check_energy(location, amino_acid)
                 new_protein.energy += new_energy
                 print("energy:",new_energy)
 
@@ -114,28 +116,28 @@ def searching(protein, amino_acid, energy_min_all, energy_min_partial, average_l
                 #update list for average energy & calculate average
                 average_list[new_protein.length - 1].append(new_protein.energy)
                 energy_average_partial = np.average(average_list[new_protein.length - 1])
-                print(average_list, energy_average_partial)
+                #print(average_list, energy_average_partial)
 
                 #place the monomer and update the energy
 
                 #if it is the last monomer
                 if new_protein.length == length_total:
-                    new_protein.add_acid(amino_acid, location, "")
                     print("last",new_protein)
 
-                    previous_location = location
+                    #previous_location = location
 
                     #update lowest energy among all completed proteins
                     if new_protein.energy < energy_min_all:
                         energy_min_all = new_protein.energy
-                    return
+                    #return
 
                 #if it is a polar monomer
                 elif amino_acid == "P":
-                    new_protein.add_acid(amino_acid, location, "")
-                    print("p",new_protein)
+                    print("p")
+                    print(location)
+                    print("placed at",new_protein)
 
-                    previous_location = location
+                    #previous_location = location
                     amino_acid = protein_str[new_protein.length - 1]
                     searching(new_protein, amino_acid, energy_min_all, energy_min_partial, average_list, previous_location)
 
@@ -146,10 +148,9 @@ def searching(protein, amino_acid, energy_min_all, energy_min_partial, average_l
                     if new_protein.energy <= energy_min_partial[new_protein.length - 1]:
                         energy_min_partial[new_protein.length - 1] = new_protein.energy
                         #print(energy_min_partial)
-                        new_protein.add_acid(amino_acid, location, "")
                         print("h",new_protein)
 
-                        previous_location = location
+                        #previous_location = location
                         amino_acid = protein_str[new_protein.length - 1]
                         searching(new_protein, amino_acid, energy_min_all, energy_min_partial, average_list, previous_location)
 
@@ -158,10 +159,9 @@ def searching(protein, amino_acid, energy_min_all, energy_min_partial, average_l
                         r = np.random.random()
 
                         if r > prob_below_average:
-                            new_protein.add_acid(amino_acid, location, "")
                             print("h",new_protein)
 
-                            previous_location = location
+                            #previous_location = location
                             amino_acid = protein_str[new_protein.length - 1]
                             searching(new_protein, amino_acid, energy_min_all, energy_min_partial, average_list, previous_location)
 
@@ -169,10 +169,9 @@ def searching(protein, amino_acid, energy_min_all, energy_min_partial, average_l
                     else:
                         r = np.random.random()
                         if r > prob_above_average:
-                            new_protein.add_acid(amino_acid, location, "")
                             print("h",new_protein)
 
-                            previous_location = location
+                            #previous_location = location
                             amino_acid = protein_str[new_protein.length - 1]
                             searching(new_protein, amino_acid, energy_min_all, energy_min_partial, average_list, previous_location)
 
