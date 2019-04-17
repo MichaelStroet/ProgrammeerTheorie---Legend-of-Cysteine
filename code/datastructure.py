@@ -111,22 +111,15 @@ class Protein:
         '''
 
         acid_connections = self.acids[location[0], location[1]].connections
-        print(f"connections acid to remove: {acid_connections}")
 
         self.acids[location[0], location[1]] = 0
-        print("removed acid:")
-        print(self)
+        self.length -= 1
 
         for connection in acid_connections:
             neighbor_location = new_location(location, connection)
             neighbor_acid = self.acids[neighbor_location[0], neighbor_location[1]]
-            print(f"neighbor acid: {neighbor_acid}")
 
             neighbor_acid.connections.remove(opposite(connection))
-            print(f"removed connection to {neighbor_acid}")
-
-        print("final result")
-        print(self)
 
     def neighbors(self, location):
         '''
