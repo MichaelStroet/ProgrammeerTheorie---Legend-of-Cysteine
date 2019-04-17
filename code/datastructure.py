@@ -110,17 +110,18 @@ class Protein:
         Removes an acid object from the acids matrix
         '''
 
-        acid = self.acids[location[0], location[1]]
-
-        acid_connections = acid.connections
+        acid_connections = self.acids[location[0], location[1]].connections
         print(f"connections acid to remove: {acid_connections}")
 
-        acid = 0
+        self.acids[location[0], location[1]] = 0
         print("removed acid:")
         print(self)
 
         for connection in acid_connections:
-            neighbor_acid = new_location(location, connection)
+            neighbor_location = new_location(location, connection)
+            neighbor_acid = self.acids[neighbor_location[0], neighbor_location[1]]
+            print(f"neighbor acid: {neighbor_acid}")
+
             neighbor_acid.connections.remove(opposite(connection))
             print(f"removed connection to {neighbor_acid}")
 
@@ -204,16 +205,31 @@ if __name__ == "__main__":
 
     # test_protein = [["H",0,0], ["P",0,1], ["P",1,1], ["H",2,1], ["H",2,0], ["C",2,-1], ["H",1,-1], ["P",0, -1], ["H",-1,-1]]
 
-    test_protein = [["H",0,0], ["P",0,1], ["P",1,1], ["H",2,1], ["H",2,0], ["C",2,-1], ["H",1,-1], ["P",0, -1], ["H",-1,-1]]
+    test_protein = [
+        ["H", 0, 0, ["first",""]],
+        ["U", 1, 0, ["down","down"]],
+        ["C", 2, 0, ["down","down"]],
+        ["D", 3, 0, ["down","down"]],
+        ["P", 4, 0, ["", "down"]]
+    ]
+
     length_total = len(test_protein)
+
     protein = Protein(length_total)
     start_location = length_total - 1
 
     for acid in test_protein:
         type = acid[0]
-        row = start_location - acid[2]
-        column = start_location + acid[1]
-        protein.add_acid(type, [row, column], "left")
+        row = start_location + acid[1]
+        column = start_location + acid[2]
+        connections = acid[3]
+        protein.add_acid(type, [row, column], connections[1])
+        protein.acids[row, column].add_connection(connections[0])
 
-    protein.check_energy([start_location,start_location], "H")
+    print("Before removal:")
+    print(protein)
+
+    protein.remove_acid([start_location + 3, start_location + 0])
+
+    print("After removal:")
     print(protein)
