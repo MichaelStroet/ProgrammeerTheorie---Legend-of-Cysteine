@@ -28,11 +28,26 @@ def random_walk(protein_string):
     protein.add_acid(protein_string[1], location, "down")
     protein.acids[location[0], location[1]].add_connection("up")
 
-    # Keep folding proteins until one is completed
-    solution_found = False
-    while not solution_found:
+    N_tries = int(input("How many proteins to fold? "))
+    print(f"\nFolding {N_tries} '{protein_string}'proteins:\n...")
+
+    energy_min = 0
+
+    # try to fold N_tries proteins
+    for i in range(N_tries):
+
         new_protein = copy.deepcopy(protein)
         (solution_found, protein_result) = walk(new_protein, protein_string, location)
+
+        if solution_found:
+            if protein_result.energy < energy_min:
+                energy_min = protein_result.energy
+                protein_min = protein_result
+
+                print(f"found new lowest energy: {energy_min}")
+
+    print(f"\nlowest energy conformation was {energy_min}:")
+    print(protein_min)
 
 
 def walk(protein, protein_string, previous_location):
@@ -92,11 +107,8 @@ def walk(protein, protein_string, previous_location):
 
     # Protein completed, end the random walks
     if protein.length == len(protein_string) and protein.energy < 0:
-        print(f"Total energy: {protein.energy}")
-        print(protein)
         return (True, protein)
 
     # Protein failed, retry with a new random walk
     else:
-        print("\nFAILED\n")
         return(False, protein)
