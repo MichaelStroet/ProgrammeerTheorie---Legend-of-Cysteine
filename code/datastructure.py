@@ -105,7 +105,7 @@ class Protein:
         self.acids[position[0], position[1]] = acid
         self.length += 1
 
-    def remove_acid(self, location):
+    def remove_acid(self, location, previous_energy):
         '''
         Removes an acid object from the acids matrix
         '''
@@ -113,6 +113,7 @@ class Protein:
         acid_connections = self.acids[location[0], location[1]].connections
 
         self.acids[location[0], location[1]] = 0
+        self.energy = previous_energy
         self.length -= 1
 
         for connection in acid_connections:
