@@ -15,7 +15,10 @@ from datastructure import Protein, Acid
 
 
 def branch_n_bound(protein_string):
-    global protein_str, length_total, prob_below_average, prob_above_average
+
+    global protein_str, length_total, prob_below_average, prob_above_average, energy_min_all, energy_min_partial
+
+
     protein_str = protein_string
     length_total = len(protein_string)
 
@@ -44,9 +47,16 @@ def branch_n_bound(protein_string):
     new_protein = copy.deepcopy(protein)
 
     #call searching function
-    searching(new_protein, energy_min_all, energy_min_partial, average_list, previous_location)
+    searching(new_protein, average_list, previous_location)
 
-def searching(protein, energy_min_all, energy_min_partial, average_list, previous_location):
+    print("Energy min partial: ",energy_min_partial)
+    print(location)
+    print("Energy min all: ",energy_min_all)
+    print(best_protein)
+
+def searching(protein, average_list, previous_location):
+
+    global energy_min_all, best_protein
 
     print("length:",protein.length)
 
@@ -114,6 +124,7 @@ def searching(protein, energy_min_all, energy_min_partial, average_list, previou
                 #update lowest energy among all completed proteins
                 if new_protein.energy < energy_min_all:
                     energy_min_all = new_protein.energy
+                    best_protein = copy.deepcopy(new_protein)
 
             #if it is a polar monomer
             elif amino_acid == "P":
@@ -122,7 +133,7 @@ def searching(protein, energy_min_all, energy_min_partial, average_list, previou
                 print(new_protein)
 
                 print(previous_location)
-                searching(new_protein, energy_min_all, energy_min_partial, average_list, location)
+                searching(new_protein, average_list, location)
 
             #if it is a hydrophobic monomer
             else:
@@ -136,7 +147,7 @@ def searching(protein, energy_min_all, energy_min_partial, average_list, previou
                     print("h\n",new_protein)
 
                     #previous_location = location
-                    searching(new_protein, energy_min_all, energy_min_partial, average_list, location)
+                    searching(new_protein, average_list, location)
 
                 #if the curent energy is equal to or below the average energy of all partial proteins
                 elif new_protein.energy <= energy_average_partial:
@@ -145,7 +156,7 @@ def searching(protein, energy_min_all, energy_min_partial, average_list, previou
                     if r > prob_below_average:
                         print("h\n",new_protein)
 
-                        searching(new_protein, energy_min_all, energy_min_partial, average_list, location)
+                        searching(new_protein, average_list, location)
 
                 #if the curent energy is bigger than the average energy of all partial proteins
                 else:
@@ -153,13 +164,11 @@ def searching(protein, energy_min_all, energy_min_partial, average_list, previou
                     if r > prob_above_average:
                         print("h\n",new_protein)
 
-                        searching(new_protein, energy_min_all, energy_min_partial, average_list, location)
+                        searching(new_protein, average_list, location)
 
     else:
         print("no locations")
 
-    print("Energy min partial: ",energy_min_partial)
-    print("Energy min all: ",energy_min_all)
 
 
 if __name__ == "__main__":
