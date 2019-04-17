@@ -4,6 +4,37 @@
 
 import numpy as np
 
+def opposite(direction):
+
+    opposite_directions = {
+        "" : "",
+        "up" : "down",
+        "down" : "up",
+        "left" : "right",
+        "right" : "left"
+        }
+
+    return opposite_directions[direction]
+
+def new_location(location, direction):
+
+    if direction == "up":
+        new_location = [location[0] - 1, location[1]]
+
+    elif direction == "down":
+        new_location = [location[0] + 1, location[1]]
+
+    elif direction == "left":
+        new_location = [location[0], location[1] - 1]
+
+    elif direction == "right":
+        new_location = [location[0], location[1] + 1]
+
+    else:
+        new_location = location
+
+    return new_location
+
 class Acid:
 
     def __init__(self, type, position, connection):
@@ -20,6 +51,7 @@ class Acid:
         '''
         arrows = {
             "" : "",
+            "first" : "▼",
             "up" : "↑",
             "down" : "↓",
             "left" : "←",
@@ -69,30 +101,42 @@ class Protein:
         Adds an acid object to the acids matrix
         '''
 
-        opposite_directions = {
-            "" : "",
-            "up" : "down",
-            "down" : "up",
-            "left" : "right",
-            "right" : "left"
-            }
-
-        acid = Acid(type, position, opposite_directions[direction_new_acid])
+        acid = Acid(type, position, opposite(direction_new_acid))
         self.acids[position[0], position[1]] = acid
         self.length += 1
+
+    def remove_acid(self, location):
+        '''
+        Removes an acid object from the acids matrix
+        '''
+
+        acid = self.acids[location[0], location[1]]
+
+        acid_connections = acid.connections
+        print(f"connections acid to remove: {acid_connections}")
+
+        acid = 0
+        print("removed acid:")
+        print(self)
+
+        for connection in acid_connections:
+            neighbor_acid = new_location(location, connection)
+            neighbor_acid.connections.remove(opposite(connection))
+            print(f"removed connection to {neighbor_acid}")
+
+        print("final result")
+        print(self)
 
     def neighbors(self, location):
         '''
         Gets the four neighboring acid objects from a central acids
         '''
 
-        loc_up = [location[0] - 1, location[1]]
-        loc_down = [location[0] + 1, location[1]]
-        loc_left = [location[0], location[1] - 1]
-        loc_right = [location[0], location[1] + 1]
-
         directions = ["up", "down", "left", "right"]
-        locations = [loc_up, loc_down, loc_left, loc_right]
+        locations = []
+
+        for direction in directions:
+            locations.append(new_location(location, direction))
 
         neighbor_acids = {}
 
@@ -158,9 +202,10 @@ class Protein:
 
 if __name__ == "__main__":
 
+    # test_protein = [["H",0,0], ["P",0,1], ["P",1,1], ["H",2,1], ["H",2,0], ["C",2,-1], ["H",1,-1], ["P",0, -1], ["H",-1,-1]]
+
     test_protein = [["H",0,0], ["P",0,1], ["P",1,1], ["H",2,1], ["H",2,0], ["C",2,-1], ["H",1,-1], ["P",0, -1], ["H",-1,-1]]
     length_total = len(test_protein)
-
     protein = Protein(length_total)
     start_location = length_total - 1
 
