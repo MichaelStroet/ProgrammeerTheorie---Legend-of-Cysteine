@@ -11,8 +11,9 @@ from datastructure import Protein, Acid
 ಠ_ಠ
 16/04
  new version
+ 18/04
+ It works!
 '''
-
 
 def branch_n_bound(protein_string):
 
@@ -22,62 +23,62 @@ def branch_n_bound(protein_string):
     protein_str = protein_string
     length_total = len(protein_string)
 
-    #create protein matrix
+    #create the protein matrix
     protein = Protein(length_total)
-    print(protein)
 
+    #initialize variables
     energy_min_all = 0
     energy_min_partial = [0] * length_total
     average_list = [[] for i in range(length_total)]
 
-    #set probabilities for pruning
+    #set probabilities for pruning (keep this percentage)
     prob_below_average = 0.8
     prob_above_average = 0.5
 
-    #place first & second amino acid underneath [row, column]
+    #place first amino acid[row, column]
     start_location = [length_total - 1, length_total - 1]
     protein.add_acid(protein_string[0], start_location,"")
     protein.acids[start_location[0], start_location[1]].add_connection("first")
 
+    #place second amino acid underneath first
     previous_location = start_location
     location = [previous_location[0] + 1, previous_location[1]]
     protein.add_acid(protein_string[1], location, "down")
     protein.acids[location[0], location[1]].add_connection("up")
-
     previous_location = location
 
-    print(protein)
+    #call next_acid function to place a new amino acid
+    next_acid(protein, average_list, previous_location)
 
-    #call searching function
-    searching(protein, average_list, previous_location)
-
-    print("\nEnergy min partial: ",energy_min_partial)
-    print(location)
-    print("Energy min all: ",energy_min_all)
+    print("\nMinumum energy found per length: ",energy_min_partial)
+    print("Minumum energy found ",energy_min_all)
     print(best_protein)
 
-def searching(protein, average_list, previous_location):
+def next_acid(protein, average_list, previous_location):
 
     global energy_min_all, best_protein
 
-    #see possible_sites for monomer k (see whether matrix box left, up & right are empty, if so store adresses in list)
+    '''
+    Check possible sites for the next amino acid,
+    see whether the matrix box left, up & right are empty,
+    if so store their locations and direction in a dictionnary
+    '''
 
     locations = protein.neighbors(previous_location)
     possible_sites = {}
 
+    #for each possible location, see if there is already an amino acid
     for direction in locations:
         location = locations[direction]
         acid = protein.acids[location[0],location[1]]
-
         if acid == 0:
             possible_sites[direction] = location
 
-
-    #print("possible sites are",possible_sites)
-
+    #if there are possible sites (it is not stuck)
     if len(possible_sites) > 0:
 
         previous_energy = protein.energy
+
         #calculate energy of current partial protein for each site (when pseudo placing)
         for key_direction in possible_sites:
 
@@ -102,15 +103,15 @@ def searching(protein, average_list, previous_location):
 
             energy_average_partial = np.average(average_list[protein.length - 1])
 
+            #update lowest energyin the partial proteins list
+            if protein.energy <= energy_min_partial[protein.length - 1]:
+                energy_min_partial[protein.length - 1] = protein.energy
+                #print("NEW min partial= ",energy_min_partial[protein.length - 1])
+
             #place the monomer and update the energy
 
             #if it is the last monomer
             if protein.length == length_total:
-
-                #update lowest energyin the partial proteins list
-                if protein.energy <= energy_min_partial[protein.length - 1]:
-                    energy_min_partial[protein.length - 1] = protein.energy
-                    #print("NEW min partial= ",energy_min_partial[protein.length - 1])
 
                 #update lowest energy among all completed proteins
                 if protein.energy < energy_min_all:
@@ -118,44 +119,37 @@ def searching(protein, average_list, previous_location):
                     #print("NEW min all= ",energy_min_all)
                     best_protein = copy.deepcopy(protein)
                     print(best_protein)
+                    print("\nMinumum partial energy : ",energy_min_partial)
+
 
             #if it is a polar monomer
             elif amino_acid == "P":
-
-                searching(protein, average_list, location)
+                next_acid(protein, average_list, location)
 
             #if it is a hydrophobic monomer
             else:
 
                 #if the curent energy is equal to or below the lowest energy of the partial protein
                 if protein.energy <= energy_min_partial[protein.length - 1]:
-                    energy_min_partial[protein.length - 1] = protein.energy
-
-                    searching(protein, average_list, location)
-
+                    next_acid(protein, average_list, location)
 
                 #if the curent energy is equal to or below the average energy of all partial proteins
                 elif protein.energy <= energy_average_partial:
                     r = np.random.random()
 
-                    if r > prob_below_average:
-
-                        searching(protein, average_list, location)
+                    if r <= prob_below_average:
+                        next_acid(protein, average_list, location)
 
 
                 #if the curent energy is bigger than the average energy of all partial proteins
                 else:
 
                     r = np.random.random()
-                    if r > prob_above_average:
-
-                        searching(protein, average_list, location)
+                    if r <= prob_above_average:
+                        next_acid(protein, average_list, location)
 
             protein.remove_acid(location, previous_energy)
 
-
-    else:
-        print("no locations")
 
 
 
