@@ -60,24 +60,22 @@ def searching(protein, average_list, previous_location):
 
     global energy_min_all, best_protein
 
-    #print("protein length: ",protein.length)
-
     #see possible_sites for monomer k (see whether matrix box left, up & right are empty, if so store adresses in list)
 
     locations = protein.neighbors(previous_location)
-    #print("all locations: ",locations)
+    print("all locations: ",locations)
     possible_sites = {}
 
     for direction in locations:
         location = locations[direction]
         acid = protein.acids[location[0],location[1]]
-        #print(acid)
+        print(acid)
 
         if acid == 0:
             possible_sites[direction] = location
 
 
-    #print("possible sites are",possible_sites)
+    print("possible sites are",possible_sites)
 
     if len(possible_sites) > 0:
 
@@ -85,15 +83,14 @@ def searching(protein, average_list, previous_location):
         #calculate energy of current partial protein for each site (when pseudo placing)
         for key_direction in possible_sites:
 
-            #protein = copy.deepcopy(protein)
 
             amino_acid = protein_str[protein.length - 1]
 
-            #print("amino acid: ",amino_acid)
-            #print("direction: ",key_direction)
+            print("amino acid: ",amino_acid)
+            print("direction: ",key_direction)
 
             previous_acid = protein.acids[previous_location[0], previous_location[1]]
-            #print("previous amino: ",previous_acid, " & its location:", previous_location)
+            print("previous amino: ",previous_acid, " & its location:", previous_location)
             previous_acid.add_connection(key_direction)
 
             location = possible_sites[key_direction]
@@ -101,19 +98,19 @@ def searching(protein, average_list, previous_location):
 
             protein.add_acid(amino_acid, location, key_direction)
 
-            #print("possible location: ",location)
+            print("possible location: ",location)
 
             # Add the acid object to the protein and connect it to the previous acid
 
             new_energy = protein.check_energy(location, amino_acid)
             protein.energy += new_energy
-            #print("current energy:",new_energy)
+            print("current energy:",new_energy)
 
             #update list for average energy & calculate average
             print(f"length: {protein.length}")
             average_list[protein.length - 1].append(protein.energy)
 
-            # print(protein)
+            #print(protein)
             # print(f"length: {protein.length}")
             #print(f"calculating average of {average_list} \nbelonging to length {protein.length}")
             energy_average_partial = np.average(average_list[protein.length - 1])
@@ -133,10 +130,6 @@ def searching(protein, average_list, previous_location):
                     energy_min_partial[protein.length - 1] = protein.energy
                     #print("NEW min partial= ",energy_min_partial[protein.length - 1])
 
-                print("no search old: ",protein.length)
-
-                protein.remove_acid(location, previous_energy)
-                print("no search new: ",protein.length)
 
 
                 #update lowest energy among all completed proteins
@@ -152,18 +145,14 @@ def searching(protein, average_list, previous_location):
                 #print("p")
                 #print(protein)
 
-                #print("previous location: ",previous_location)
+                print("previous location: ",previous_location)
                 searching(protein, average_list, location)
-                print("old: ",protein.length)
-
-                protein.remove_acid(location, previous_energy)
-                print("new: ",protein.length)
 
             #if it is a hydrophobic monomer
             else:
 
                 #if the curent energy is equal to or below the lowest energy of the partial protein
-                #print("curent length: ",protein.length)
+                print("curent length: ",protein.length)
                 #print("min partial = ",energy_min_partial[protein.length - 1])
                 if protein.energy <= energy_min_partial[protein.length - 1]:
                     energy_min_partial[protein.length - 1] = protein.energy
@@ -171,39 +160,32 @@ def searching(protein, average_list, previous_location):
                     #print("h\n",protein)
 
                     searching(protein, average_list, location)
-                    print("old: ",protein.length)
-                    protein.remove_acid(location, previous_energy)
-
-                    print("new: ",protein.length)
-
 
 
                 #if the curent energy is equal to or below the average energy of all partial proteins
                 elif protein.energy <= energy_average_partial:
-                    #print("energy < average")
+                    print("energy < average")
                     r = np.random.random()
 
                     if r > prob_below_average:
                         #print("h\n",protein)
 
                         searching(protein, average_list, location)
-                        print("old: ",protein.length)
-                        protein.remove_acid(location, previous_energy)
-                        print("new: ",protein.length)
 
 
                 #if the curent energy is bigger than the average energy of all partial proteins
                 else:
-                    #print("energy > average")
+                    print("energy > average")
 
                     r = np.random.random()
                     if r > prob_above_average:
                         #print("h\n",protein)
 
                         searching(protein, average_list, location)
-                        print("old: ",protein.length)
-                        protein.remove_acid(location, previous_energy)
-                        print("new: ",protein.length)
+
+            print("old: ",protein.length)
+            protein.remove_acid(location, previous_energy)
+            print("new: ",protein.length)
 
 
     else:
