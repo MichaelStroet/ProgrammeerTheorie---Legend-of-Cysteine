@@ -7,7 +7,7 @@ import numpy as np
 
 from datastructure import Protein, Acid
 
-def random_walk(protein_string):
+def random_walk(protein_string, N_tries):
     '''
     Input is a string representing the protein by its amino acids
     Then folds a protein by randomly placing the next amino acid
@@ -28,13 +28,13 @@ def random_walk(protein_string):
     protein.add_acid(protein_string[1], location, "down")
     protein.acids[location[0], location[1]].add_connection("up")
 
-    N_tries = int(input("How many proteins to fold? "))
-    print(f"\nFolding {N_tries} '{protein_string}'proteins:\n...")
-
     energy_min = 0
 
     # try to fold N_tries proteins
     for i in range(N_tries):
+
+        if (i + 1) % 1000 == 0:
+            print(f"{i + 1}th protein folded")
 
         new_protein = copy.deepcopy(protein)
         (solution_found, protein_result) = walk(new_protein, protein_string, location)
@@ -48,6 +48,7 @@ def random_walk(protein_string):
 
     print(f"\nlowest energy conformation was {energy_min}:")
     print(protein_min)
+    print(f"\nlowest energy conformation was {energy_min}:")
 
 
 def walk(protein, protein_string, previous_location):
