@@ -22,7 +22,7 @@ def greedy_start(protein_string):
 	# Place the first two amino acids
 	location = [protein_length - 1, protein_length - 1]
 	protein.add_acid(protein_string[0], location, "")
-	protein.acids[location[0], location[1]].add_connection("down")
+	protein.acids[location[0], location[1]].add_connection("first")
 
 	location = [location[0] + 1, location[1]]
 	protein.add_acid(protein_string[1], location, "down")
@@ -41,12 +41,14 @@ def greedy_fold(protein, p_string, p_len, loc_current):
 	and the location of the last placed amino acid
 	The ouput is a folded protein
 	'''
-	print("line 44: \ngreedy_fold, yes, that's me")
-	print("line 45: \n", protein, p_string, p_len, loc_current)
+
+	print("line 45: \ngreedy_fold, yes, that's me")
+	print("line 46: \n", protein, p_string, p_len, loc_current)
 	# add dictionary for possible next locations
 	locs_next = {}
+	energy = {}
 
-	# Every direction for following amino acid
+	# Every direction for the following amino acid
 	for acid_index in range(2, p_len):
 		acid_type = p_string[acid_index]
 		directions = protein.neighbors(loc_current)
@@ -54,19 +56,29 @@ def greedy_fold(protein, p_string, p_len, loc_current):
 		# Check if any directions are a valid location for amino acid placement
 		for direction, loc_new in directions.items():
 
-			# Remember the possible next locations
+			# Remember the next possible locations
 			if protein.acids[loc_new[0], loc_new[1]] == 0:
 				locs_next[direction] = loc_new
 
 		# Check the energy of every next location
 		if len(locs_next) > 0:
-			print("line 63:\n", locs_next)
+			previous_energy = protein.energy
+			print("line 66:\n", locs_next, previous_energy)
+
+			# Every next location's energy is collected after pseudo placing
 			for direction, loc_next in locs_next.items():
-				print("line65:\n", loc_next, acid_type)
+				previous_acid = protein.acids[loc_current[0], loc_current[1]]
+				previous_acid.add_connection(direction)
+
+				# Acid is placed, energy is stored, acid is then removed
+				protein.add_acid(acid_type, loc_next, direction)
+				energy[direction] = protein.check_energy(loc_next, acid_type)
+				protein.remove_acid(loc_next, previous_energy)
+				print("line74:\n", loc_next, acid_type)
 
 		# Protein incomplete, abort folding
 		else:
-			print("line 67:\n No locations found")
-		print("line 68:\n", acid_type, "\n", directions)
+			print("line 79:\n No locations found")
+		print("line 80:\n", acid_type, "\n", directions, "\n", energy)
 
 	return True
