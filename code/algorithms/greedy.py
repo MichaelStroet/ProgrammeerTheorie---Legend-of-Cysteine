@@ -6,6 +6,7 @@
 This algorithm will fold a protein using a greedy algorithm
 """
 import copy
+import random
 
 from datastructure import Protein, Acid
 
@@ -75,6 +76,10 @@ def greedy_fold(protein, p_string, p_len, loc_current):
 				energy[direction] = protein.check_energy(loc_next, acid_type)
 				protein.remove_acid(loc_next, previous_energy)
 				print("line74:\n", loc_next, acid_type)
+
+				# Compare energy than pick lowest else random
+				# chooses a random direction from the energy dictionary
+				print("line79:\n", random.choice(list(energy)))
 
 		# Protein incomplete, abort folding
 		else:
