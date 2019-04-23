@@ -116,8 +116,7 @@ class Protein:
             neighbor_location = new_location(location, connection)
             neighbor_acid = self.acids[neighbor_location[0], neighbor_location[1]]
 
-            if not neighbor_acid == 0:
-                neighbor_acid.connections[key] = ""
+            neighbor_acid.connections["next"] = ""
 
         self.acids[location[0], location[1]] = 0
         self.energy = previous_energy
