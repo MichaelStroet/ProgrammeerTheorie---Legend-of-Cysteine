@@ -37,13 +37,16 @@ def new_location(location, direction):
 
 class Acid:
 
-    def __init__(self, type, position, connection):
+    def __init__(self, type, position, previous_connection):
         '''
         Initialise an amino acid
         '''
         self.type = type
         self.position = [position[0], position[1]] # [row,column]
-        self.connections = [connection]
+        self.connections = {
+            "previous" : previous_connection,
+            "next" : ""
+            }
 
     def __str__(self):
         '''
@@ -57,15 +60,11 @@ class Acid:
             "left" : "←",
             "right" : "→",
         }
-        if len(self.connections) > 1:
-            return f"{self.type}{arrows[self.connections[1]]}"
 
-        else:
-            return f"{self.type}"
+        return f"{self.type}{arrows[self.connections['next']]}"
 
     def add_connection(self, connection):
-        if not connection in self.connections:
-            self.connections.append(connection)
+            self.connections["next"] = connection
 
 
 class Protein:
@@ -112,19 +111,20 @@ class Protein:
 
         acid_connections = self.acids[location[0], location[1]].connections
 
+        for key in ["previous", "next"]:
+            connection = acid_connections[key]
+            neighbor_location = new_location(location, connection)
+            neighbor_acid = self.acids[neighbor_location[0], neighbor_location[1]]
+
+            neighbor_acid.connections[key] = ""
+
         self.acids[location[0], location[1]] = 0
         self.energy = previous_energy
         self.length -= 1
 
-        for connection in acid_connections:
-            neighbor_location = new_location(location, connection)
-            neighbor_acid = self.acids[neighbor_location[0], neighbor_location[1]]
-
-            neighbor_acid.connections.remove(opposite(connection))
-
     def neighbors(self, location):
         '''
-        Gets the four neighboring acid objects from a central acids
+        Gets the four neighboring acid objects from a central acids, returns dict
         '''
 
         directions = ["up", "down", "left", "right"]
@@ -157,15 +157,16 @@ class Protein:
         elif type == "H" or type == "C":
 
             central_acid = self.acids[location[0], location[1]]
+            central_connections = central_acid.connections.values()
             acids = self.neighbors(location)
 
             for direction in ["up", "down", "left", "right"]:
-                #NEW IF#
+
                 if direction in acids:
                     location = acids[direction]
                     acid = self.acids[location[0], location[1]]
 
-                    if acid == 0 or direction in central_acid.connections:
+                    if acid == 0 or direction in central_connections:
                         del acids[direction]
 
             new_energy = 0
