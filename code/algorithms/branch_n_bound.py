@@ -130,28 +130,28 @@ def next_acid(protein, average_list, previous_location):
                 '''
                 if the curent energy is equal to or below the lowest energy of
                 the partial protein, add a new amino acid
-                ''''
+                '''
                 if protein.energy <= energy_min_partial[protein.length - 1]:
                     next_acid(protein, average_list, location)
 
-                '''
-                if the curent energy is below the average energy of
-                all partial proteins up to now, compute a random number between
-                0 and 1 and if it is below the probability threshold, add a new
-                amino acid
-                ''''
+                # '''
+                # if the curent energy is below the average energy of
+                # all partial proteins up to now, compute a random number between
+                # 0 and 1 and if it is below the probability threshold, add a new
+                # amino acid
+                # ''''
                 elif protein.energy <= energy_average_partial:
                     r = np.random.random()
 
                     if r <= prob_below_average:
                         next_acid(protein, average_list, location)
 
-                '''
-                if the curent energy is bigger the average energy of
-                all partial proteins up to now, compute a random number between
-                0 and 1 and if it is below the probability threshold, add a new
-                amino acid
-                ''''
+                # '''
+                # if the curent energy is bigger the average energy of
+                # all partial proteins up to now, compute a random number between
+                # 0 and 1 and if it is below the probability threshold, add a new
+                # amino acid
+                # ''''
                 else:
                     r = np.random.random()
                     if r <= prob_above_average:
