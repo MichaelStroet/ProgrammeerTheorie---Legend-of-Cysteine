@@ -40,7 +40,7 @@ def branch_n_bound(protein_string):
     #place first amino acid[row, column]
     start_location = [length_total - 1, length_total - 1]
     protein.add_acid(protein_string[0], start_location,"")
-    protein.acids[start_location[0], start_location[1]].add_connection("first")
+    protein.acids[start_location[0], start_location[1]].add_connection("down")
 
     #place second amino acid underneath first
     previous_location = start_location
