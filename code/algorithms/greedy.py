@@ -4,6 +4,7 @@
 
 """
 This algorithm will fold a protein using a greedy algorithm
+Greedy in this case means always placing an amino acid at the location that results in the lowest energy
 """
 import copy
 import random
@@ -36,6 +37,7 @@ def greedy(protein_string):
 		protein_clean = copy.deepcopy(protein)
 		(solution_found, protein_result) = greedy_fold(protein_clean, protein_string, protein_length, location)
 	print(protein_result)
+	print(protein_result.energy)
 
 def greedy_fold(protein, p_string, p_len, loc_current):
 	'''
@@ -43,7 +45,7 @@ def greedy_fold(protein, p_string, p_len, loc_current):
 	and the location of the last placed amino acid
 	The ouput is a folded protein
 	'''
-	print("line 46: protein matrix, its string, lenght and location of second placed protein\n", protein, p_string, p_len, loc_current)
+	#print("line 46: protein matrix, its string, lenght and location of second placed protein\n", protein, p_string, p_len, loc_current)
 		
 	# Every direction for the following amino acid
 	for acid_index in range(2, p_len):
@@ -109,6 +111,7 @@ def greedy_fold(protein, p_string, p_len, loc_current):
 			break
 		#print("line 101: type of acid to be placed, its possible directions and energy dict\n", acid_type, "\n", directions, "\n", energy)
 	
+	# Returns the solution
 	if protein.length == p_len and protein.energy < 0:
 		return(True, protein)
 
