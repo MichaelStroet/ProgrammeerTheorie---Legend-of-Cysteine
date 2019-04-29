@@ -14,7 +14,7 @@ from datastructure import Protein, Acid
  18/04
  It works!
  22/04
- Addec more comments
+ Added more comments
 '''
 
 def branch_n_bound(protein_string):
@@ -34,19 +34,19 @@ def branch_n_bound(protein_string):
     average_list = [[] for i in range(length_total)]
 
     #set probabilities for pruning (keep this percentage)
-    prob_below_average = 0.5
-    prob_above_average = 0.25
+    prob_below_average = 0.10
+    prob_above_average = 0.05
 
     #place first amino acid[row, column]
     start_location = [length_total - 1, length_total - 1]
     protein.add_acid(protein_string[0], start_location,"")
-    protein.acids[start_location[0], start_location[1]].add_connection("first")
+    protein.acids[start_location[0], start_location[1]].add_connection("down")
 
     #place second amino acid underneath first
     previous_location = start_location
     location = [previous_location[0] + 1, previous_location[1]]
     protein.add_acid(protein_string[1], location, "down")
-    protein.acids[location[0], location[1]].add_connection("up")
+    #protein.acids[location[0], location[1]].add_connection("up")
     previous_location = location
 
     #call next_acid function to place a new amino acid
@@ -55,6 +55,7 @@ def branch_n_bound(protein_string):
     print("\nMinumum energy found per length: ",energy_min_partial)
     print("Minumum energy found ",energy_min_all)
     print(best_protein)
+    return best_protein
 
 def next_acid(protein, average_list, previous_location):
 
@@ -134,24 +135,20 @@ def next_acid(protein, average_list, previous_location):
                 if protein.energy <= energy_min_partial[protein.length - 1]:
                     next_acid(protein, average_list, location)
 
-                # '''
                 # if the curent energy is below the average energy of
                 # all partial proteins up to now, compute a random number between
                 # 0 and 1 and if it is below the probability threshold, add a new
                 # amino acid
-                # ''''
                 elif protein.energy <= energy_average_partial:
                     r = np.random.random()
 
                     if r <= prob_below_average:
                         next_acid(protein, average_list, location)
 
-                # '''
                 # if the curent energy is bigger the average energy of
                 # all partial proteins up to now, compute a random number between
                 # 0 and 1 and if it is below the probability threshold, add a new
                 # amino acid
-                # ''''
                 else:
                     r = np.random.random()
                     if r <= prob_above_average:

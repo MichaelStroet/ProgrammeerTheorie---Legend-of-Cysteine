@@ -3,6 +3,7 @@
 # Michael Stroet  11293284
 
 import numpy as np
+from graph import visualise as plot
 
 def opposite(direction):
 
@@ -84,7 +85,7 @@ class Protein:
         Returns a string representation of the acids matrix
         '''
         string_matrix = ""
-        length = len(self.acids[0])
+        length = len(self.acids)
 
         for row in self.acids:
             string_matrix += f"[{row[0]}"
@@ -193,38 +194,22 @@ class Protein:
             exit(1)
 
     def visualise(self):
-        pass
+        length_protein = int((len(self.acids) + 1) / 2.)
 
+        location = [length_protein - 1, length_protein - 1]
+        acid = self.acids[location[0], location[1]]
 
-if __name__ == "__main__":
+        acid_data = []
 
-    # test_protein = [["H",0,0], ["P",0,1], ["P",1,1], ["H",2,1], ["H",2,0], ["C",2,-1], ["H",1,-1], ["P",0, -1], ["H",-1,-1]]
+        while not acid.connections["next"] == "":
 
-    test_protein = [
-        ["H", 0, 0, ["first",""]],
-        ["U", 1, 0, ["down","down"]],
-        ["C", 2, 0, ["down","down"]],
-        ["D", 3, 0, ["down","down"]],
-        ["P", 4, 0, ["", "down"]]
-    ]
+            acid = self.acids[location[0], location[1]]
 
-    length_total = len(test_protein)
+            acid_type = acid.type
+            acid_x = acid.position[0] - length_protein + 1
+            acid_y = acid.position[1] - length_protein + 1
 
-    protein = Protein(length_total)
-    start_location = length_total - 1
+            acid_data.append([acid_type, acid_x, acid_y])
+            location = new_location(location, acid.connections["next"])
 
-    for acid in test_protein:
-        type = acid[0]
-        row = start_location + acid[1]
-        column = start_location + acid[2]
-        connections = acid[3]
-        protein.add_acid(type, [row, column], connections[1])
-        protein.acids[row, column].add_connection(connections[0])
-
-    print("Before removal:")
-    print(protein)
-
-    protein.remove_acid([start_location + 3, start_location + 0])
-
-    print("After removal:")
-    print(protein)
+        plot(acid_data)
