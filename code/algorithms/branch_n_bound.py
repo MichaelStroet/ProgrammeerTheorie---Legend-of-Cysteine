@@ -34,7 +34,7 @@ def branch_n_bound(protein_string):
     average_list = [[] for i in range(length_total)]
 
     #set probabilities for pruning (keep this percentage)
-    prob_below_average = 0.25
+    prob_below_average = 0.10
     prob_above_average = 0.05
 
     #place first amino acid[row, column]
@@ -46,7 +46,7 @@ def branch_n_bound(protein_string):
     previous_location = start_location
     location = [previous_location[0] + 1, previous_location[1]]
     protein.add_acid(protein_string[1], location, "down")
-    protein.acids[location[0], location[1]].add_connection("up")
+    #protein.acids[location[0], location[1]].add_connection("up")
     previous_location = location
 
     #call next_acid function to place a new amino acid
@@ -55,6 +55,7 @@ def branch_n_bound(protein_string):
     print("\nMinumum energy found per length: ",energy_min_partial)
     print("Minumum energy found ",energy_min_all)
     print(best_protein)
+    return best_protein
 
 def next_acid(protein, average_list, previous_location):
 
