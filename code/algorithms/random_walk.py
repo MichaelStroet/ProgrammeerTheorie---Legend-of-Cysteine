@@ -22,11 +22,10 @@ def random_walk(protein_string, N_tries):
     # Place the first two amino acids
     location = [protein_length - 1, protein_length - 1]
     protein.add_acid(protein_string[0], location, "")
-    protein.acids[location[0], location[1]].add_connection("first")
+    protein.acids[location[0], location[1]].add_connection("down")
 
     location = [location[0] + 1, location[1]]
-    protein.add_acid(protein_string[1], location, "down")
-    protein.acids[location[0], location[1]].add_connection("up")
+    protein.add_acid(protein_string[1], location, "up")
 
     energy_min = 0
 
@@ -49,6 +48,8 @@ def random_walk(protein_string, N_tries):
     print(f"\nlowest energy conformation was {energy_min}:")
     print(protein_min)
     print(f"\nlowest energy conformation was {energy_min}:")
+
+    return protein_min
 
 
 def walk(protein, protein_string, previous_location):
