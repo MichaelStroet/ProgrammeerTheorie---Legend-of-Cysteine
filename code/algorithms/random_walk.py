@@ -58,8 +58,7 @@ def random_walk(protein_string, N_tries):
     print(protein_min)
     print(f"\nlowest energy conformation was {energy_min}:")
 
-    print(energy_counter)
-    return protein_min
+    return protein_min, energy_counter
 
 
 def walk(protein, protein_string, previous_location):
