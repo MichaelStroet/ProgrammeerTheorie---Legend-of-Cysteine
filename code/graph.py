@@ -47,6 +47,14 @@ def visualise(protein):
     plt.show()
 
 
+def dictionary_hist(dictionary):
+    print(dictionary.keys())
+    print(list(dictionary.keys()))
+
+    plt.bar(x = list(dictionary.keys()), height = dictionary.values(), width = 0.8)
+    plt.show()
+
+
 if __name__ == "__main__":
     '''
     protein als txt file opslaan en hier parsen en plotten?
