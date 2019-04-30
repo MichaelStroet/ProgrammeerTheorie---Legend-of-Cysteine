@@ -12,7 +12,7 @@ import numpy as np
 
 from datastructure import Protein, Acid
 
-def greedy(protein_string):
+def greedy(protein_string, N_tries):
 	'''
 	The input is a string that represents the proteins amino acid sequence
 	The output is a protein folded by a greedy algorithm
@@ -30,12 +30,24 @@ def greedy(protein_string):
 	location = [location[0] + 1, location[1]]
 	protein.add_acid(protein_string[1], location, "down")
 
-	# Until solution is found, fold a protein greedy like
-	solution_found = False
-	while not solution_found:
+	energy_min = 0
+
+	# Try to fold N_tries protein greedy like
+	for i in range(N_tries):
+		#if (i + 1) % 1000 == 0:
+		#	print(f"{i + 1}th protein folded")
+
+		# Start with a clean protein	
 		protein_clean = copy.deepcopy(protein)
 		(solution_found, protein_result) = greedy_fold(protein_clean, protein_string, protein_length, location)
-	return protein_result
+
+		if solution_found:
+			if protein_result.energy < energy_min:
+				energy_min = protein_result.energy
+				protein_min = protein_result
+
+				#print(f"found new lowest energy: {energy_min}")
+	return protein_min
 
 def greedy_fold(protein, p_string, p_len, loc_current):
 	'''
@@ -97,7 +109,6 @@ def greedy_fold(protein, p_string, p_len, loc_current):
 
 		# Protein incomplete, abort folding
 		else:
-			print("line 100:\n No locations found")
 			break
 		
 	# Return the folded protein
