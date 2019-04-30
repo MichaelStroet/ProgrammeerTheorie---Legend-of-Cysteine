@@ -24,7 +24,10 @@ def visualise(protein):
         L_x.append(acid[1])
         L_y.append(acid[2])
 
-    max_distance = max([max(L_x), max(L_y)]) + 1
+    x_min = min(L_x) - 1
+    x_max = max(L_x) + 1
+    y_min = min(L_y) - 1
+    y_max = max(L_y) + 1
 
     plt.figure("Folded protein", figsize = (6, 6))
 
@@ -33,8 +36,10 @@ def visualise(protein):
     for i, color in enumerate(L_color):
         plt.plot(L_x[i], L_y[i], 'o', color = color, markersize = 10)
 
-    plt.xlim([-max_distance, max_distance])
-    plt.ylim([-max_distance, max_distance])
+    plt.xlim([min([x_min, y_min]), max([x_max, y_max])])
+    plt.ylim([min([x_min, y_min]), max([x_max, y_max])])
+
+    plt.title("Protein!")
 
     plt.grid(axis = "both")
     plt.legend(loc = "upper right")
