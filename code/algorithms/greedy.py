@@ -34,8 +34,8 @@ def greedy(protein_string, N_tries):
 
 	# Try to fold N_tries protein greedy like
 	for i in range(N_tries):
-		#if (i + 1) % 1000 == 0:
-		#	print(f"{i + 1}th protein folded")
+		if (i + 1) % 1000 == 0:
+			print(f"{i + 1}th protein folded")
 
 		# Start with a clean protein	
 		protein_clean = copy.deepcopy(protein)
@@ -46,7 +46,7 @@ def greedy(protein_string, N_tries):
 				energy_min = protein_result.energy
 				protein_min = protein_result
 
-				#print(f"found new lowest energy: {energy_min}")
+				print(f"found new lowest energy: {energy_min}")
 	return protein_min
 
 def greedy_fold(protein, p_string, p_len, loc_current):
