@@ -1,5 +1,5 @@
+os
+sys
+time
 matplotlib
-random
-
-numpy?
-time?
+numpy

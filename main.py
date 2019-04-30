@@ -4,6 +4,7 @@
 
 # Add the directory structure to the path
 import os, sys
+import time
 
 directory = os.path.dirname(os.path.realpath(__file__))
 
@@ -60,28 +61,31 @@ if __name__ == "__main__":
 		N_tries = int(input("How many proteins to fold? "))
 		print(f"{N_tries}\n")
 
+		start_time = time.time()
 		protein, dict = random_walk(proteins[chosen_protein], N_tries)
-		print(protein)
-		print(dict)
-		protein.visualise()
+		end_time = time.time() - start_time
 
 	elif chosen_algorithm == 1:
 		N_tries = int(input("How many proteins to fold? "))
 		print(f"{N_tries}\n")
 
+		start_time = time.time()
 		protein, dict = greedy(proteins[chosen_protein], N_tries)
-		print(protein)
-		print(dict)
-		protein.visualise()
+		end_time = time.time() - start_time
 
 	elif chosen_algorithm == 2:
-
 		# to do: ask for probabilities
 
+		start_time = time.time()
 		protein = branch_n_bound(proteins[chosen_protein])
-		print(protein)
-		protein.visualise()
+		end_time = time.time() - start_time
 
 	else:
 		print(f"Error: Unknown algorthm '{algorithms[chosen_algorithm]}'")
 		exit(1)
+
+
+	if protein and end_time:
+		print(protein)
+		print("Elapsed time: " + time.strftime('%H:%M:%S', time.gmtime(end_time)))
+		protein.visualise()
