@@ -21,7 +21,7 @@ from greedy import greedy
 from branch_n_bound import branch_n_bound
 
 # Import auxilary functions
-from graph import visualise
+from graph import visualise, dictionary_hist
 from datastructure import Protein
 from datastructure import Acid
 
@@ -88,4 +88,6 @@ if __name__ == "__main__":
 	if protein and end_time:
 		print(protein)
 		print("Elapsed time: " + time.strftime('%H:%M:%S', time.gmtime(end_time)))
-		protein.visualise()
+
+		if dict:
+			dictionary_hist(dict)
