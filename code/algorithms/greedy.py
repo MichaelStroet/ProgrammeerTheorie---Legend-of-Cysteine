@@ -31,6 +31,7 @@ def greedy(protein_string, N_tries):
 	protein.add_acid(protein_string[1], location, "down")
 
 	energy_min = 0
+	energy_counter = {}
 
 	# Try to fold N_tries protein greedy like
 	for i in range(N_tries):
@@ -41,13 +42,23 @@ def greedy(protein_string, N_tries):
 		protein_clean = copy.deepcopy(protein)
 		(solution_found, protein_result) = greedy_fold(protein_clean, protein_string, protein_length, location)
 
+		# When a protein is created save its energy
 		if solution_found:
-			if protein_result.energy < energy_min:
-				energy_min = protein_result.energy
-				protein_min = protein_result
+			energy = protein_result.energy
 
+			# When its energy lower the protein is saved
+			if energy < energy_min:
+				energy_min = energy
+				protein_min = protein_result
 				print(f"found new lowest energy: {energy_min}")
-	return protein_min
+
+		else:
+			energy = "stuck"
+
+		# dictonary for histogram of solutions
+		energy_counter[energy] = energy_counter.get(energy, 0) + 1
+
+	return protein_min, energy_counter
 
 def greedy_fold(protein, p_string, p_len, loc_current):
 	'''
@@ -112,7 +123,7 @@ def greedy_fold(protein, p_string, p_len, loc_current):
 			break
 		
 	# Return the folded protein
-	if protein.length == p_len and protein.energy < 0:
+	if protein.length == p_len:
 		return(True, protein)
 	else:
 		return(False, protein)
