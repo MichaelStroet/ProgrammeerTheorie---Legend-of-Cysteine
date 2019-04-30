@@ -51,9 +51,9 @@ def greedy(protein_string, N_tries):
 				energy_min = energy
 				protein_min = protein_result
 				print(f"found new lowest energy: {energy_min}")
-
-		# dictonary for histogram of solutions
-		energy_counter[energy] = energy_counter.get(energy, 0) + 1
+			
+			# dictonary for histogram of solutions
+			energy_counter[energy] = energy_counter.get(energy, 0) + 1
 
 	return protein_min, energy_counter
 

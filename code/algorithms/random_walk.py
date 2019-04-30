@@ -49,8 +49,8 @@ def random_walk(protein_string, N_tries):
                 protein_min = protein_result
                 print(f"found new lowest energy: {energy_min}")
 
-        # dictonary for histogram of solutions
-        energy_counter[energy] = energy_counter.get(energy, 0) + 1
+            # dictonary for histogram of solutions
+            energy_counter[energy] = energy_counter.get(energy, 0) + 1
 
     print(f"\nlowest energy conformation was {energy_min}:")
     print(protein_min)
