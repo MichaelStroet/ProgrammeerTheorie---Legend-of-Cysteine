@@ -3,6 +3,9 @@
 # Michael Stroet  11293284
 
 def opposite(direction):
+	'''
+
+	'''
 
     opposite_directions = {
         "" : "",
@@ -15,6 +18,9 @@ def opposite(direction):
     return opposite_directions[direction]
 
 def new_location(location, direction):
+	'''
+
+	'''
 
     if direction == "up":
         new_location = [location[0] - 1, location[1]]

@@ -6,6 +6,9 @@ import matplotlib.pyplot as plt
 
 
 def visualise(protein, protein_string, protein_energy):
+	'''
+
+	'''
 
     colors = {
         "H" : "red",
@@ -49,6 +52,10 @@ def visualise(protein, protein_string, protein_energy):
 
 
 def dictionary_hist(dictionary):
+	'''
+
+	'''
+
     print(dictionary.keys())
     print(list(dictionary.keys()))
 

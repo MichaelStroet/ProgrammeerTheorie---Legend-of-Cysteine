@@ -20,6 +20,7 @@ class Protein:
         self.energy = 0
         self.length = 0
 
+
     def __str__(self):
         '''
         Returns a string representation of the acids matrix
@@ -36,6 +37,7 @@ class Protein:
 
         return string_matrix
 
+
     def add_acid(self, type, position, direction_new_acid):
         '''
         Adds an acid object to the acids matrix
@@ -44,6 +46,7 @@ class Protein:
         acid = Acid(type, position, opposite(direction_new_acid))
         self.acids[position[0], position[1]] = acid
         self.length += 1
+
 
     def remove_acid(self, location, previous_energy):
         '''
@@ -62,6 +65,7 @@ class Protein:
         self.acids[location[0], location[1]] = 0
         self.energy = previous_energy
         self.length -= 1
+
 
     def neighbors(self, location):
         '''
@@ -83,6 +87,7 @@ class Protein:
                 neighbor_acids[direction] = location
 
         return neighbor_acids
+
 
     def check_energy(self, location, type):
         '''
@@ -133,7 +138,12 @@ class Protein:
             print(f"Unknown amino acid type: '{type}'")
             exit(1)
 
+
     def visualise(self, protein_string):
+        '''
+
+        '''
+
         length_protein = int((len(self.acids) + 1) / 2.)
 
         location = [length_protein - 1, length_protein - 1]

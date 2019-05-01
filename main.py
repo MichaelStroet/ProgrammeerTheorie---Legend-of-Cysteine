@@ -37,9 +37,14 @@ def read_input():
 		file_lines = file_content.split()
 	return file_lines
 
-def run_algorithm(chosen_algorithm, chosen_protein):
+def run_algorithm(algoritms, chosen_algorithm, chosen_protein):
+	'''
 
-	if chosen_algorithm == "random walk":
+	'''
+
+	# Run a random walk
+	if chosen_algorithm == algorithms[0]:
+
 		N_tries = int(input("How many proteins to fold? "))
 		print(f"{N_tries}\n")
 
@@ -47,7 +52,9 @@ def run_algorithm(chosen_algorithm, chosen_protein):
 		protein, dict = random_walk(chosen_protein, N_tries)
 		end_time = time.time() - start_time
 
-	elif chosen_algorithm == "greedy":
+	# Run a greedy algoritm
+	elif chosen_algorithm == algorithms[1]:
+
 		N_tries = int(input("How many proteins to fold? "))
 		print(f"{N_tries}\n")
 
@@ -55,7 +62,9 @@ def run_algorithm(chosen_algorithm, chosen_protein):
 		protein, dict = greedy(chosen_protein, N_tries)
 		end_time = time.time() - start_time
 
-	elif chosen_algorithm == "probabilty-based branch-n-bound":
+	# Run a probability-based branch n bound algorithm
+	elif chosen_algorithm == algorithms[2]:
+
 		# to do: ask for probabilities
 
 		start_time = time.time()
@@ -88,7 +97,7 @@ if __name__ == "__main__":
 	chosen_protein = int(input("Choose a protein: ")) - 1
 	print(proteins[chosen_protein] + '\n')
 
-	protein, end_time = run_algorithm(algorithms[chosen_algorithm], proteins[chosen_protein])
+	protein, end_time = run_algorithm(algorithms, algorithms[chosen_algorithm], proteins[chosen_protein])
 
 	print(time.strftime('Elapsed time: %H:%M:%S', time.gmtime(end_time)))
 	protein.visualise(proteins[chosen_protein])

@@ -15,6 +15,7 @@ class Acid:
             "next" : ""
             }
 
+
     def __str__(self):
         '''
         Returns a string representation of the amino acid
@@ -30,5 +31,10 @@ class Acid:
 
         return f"{self.type}{arrows[self.connections['next']]}"
 
+
     def add_connection(self, connection):
-            self.connections["next"] = connection
+    	'''
+
+    	'''
+
+        self.connections["next"] = connection
