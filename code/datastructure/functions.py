@@ -3,24 +3,24 @@
 # Michael Stroet  11293284
 
 def opposite(direction):
-	'''
+    '''
 
-	'''
+    '''
 
     opposite_directions = {
-        "" : "",
-        "up" : "down",
-        "down" : "up",
-        "left" : "right",
-        "right" : "left"
-        }
+    "" : "",
+    "up" : "down",
+    "down" : "up",
+    "left" : "right",
+    "right" : "left"
+    }
 
     return opposite_directions[direction]
 
 def new_location(location, direction):
-	'''
+    '''
 
-	'''
+    '''
 
     if direction == "up":
         new_location = [location[0] - 1, location[1]]

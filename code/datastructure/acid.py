@@ -33,8 +33,7 @@ class Acid:
 
 
     def add_connection(self, connection):
-    	'''
+        '''
 
-    	'''
-
+        '''
         self.connections["next"] = connection
