@@ -29,6 +29,10 @@ def visualise(protein):
     y_min = min(L_y) - 1
     y_max = max(L_y) + 1
 
+    axis_min = min([x_min, y_min])
+    axis_max = min([x_max, y_max])
+    ticks = range(axis_min, axis_max + 1)
+
     plt.figure("Folded protein", figsize = (6, 6))
 
     plt.plot(L_x, L_y, '-', color = "black")
@@ -36,15 +40,16 @@ def visualise(protein):
     for i, color in enumerate(L_color):
         plt.plot(L_x[i], L_y[i], 'o', color = color, markersize = 10)
 
-    plt.xlim([min([x_min, y_min]), max([x_max, y_max])])
-    plt.ylim([min([x_min, y_min]), max([x_max, y_max])])
+    plt.xticks(ticks)
+    plt.xlim([axis_min, axis_max])
 
-    plt.title("Protein!")
+    plt.yticks(ticks)
+    plt.ylim([axis_min, axis_max])
+
+    plt.title("")
 
     plt.grid(axis = "both")
     plt.legend(loc = "upper right")
-
-    plt.show()
 
 
 def dictionary_hist(dictionary):
@@ -52,7 +57,6 @@ def dictionary_hist(dictionary):
     print(list(dictionary.keys()))
 
     plt.bar(x = list(dictionary.keys()), height = dictionary.values(), width = 0.8)
-    plt.show()
 
 
 if __name__ == "__main__":
