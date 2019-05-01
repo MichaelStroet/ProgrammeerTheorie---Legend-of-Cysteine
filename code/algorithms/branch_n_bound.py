@@ -5,7 +5,9 @@
 import numpy as np
 import copy
 
-from datastructure import Protein, Acid
+from acid import Acid
+from protein import Protein
+
 '''
 09/04
 ಠ_ಠ

@@ -3,70 +3,10 @@
 # Michael Stroet  11293284
 
 import numpy as np
+
+from acid import Acid
 from graph import visualise as plot
-
-def opposite(direction):
-
-    opposite_directions = {
-        "" : "",
-        "up" : "down",
-        "down" : "up",
-        "left" : "right",
-        "right" : "left"
-        }
-
-    return opposite_directions[direction]
-
-def new_location(location, direction):
-
-    if direction == "up":
-        new_location = [location[0] - 1, location[1]]
-
-    elif direction == "down":
-        new_location = [location[0] + 1, location[1]]
-
-    elif direction == "left":
-        new_location = [location[0], location[1] - 1]
-
-    elif direction == "right":
-        new_location = [location[0], location[1] + 1]
-
-    else:
-        new_location = location
-
-    return new_location
-
-class Acid:
-
-    def __init__(self, type, position, previous_connection):
-        '''
-        Initialise an amino acid
-        '''
-        self.type = type
-        self.position = [position[0], position[1]] # [row,column]
-        self.connections = {
-            "previous" : previous_connection,
-            "next" : ""
-            }
-
-    def __str__(self):
-        '''
-        Returns a string representation of the amino acid
-        '''
-        arrows = {
-            "" : "",
-            "first" : "▼",
-            "up" : "↑",
-            "down" : "↓",
-            "left" : "←",
-            "right" : "→",
-        }
-
-        return f"{self.type}{arrows[self.connections['next']]}"
-
-    def add_connection(self, connection):
-            self.connections["next"] = connection
-
+from functions import opposite, new_location
 
 class Protein:
 
@@ -193,7 +133,7 @@ class Protein:
             print(f"Unknown amino acid type: '{type}'")
             exit(1)
 
-    def visualise(self):
+    def visualise(self, protein_string):
         length_protein = int((len(self.acids) + 1) / 2.)
 
         location = [length_protein - 1, length_protein - 1]
@@ -212,4 +152,4 @@ class Protein:
             acid_data.append([acid_type, acid_x, acid_y])
             location = new_location(location, acid.connections["next"])
 
-        plot(acid_data)
+        plot(acid_data, protein_string, self.energy)

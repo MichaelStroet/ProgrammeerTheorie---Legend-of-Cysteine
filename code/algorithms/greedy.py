@@ -10,7 +10,8 @@ import copy
 import random
 import numpy as np
 
-from datastructure import Protein, Acid
+from acid import Acid
+from protein import Protein
 
 def greedy(protein_string, N_tries):
 	'''
@@ -51,7 +52,7 @@ def greedy(protein_string, N_tries):
 				energy_min = energy
 				protein_min = protein_result
 				print(f"found new lowest energy: {energy_min}")
-			
+
 			# dictonary for histogram of solutions
 			energy_counter[energy] = energy_counter.get(energy, 0) + 1
 
@@ -59,11 +60,11 @@ def greedy(protein_string, N_tries):
 
 def greedy_fold(protein, p_string, p_len, loc_current):
 	'''
-	The input is the protein matrix, string and length 
+	The input is the protein matrix, string and length
 	and the location of the last placed amino acid
 	The ouput is a folded protein
 	'''
-		
+
 	# Every direction for the following amino acid
 	for acid_index in range(2, p_len):
 
@@ -118,7 +119,7 @@ def greedy_fold(protein, p_string, p_len, loc_current):
 		# Protein incomplete, abort folding
 		else:
 			break
-		
+
 	# Return the folded protein
 	if protein.length == p_len:
 		return(True, protein)

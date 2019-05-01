@@ -5,7 +5,7 @@
 import matplotlib.pyplot as plt
 
 
-def visualise(protein):
+def visualise(protein, protein_string, protein_energy):
 
     colors = {
         "H" : "red",
@@ -29,24 +29,20 @@ def visualise(protein):
     y_min = min(L_y) - 1
     y_max = max(L_y) + 1
 
-    axis_min = min([x_min, y_min])
-    axis_max = min([x_max, y_max])
-    ticks = range(axis_min, axis_max + 1)
-
-    plt.figure("Folded protein", figsize = (6, 6))
+    plt.figure("Folded protein", figsize = (x_max - x_min, y_max - y_min))
 
     plt.plot(L_x, L_y, '-', color = "black")
 
     for i, color in enumerate(L_color):
         plt.plot(L_x[i], L_y[i], 'o', color = color, markersize = 10)
 
-    plt.xticks(ticks)
-    plt.xlim([axis_min, axis_max])
+    plt.xticks(range(x_min, x_max + 1))
+    plt.xlim([x_min, x_max])
 
-    plt.yticks(ticks)
-    plt.ylim([axis_min, axis_max])
+    plt.yticks(range(y_min, y_max + 1))
+    plt.ylim([y_min, y_max])
 
-    plt.title("")
+    plt.title(f"{protein_string}\nEnergy: {protein_energy}")
 
     plt.grid(axis = "both")
     plt.legend(loc = "upper right")
@@ -65,3 +61,4 @@ if __name__ == "__main__":
     '''
     test_protein = [["H",0,0], ["P",0,1], ["P",1,1], ["H",2,1], ["H",2,0], ["C",2,-1], ["H",1,-1], ["P",0, -1], ["H",-1,-1]]
     visualise(test_protein)
+    plt.show()

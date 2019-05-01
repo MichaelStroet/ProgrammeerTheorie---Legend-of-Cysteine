@@ -5,7 +5,8 @@
 import copy
 import numpy as np
 
-from datastructure import Protein, Acid
+from acid import Acid
+from protein import Protein
 
 def random_walk(protein_string, N_tries):
     '''
