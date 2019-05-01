@@ -38,40 +38,6 @@ def read_input():
 		file_lines = file_content.split()
 	return file_lines
 
-def ask_integer(message):
-	'''
-	Asks the user for an integer
-	'''
-
-	user_input = input(message)
-
-	while not user_input.isdigit():
-		user_input = input(message)
-
-	return int(user_input)
-
-def is_float(string):
-	'''
-	Determines if the given string represents a float
-	'''
-	try:
-		float(string)
-		return True
-	except ValueError:
-		return False
-
-def ask_float(message):
-	'''
-	Asks the user for a float
-	'''
-
-	user_input = input(message)
-
-	while not user_input.is_float():
-		user_input = input(message)
-
-	return float(user_input)
-
 def run_algorithm(algoritms, chosen_algorithm, chosen_protein):
 	'''
 

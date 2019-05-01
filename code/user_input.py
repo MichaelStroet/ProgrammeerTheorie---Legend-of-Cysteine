@@ -30,7 +30,7 @@ def ask_integer(message):
 	'''
 	user_input = input(message)
 
-	while not user_input.is_integer(user_input):
+	while not is_integer(user_input):
 		user_input = input(message)
 
 	return int(user_input)
@@ -42,7 +42,7 @@ def ask_float(message):
 	'''
 	user_input = input(message)
 
-	while not user_input.is_float(user_input):
+	while not is_float(user_input):
 		user_input = input(message)
 
 	return float(user_input)
