@@ -22,32 +22,7 @@ from protein import Protein
 def branch_n_bound(protein_string, prob_above_avg, prob_below_avg):
 
     global protein_str, prob_below_average, prob_above_average, length_total, energy_min_all, energy_min_partial
-    # while True:
-    #     prob_below_average = input("Choose a probability to discard proteins with energy below the average? ")
-    #     try:
-    #         prob_below_average = float(prob_below_average)
-    #     except ValueError:
-    #         print("A probability is between 0 and 1. Try again.")
-    #         continue
-    #     if 0 < prob_below_average < 1:
-    #         print("Probability below average: ",prob_below_average)
-    #         break
-    #     else:
-    #         print("A probability is between 0 and 1. Try again.")
-    #         continue
-    # while True:
-    #     prob_above_average = input("Choose a probability to discard proteins with energy above the average?  ")
-    #     try:
-    #         prob_above_average = float(prob_above_average)
-    #     except ValueError:
-    #         print("A probability is between 0 and 1. Try again.")
-    #         continue
-    #     if 0 < prob_above_average < 1:
-    #         print("Probability above average: ",prob_above_average)
-    #         break
-    #     else:
-    #         print("A probability is between 0 and 1. Try again.")
-    #         continue
+    
     prob_above_average = prob_above_avg
     prob_below_average = prob_below_avg
     protein_str = protein_string
@@ -145,7 +120,7 @@ def next_acid(protein, average_list, previous_location):
                 #update lowest energy among all completed proteins
                 if protein.energy < energy_min_all:
                     energy_min_all = protein.energy
-                    print("NEW min all= ",energy_min_all)
+                    print("New minimum energy found : ",energy_min_all)
                     best_protein = copy.deepcopy(protein)
                     # print(best_protein)
                     # print("\nMinumum partial energy : ",energy_min_partial)
