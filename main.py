@@ -24,6 +24,7 @@ from branch_n_bound import branch_n_bound
 from acid import Acid
 from protein import Protein
 from graph import visualise, dictionary_hist
+from user_input import ask_integer, ask_float
 
 def read_input():
 	'''
@@ -37,6 +38,40 @@ def read_input():
 		file_lines = file_content.split()
 	return file_lines
 
+def ask_integer(message):
+	'''
+	Asks the user for an integer
+	'''
+
+	user_input = input(message)
+
+	while not user_input.isdigit():
+		user_input = input(message)
+
+	return int(user_input)
+
+def is_float(string):
+	'''
+	Determines if the given string represents a float
+	'''
+	try:
+		float(string)
+		return True
+	except ValueError:
+		return False
+
+def ask_float(message):
+	'''
+	Asks the user for a float
+	'''
+
+	user_input = input(message)
+
+	while not user_input.is_float():
+		user_input = input(message)
+
+	return float(user_input)
+
 def run_algorithm(algoritms, chosen_algorithm, chosen_protein):
 	'''
 
@@ -45,18 +80,24 @@ def run_algorithm(algoritms, chosen_algorithm, chosen_protein):
 	# Run a random walk
 	if chosen_algorithm == algorithms[0]:
 
-		N_tries = int(input("How many proteins to fold? "))
-		print(f"{N_tries}\n")
+		N_tries = ask_integer("How many proteins to fold? ")
+		while N_tries < 2:
+			N_tries = ask_integer("How many proteins to fold? ")
+
+		print(f">{N_tries}\n")
 
 		start_time = time.time()
 		protein, dict = random_walk(chosen_protein, N_tries)
 		end_time = time.time() - start_time
 
-	# Run a greedy algoritm
+	# Run a greedy algorithm
 	elif chosen_algorithm == algorithms[1]:
 
-		N_tries = int(input("How many proteins to fold? "))
-		print(f"{N_tries}\n")
+		N_tries = ask_integer("How many proteins to fold? ")
+		while N_tries < 2:
+			N_tries = ask_integer("How many proteins to fold? ")
+
+		print(f">{N_tries}\n")
 
 		start_time = time.time()
 		protein, dict = greedy(chosen_protein, N_tries)
@@ -86,20 +127,26 @@ if __name__ == "__main__":
 		print(f"{i + 1}: {algorithm}")
 	print()
 
-	chosen_algorithm = int(input("Choose an algorithm: ")) - 1
-	print(algorithms[chosen_algorithm] + '\n')
+	chosen_algorithm = ask_integer("Choose an algorithm: ") - 1
+	while chosen_algorithm < 0 or chosen_algorithm > len(algorithms) - 1:
+		chosen_algorithm = ask_integer("Choose an algorithm: ") - 1
+
+	print(f">{algorithms[chosen_algorithm]}\n")
 
 	proteins = read_input()
 	for i, protein in zip(range(len(proteins)), proteins):
 		print(f"{i + 1}: {protein}")
 	print()
 
-	chosen_protein = int(input("Choose a protein: ")) - 1
-	print(proteins[chosen_protein] + '\n')
+	chosen_protein = ask_integer("Choose a protein: ") - 1
+	while chosen_protein < 0 or chosen_protein > len(proteins) - 1:
+		chosen_protein = ask_integer("Choose a protein: ") - 1
+
+	print(f">{proteins[chosen_protein]}\n")
 
 	protein, end_time = run_algorithm(algorithms, algorithms[chosen_algorithm], proteins[chosen_protein])
 
-	print(time.strftime('Elapsed time: %H:%M:%S', time.gmtime(end_time)))
+	print(time.strftime('\nElapsed time: %H:%M:%S', time.gmtime(end_time)))
 	protein.visualise(proteins[chosen_protein])
 
 	plt.show()
