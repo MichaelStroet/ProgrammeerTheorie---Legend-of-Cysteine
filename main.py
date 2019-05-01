@@ -72,10 +72,21 @@ def run_algorithm(algoritms, chosen_algorithm, chosen_protein):
 	# Run a probability-based branch n bound algorithm
 	elif chosen_algorithm == algorithms[2]:
 
-		# to do: ask for probabilities
+		# Get probabilities
+		prob_below_average = ask_float("Choose a probability to discard proteins with energy below the average? ")
+		while 0 > prob_below_average or prob_below_average > 1:
+			print("A probability is between 0 and 1. Try again.")
+			prob_below_average = ask_float("Choose a probability to discard proteins with energy below the average? ")
+		print("Probability below average: ",prob_below_average)
+
+		prob_above_average = ask_float("Choose a probability to discard proteins with energy above the average? ")
+		while 0 > prob_above_average or prob_above_average > 1:
+			print("A probability is between 0 and 1. Try again.")
+			prob_above_average = ask_float("Choose a probability to discard proteins with energy above the average? ")
+		print("Probability above average: ",prob_above_average)
 
 		start_time = time.time()
-		protein = branch_n_bound(chosen_protein)#, prob_above, prob_below)
+		protein = branch_n_bound(chosen_protein, prob_above_average, prob_below_average)
 		end_time = time.time() - start_time
 
 	else:
