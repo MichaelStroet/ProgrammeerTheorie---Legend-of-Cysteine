@@ -22,9 +22,8 @@ from protein import Protein
 def branch_n_bound(protein_string, prob_above_avg, prob_below_avg):
 
     global protein_str, prob_below_average, prob_above_average, length_total, energy_min_all, energy_min_partial
-    
-    prob_above_average = prob_above_avg
     prob_below_average = prob_below_avg
+    prob_above_average = prob_above_avg
     protein_str = protein_string
     length_total = len(protein_string)
 
@@ -34,7 +33,7 @@ def branch_n_bound(protein_string, prob_above_avg, prob_below_avg):
     #initialize variables
     energy_min_all = 0
     energy_min_partial = [0] * length_total
-    average_list = [[] for i in range(length_total)]
+    energy_counter = {}
 
     #set probabilities for pruning (keep this percentage)
     # prob_below_average = 0.10
@@ -53,14 +52,22 @@ def branch_n_bound(protein_string, prob_above_avg, prob_below_avg):
     previous_location = location
 
     #call next_acid function to place a new amino acid
-    next_acid(protein, average_list, previous_location)
+    next_acid(protein, energy_counter, previous_location)
 
     print("\nMinumum energy found per length: ",energy_min_partial)
     print("Minumum energy found ",energy_min_all)
     print(best_protein)
     return best_protein
 
-def next_acid(protein, average_list, previous_location):
+def dict_average(dict):
+    sum_energy = 0
+    for key, value in dict.items():
+        sum_energy += key * value
+    values = dict.values()
+    return sum_energy / sum(values)
+
+
+def next_acid(protein, energy_counter, previous_location):
 
     global energy_min_all, best_protein
 
@@ -100,9 +107,10 @@ def next_acid(protein, average_list, previous_location):
             new_energy = protein.check_energy(location, amino_acid)
             protein.energy += new_energy
 
-            #update the list for average energy & calculate average
-            average_list[protein.length - 1].append(protein.energy)
-            energy_average_partial = np.average(average_list[protein.length - 1])
+            #update dict for average energy & calculate average
+            # Add the energy to a dictionary counter
+            energy_counter[protein.energy] = energy_counter.get(protein.energy, 0) + 1
+            average_energy = dict_average(energy_counter)
 
             #update lowest energy in the partial proteins list
             if protein.energy <= energy_min_partial[protein.length - 1]:
@@ -127,7 +135,7 @@ def next_acid(protein, average_list, previous_location):
 
             #if it is a polar amino acid, add a new acid
             elif amino_acid == "P":
-                next_acid(protein, average_list, location)
+                next_acid(protein, energy_counter, location)
 
             #if it is a hydrophobic amino acid, there are several possibilities
             else:
@@ -136,17 +144,17 @@ def next_acid(protein, average_list, previous_location):
                 the partial protein, add a new amino acid
                 '''
                 if protein.energy <= energy_min_partial[protein.length - 1]:
-                    next_acid(protein, average_list, location)
+                    next_acid(protein, energy_counter, location)
 
                 # if the curent energy is below the average energy of
                 # all partial proteins up to now, compute a random number between
                 # 0 and 1 and if it is below the probability threshold, add a new
                 # amino acid
-                elif protein.energy <= energy_average_partial:
+                elif protein.energy <= average_energy:
                     r = np.random.random()
 
                     if r <= prob_below_average:
-                        next_acid(protein, average_list, location)
+                        next_acid(protein, energy_counter, location)
 
                 # if the curent energy is bigger the average energy of
                 # all partial proteins up to now, compute a random number between
@@ -155,7 +163,7 @@ def next_acid(protein, average_list, previous_location):
                 else:
                     r = np.random.random()
                     if r <= prob_above_average:
-                        next_acid(protein, average_list, location)
+                        next_acid(protein, energy_counter, location)
 
             #remove the acid before continuing
             protein.remove_acid(location, previous_energy)
