@@ -4,37 +4,58 @@
 
 def opposite(direction):
     '''
-
+    Returns the opposite direction of the given direction
     '''
-
     opposite_directions = {
     "" : "",
     "up" : "down",
     "down" : "up",
     "left" : "right",
-    "right" : "left"
+    "right" : "left",
+    "in" : "out",
+    "out" : "in"
     }
 
     return opposite_directions[direction]
 
-def new_location(location, direction):
+def new_location(location, direction):#, matrix_length):
+    '''
+    Determines the matrix location in a certain direction from another location
+    TO DO: If the new location lies outside the matrix, returns ...?
     '''
 
-    '''
+    matrix_length = 100000000000
+    row = location[0]
+    column = location[1]
+    #3D = location[2]
 
-    if direction == "up":
-        new_location = [location[0] - 1, location[1]]
+    if direction == "up" and row - 1 >= 0:
+        new_location = [row - 1, column]
 
-    elif direction == "down":
-        new_location = [location[0] + 1, location[1]]
+    elif direction == "down" and row + 1 < matrix_length:
+        new_location = [row + 1, column]
 
-    elif direction == "left":
-        new_location = [location[0], location[1] - 1]
+    elif direction == "left" and column - 1 >= 0:
+        new_location = [row, column - 1]
 
-    elif direction == "right":
-        new_location = [location[0], location[1] + 1]
+    elif direction == "right" and column + 1 < matrix_length:
+        new_location = [row, column + 1]
+
+    elif direction == "in":# and 3D +- 1 ? 0 / matrix_length:
+        print("in: not yet implemented")
+        new_location = location
+
+    elif direction == "out":# and 3D +- 1 ? 0 / matrix_length:
+        print("out: not yet implemented")
+        new_location = location
 
     else:
+        #print("unknown direction or new location outside matrix")
+        '''
+        random walk prints one at the end
+        greedy prints these a lot
+        branch n bound prints these a lot
+        '''
         new_location = location
 
     return new_location

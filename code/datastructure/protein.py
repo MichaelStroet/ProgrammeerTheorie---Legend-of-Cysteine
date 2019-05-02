@@ -12,7 +12,7 @@ class Protein:
 
     def __init__(self, protein_length):
         '''
-        Initialise a n x n matrix
+        Initialise a n x n matrix for Acid object
         '''
         matrix_size = 2 * protein_length - 1
 
@@ -20,39 +20,37 @@ class Protein:
         self.energy = 0
         self.length = 0
 
-
     def __str__(self):
         '''
-        Returns a string representation of the acids matrix
+        Returns a string representation of the acid matrix
         '''
-        string_matrix = ""
-        length = len(self.acids)
 
+        string_matrix = ""
+        matrix_length = len(self.acids)
+
+        # For each column in each row, add the Acid object to the matrix string
         for row in self.acids:
             string_matrix += f"[{row[0]}"
-            for i in range(1, length):
+            for i in range(1, matrix_length):
                 string_matrix += f" {row[i]}"
 
             string_matrix += "]\n"
 
         return string_matrix
 
-
     def add_acid(self, type, position, direction_new_acid):
         '''
-        Adds an acid object to the acids matrix
+        Adds a new acid object to the acid matrix
         '''
-
         acid = Acid(type, position, opposite(direction_new_acid))
         self.acids[position[0], position[1]] = acid
         self.length += 1
 
-
     def remove_acid(self, location, previous_energy):
         '''
         Removes an acid object from the acids matrix
+        TO DO: Removes the last acid object from the matrix
         '''
-
         acid_connections = self.acids[location[0], location[1]].connections
 
         for key in ["previous", "next"]:
@@ -66,100 +64,107 @@ class Protein:
         self.energy = previous_energy
         self.length -= 1
 
-
     def neighbors(self, location):
         '''
-        Gets the four neighboring acid objects from a central acids, returns dict
+        Gets all neighboring acid objects from a central acid
+        and returns a dictionary of the location for each direction.
+        TO DO: rework for one for loop and smaller matrices
         '''
-
         directions = ["up", "down", "left", "right"]
         locations = []
 
+        # Get the locations of all neighbors
         for direction in directions:
-            locations.append(new_location(location, direction))
+            locations.append(new_location(location, direction))#, matrix_length))
 
         neighbor_acids = {}
 
+        # Loop over each direction and its location
         for direction, location in zip(directions, locations):
 
+            # If the new location lies within the matrix, add the object to the dictionary
             if 0 <= location[0] <= (len(self.acids) - 1) and 0 <= location[1] <= (len(self.acids) - 1):
                 acid = self.acids[location[0], location[1]]
                 neighbor_acids[direction] = location
 
         return neighbor_acids
 
-
     def check_energy(self, location, type):
         '''
-        input is the location of the acid you want to check the energy of, type is the acid type: "P"/"H"/"C"
-        Calculates the energy of an amino acid and its unconnected neighbors
+        Calculates the energy of a newly placed Acid object and returns an integer
         '''
 
-        # If acid is polair energy does not change
-        if type == "P":
-            return 0
+        # Checks if the location contains an actual Acid object
+        central_acid = self.acids[location[0], location[1]]
+        if not central_acid == 0:
 
-        # If acid is hydrofobic energy is decreased by -1 (type = "H") or -5 (type = "C")
-        elif type == "H" or type == "C":
+            # If the acid is polar, the energy stays the same
+            if type == "P":
+                return 0
 
-            central_acid = self.acids[location[0], location[1]]
-            central_connections = central_acid.connections.values()
-            acids = self.neighbors(location)
+            elif type == "H" or type == "C":
 
-            for direction in ["up", "down", "left", "right"]:
+                # Get the neighboring locations
+                central_connections = central_acid.connections.values()
+                neighbor_acids = self.neighbors(location)
 
-                if direction in acids:
-                    location = acids[direction]
+                new_energy = 0
+
+                # Loop over each neighbor and check the new energy
+                for direction in neighbor_acids:
+                    location = neighbor_acids[direction]
                     acid = self.acids[location[0], location[1]]
 
-                    if acid == 0 or direction in central_connections:
-                        del acids[direction]
+                    if not acid == 0:
 
-            new_energy = 0
+                        # If the neighbor pair is H-H or H-C, the energy decreases by 1
+                        if type == "H":
+                            if acid.type == "H" or acid.type == "C":
+                                new_energy -= 1
 
-            for direction in acids:
-                location = acids[direction]
-                acid = self.acids[location[0], location[1]]
+                        # If the neighbor pair is C-H, the energy decreases by 1,
+                        # and if it is C-C, the energy decreases by 5
+                        else:
+                            if acid.type == "H":
+                                new_energy -= 1
 
-                if type == "H":
-                    if acid.type == "H" or acid.type == "C":
-                        new_energy -= 1
+                            elif acid.type == "C":
+                                new_energy -= 5
 
-                else:
-                    if acid.type == "H":
-                        new_energy -= 1
+                return new_energy
 
-                    elif acid.type == "C":
-                        new_energy -= 5
-
-            return new_energy
+            else:
+                print(f"Unknown amino acid type: '{type}'")
+                exit(1)
 
         else:
-            print(f"Unknown amino acid type: '{type}'")
-            exit(1)
-
+            return 0
 
     def visualise(self, protein_string):
         '''
-
+        Visualises the protein object in a 2D matplotlib plot
         '''
 
-        length_protein = int((len(self.acids) + 1) / 2.)
-
-        location = [length_protein - 1, length_protein - 1]
-        acid = self.acids[location[0], location[1]]
+        # Determine the middle (start) of the matrix
+        matrix_length = len(self.acids)
+        start_index = int((matrix_length - 1) / 2.)
+        location = [start_location, start_location]
 
         acid_data = []
+
+        # Loop over each acid in the protein and add its info to the data list
+        acid = self.acids[location[0], location[1]]
 
         while not acid.connections["next"] == "":
 
             acid = self.acids[location[0], location[1]]
 
             acid_type = acid.type
-            acid_x = acid.position[0] - length_protein + 1
-            acid_y = acid.position[1] - length_protein + 1
+            acid_x = acid.position[0] - start_location
+            acid_y = acid.position[1] - start_location
 
             acid_data.append([acid_type, acid_x, acid_y])
             location = new_location(location, acid.connections["next"])
 
+        # Plot the acid_data list
         plot(acid_data, protein_string, self.energy)
