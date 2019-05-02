@@ -104,8 +104,9 @@ class Protein:
 
             elif type == "H" or type == "C":
 
-                # Get the neighboring locations
                 central_connections = central_acid.connections.values()
+
+                # Get the neighboring locations
                 neighbor_acids = self.neighbors(location)
 
                 new_energy = 0
@@ -115,7 +116,7 @@ class Protein:
                     location = neighbor_acids[direction]
                     acid = self.acids[location[0], location[1]]
 
-                    if not acid == 0:
+                    if not acid == 0 and not direction in central_connections:
 
                         # If the neighbor pair is H-H or H-C, the energy decreases by 1
                         if type == "H":
