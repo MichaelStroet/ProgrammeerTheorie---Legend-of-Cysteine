@@ -148,7 +148,7 @@ class Protein:
         # Determine the middle (start) of the matrix
         matrix_length = len(self.acids)
         start_index = int((matrix_length - 1) / 2.)
-        location = [start_location, start_location]
+        location = [start_index, start_index]
 
         acid_data = []
 
