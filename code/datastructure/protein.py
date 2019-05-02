@@ -160,8 +160,8 @@ class Protein:
             acid = self.acids[location[0], location[1]]
 
             acid_type = acid.type
-            acid_x = acid.position[0] - start_location
-            acid_y = acid.position[1] - start_location
+            acid_x = acid.position[0] - start_index
+            acid_y = acid.position[1] - start_index
 
             acid_data.append([acid_type, acid_x, acid_y])
             location = new_location(location, acid.connections["next"])
