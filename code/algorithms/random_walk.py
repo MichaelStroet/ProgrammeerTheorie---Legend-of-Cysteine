@@ -18,17 +18,17 @@ def random_walk(protein_string, N_tries):
 
     # Use lenght to establish location of the first amino acid
     protein_length = len(protein_string)
-    start_protein = Protein(protein_length)
+    protein = Protein(protein_length)
 
     # Place the first amino acid
-    start_index = int((len(start_protein.acids) - 1) / 2.)
+    start_index = int((len(protein.acids) - 1) / 2.)
     location = [start_index, start_index]
-    start_protein.add_acid(protein_string[0], location, "")
-    start_protein.acids[location[0], location[1]].add_connection("down")
+    protein.add_acid(protein_string[0], location, "")
+    protein.acids[location[0], location[1]].add_connection("down")
 
     # Place the second amino acid below the first
     location = [location[0] + 1, location[1]]
-    start_protein.add_acid(protein_string[1], location, "up")
+    protein.add_acid(protein_string[1], location, "up")
 
     energy_min = 0
     energy_counter = {}
@@ -40,20 +40,21 @@ def random_walk(protein_string, N_tries):
         if (i + 1) % 1000 == 0:
             print(f"{i + 1}th protein folded")
 
-        # Copy the start_protein for the next random walk
-        protein = copy.deepcopy(start_protein)
+        # Remove acids until only the first two are left
+        while protein.length > 2:
+            protein.remove_acid(0)
 
         # Run the next random walk
-        solution_found, resulting_protein = walk(protein, protein_string, location)
+        solution_found, protein = walk(protein, protein_string, location)
 
         # When a complete protein has been created, get it's energy
         if solution_found:
-            energy = resulting_protein.energy
+            energy = protein.energy
 
             # When its energy is the lowest energy yet, save the protein object
             if energy < energy_min:
                 energy_min = energy
-                protein_min = resulting_protein
+                protein_min = copy.deepcopy(protein)
                 print(f"Found new lowest energy: {energy_min}")
 
             # Add the energy to a dictionary counter
