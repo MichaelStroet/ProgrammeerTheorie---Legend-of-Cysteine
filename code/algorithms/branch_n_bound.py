@@ -21,22 +21,22 @@ from protein import Protein
 
 def branch_n_bound(protein_string, prob_above_avg, prob_below_avg):
 
-    global protein_str, prob_below_average, prob_above_average, length_total, energy_min_all, energy_min_partial
+    global protein_str, prob_below_average, prob_above_average, protein_length, energy_min_all, energy_min_partial
     prob_below_average = prob_below_avg
     prob_above_average = prob_above_avg
     protein_str = protein_string
-    length_total = len(protein_string)
-
+    protein_length = len(protein_string)
     # Create the protein matrix
-    protein = Protein(length_total)
+    protein = Protein(protein_length)
 
     # Initialize variables
     energy_min_all = 0
-    energy_min_partial = [0] * length_total
+    energy_min_partial = [0] * protein_length
     energy_counter = {}
 
     # Place first amino acid[row, column]
-    start_location = [length_total - 1, length_total - 1]
+    start_index = int((len(protein.acids) - 1) / 2.)
+    start_location = [start_index, start_index]
     protein.add_acid(protein_string[0], start_location,"")
     protein.acids[start_location[0], start_location[1]].add_connection("down")
 
@@ -50,9 +50,6 @@ def branch_n_bound(protein_string, prob_above_avg, prob_below_avg):
     # Call next_acid function to place a new amino acid
     next_acid(protein, energy_counter, previous_location)
 
-    print("\nMinumum energy found per length: ",energy_min_partial)
-    print("Minumum energy found ",energy_min_all)
-    print(best_protein)
     return best_protein
 
 # Function for calculating the average of the values in a dictionary
@@ -119,7 +116,7 @@ def next_acid(protein, energy_counter, previous_location):
             '''
 
             # If it is the last amino acid of the protein string
-            if protein.length == length_total:
+            if protein.length == protein_length:
 
                 # Update lowest energy among all completed proteins
                 if protein.energy < energy_min_all:
@@ -162,13 +159,7 @@ def next_acid(protein, energy_counter, previous_location):
                         next_acid(protein, energy_counter, location)
 
             # Remove the acid before continuing
-            protein.remove_acid(location, previous_energy)
-
-
-if __name__ == "__main__":
-    branch_n_bound("HHPHHHPH")
-
-
+            protein.remove_acid(previous_energy)
 
 '''
 Pseudo-code for the Branch & Bound algorithm inspired from:

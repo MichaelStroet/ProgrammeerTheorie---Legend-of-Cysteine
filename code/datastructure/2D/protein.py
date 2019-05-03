@@ -14,9 +14,14 @@ class Protein:
         '''
         Initialise a n x n matrix for Acid object
         '''
-        matrix_size = 2 * protein_length - 1
+        matrix_size = protein_length
+
+        # Ensure odd matrix_size
+        if matrix_size % 2 == 0:
+            matrix_size += 1
 
         self.acids = np.zeros((matrix_size, matrix_size), dtype = Acid)
+        self.last_acid = [0, 0]
         self.energy = 0
         self.length = 0
 
@@ -38,29 +43,34 @@ class Protein:
 
         return string_matrix
 
-    def add_acid(self, type, position, direction_new_acid):
+    def add_acid(self, type, location, direction_new_acid):
         '''
         Adds a new acid object to the acid matrix
         '''
-        acid = Acid(type, position, opposite(direction_new_acid))
-        self.acids[position[0], position[1]] = acid
+        row, column = location
+
+        acid = Acid(type, location, opposite(direction_new_acid))
+        self.acids[row, column] = acid
+        self.last_acid = location
         self.length += 1
 
-    def remove_acid(self, location, previous_energy):
+    def remove_acid(self, previous_energy):
         '''
         Removes an acid object from the acids matrix
         TO DO: Removes the last acid object from the matrix
         '''
-        acid_connections = self.acids[location[0], location[1]].connections
+        row, column = self.last_acid
+        acid_connections = self.acids[row, column].connections
 
-        for key in ["previous", "next"]:
-            connection = acid_connections[key]
-            neighbor_location = new_location(location, connection)
-            neighbor_acid = self.acids[neighbor_location[0], neighbor_location[1]]
+        previous_connection = acid_connections["previous"]
 
-            neighbor_acid.connections["next"] = ""
+        previous_row, previous_column = new_location([row, column], previous_connection, len(self.acids))
+        previous_acid = self.acids[previous_row, previous_column]
 
-        self.acids[location[0], location[1]] = 0
+        previous_acid.connections["next"] = ""
+
+        self.acids[row, column] = 0
+        self.last_acid = [previous_row, previous_column]
         self.energy = previous_energy
         self.length -= 1
 
@@ -71,21 +81,13 @@ class Protein:
         TO DO: rework for one for loop and smaller matrices
         '''
         directions = ["up", "down", "left", "right"]
-        locations = []
+        neighbor_acids = {}
 
         # Get the locations of all neighbors
         for direction in directions:
-            locations.append(new_location(location, direction))#, matrix_length))
-
-        neighbor_acids = {}
-
-        # Loop over each direction and its location
-        for direction, location in zip(directions, locations):
-
-            # If the new location lies within the matrix, add the object to the dictionary
-            if 0 <= location[0] <= (len(self.acids) - 1) and 0 <= location[1] <= (len(self.acids) - 1):
-                acid = self.acids[location[0], location[1]]
-                neighbor_acids[direction] = location
+            site = new_location(location, direction, len(self.acids))
+            if site:
+                neighbor_acids[direction] = site
 
         return neighbor_acids
 
@@ -165,7 +167,7 @@ class Protein:
             acid_y = acid.position[1] - start_index
 
             acid_data.append([acid_type, acid_x, acid_y])
-            location = new_location(location, acid.connections["next"])
+            location = new_location(location, acid.connections["next"], len(self.acids))
 
         # Plot the acid_data list
         plot(acid_data, protein_string, self.energy)
