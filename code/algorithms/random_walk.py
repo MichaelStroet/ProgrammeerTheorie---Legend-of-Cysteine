@@ -21,7 +21,7 @@ def random_walk(protein_string, N_tries):
     start_protein = Protein(protein_length)
 
     # Place the first amino acid
-    start_index = int((len(protein.acids) - 1) / 2.)
+    start_index = int((len(start_protein.acids) - 1) / 2.)
     location = [start_index, start_index]
     start_protein.add_acid(protein_string[0], location, "")
     start_protein.acids[location[0], location[1]].add_connection("down")
