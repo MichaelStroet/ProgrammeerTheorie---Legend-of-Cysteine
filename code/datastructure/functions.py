@@ -23,11 +23,12 @@ def new_location(location, direction):#, matrix_length):
     Determines the matrix location in a certain direction from another location
     TO DO: If the new location lies outside the matrix, returns ...?
     '''
-
     matrix_length = 100000000000
-    row = location[0]
-    column = location[1]
-    #3D = location[2]
+
+    if len(location) > 2:
+        row, column, layer = location
+    else:
+        row, column = location
 
     if direction == "up" and row - 1 >= 0:
         new_location = [row - 1, column]
@@ -50,11 +51,12 @@ def new_location(location, direction):#, matrix_length):
         new_location = location
 
     else:
-        #print("unknown direction or new location outside matrix")
+        # print("unknown direction or new location outside matrix")
         '''
         random walk prints one at the end
         greedy prints these a lot
         branch n bound prints these a lot
+        >>> Error in remove_acid
         '''
         new_location = location
 

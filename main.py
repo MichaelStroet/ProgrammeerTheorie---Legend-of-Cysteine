@@ -11,6 +11,8 @@ directory = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(directory, "code"))
 sys.path.append(os.path.join(directory, "code", "algorithms"))
 sys.path.append(os.path.join(directory, "code", "datastructure"))
+sys.path.append(os.path.join(directory, "code", "datastructure", "2D"))
+sys.path.append(os.path.join(directory, "code", "datastructure", "3D"))
 
 # Add the data path
 sys.path.append(os.path.join(directory, "data"))
@@ -23,6 +25,9 @@ from branch_n_bound import branch_n_bound
 # Import datastructure and auxiliary functions
 from acid import Acid
 from protein import Protein
+from acid3D import Acid as Acid3D
+from protein3D import Protein as Protein3D
+
 from graph import visualise, dictionary_hist
 from user_input import ask_integer, ask_float
 
