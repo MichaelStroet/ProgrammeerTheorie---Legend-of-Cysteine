@@ -27,31 +27,31 @@ def branch_n_bound(protein_string, prob_above_avg, prob_below_avg):
     protein_str = protein_string
     length_total = len(protein_string)
 
-    #create the protein matrix
+    # Create the protein matrix
     protein = Protein(length_total)
 
-    #initialize variables
+    # Initialize variables
     energy_min_all = 0
     energy_min_partial = [0] * length_total
     energy_counter = {}
 
-    #set probabilities for pruning (keep this percentage)
+    # Set probabilities for pruning (keep this percentage)
     # prob_below_average = 0.10
     # prob_above_average = 0.05
 
-    #place first amino acid[row, column]
+    # Place first amino acid[row, column]
     start_location = [length_total - 1, length_total - 1]
     protein.add_acid(protein_string[0], start_location,"")
     protein.acids[start_location[0], start_location[1]].add_connection("down")
 
-    #place second amino acid underneath first
+    # Place second amino acid underneath first
     previous_location = start_location
     location = [previous_location[0] + 1, previous_location[1]]
     protein.add_acid(protein_string[1], location, "down")
     #protein.acids[location[0], location[1]].add_connection("up")
     previous_location = location
 
-    #call next_acid function to place a new amino acid
+    # Call next_acid function to place a new amino acid
     next_acid(protein, energy_counter, previous_location)
 
     print("\nMinumum energy found per length: ",energy_min_partial)
@@ -80,19 +80,19 @@ def next_acid(protein, energy_counter, previous_location):
     locations = protein.neighbors(previous_location)
     possible_sites = {}
 
-    #for each possible location, see if there is already an amino acid
+    # For each possible location, see if there is already an amino acid
     for direction in locations:
         location = locations[direction]
         acid = protein.acids[location[0],location[1]]
         if acid == 0:
             possible_sites[direction] = location
 
-    #if there are possible sites (it is not stuck)
+    # If there are possible sites (it is not stuck)
     if len(possible_sites) > 0:
 
         previous_energy = protein.energy
 
-        #add the acid object to the protein and connect it to the previous acid
+        # Add the acid object to the protein and connect it to the previous acid
         for key_direction in possible_sites:
 
             amino_acid = protein_str[protein.length]
@@ -103,16 +103,15 @@ def next_acid(protein, energy_counter, previous_location):
             location = possible_sites[key_direction]
             protein.add_acid(amino_acid, location, key_direction)
 
-            #calculate the new energy of the (partial) protein
+            # Calculate the new energy of the (partial) protein
             new_energy = protein.check_energy(location, amino_acid)
             protein.energy += new_energy
 
-            #update dict for average energy & calculate average
-            # Add the energy to a dictionary counter
+            # Add the energy to the dictionary counter & calculate the average
             energy_counter[protein.energy] = energy_counter.get(protein.energy, 0) + 1
             average_energy = dict_average(energy_counter)
 
-            #update lowest energy in the partial proteins list
+            # Update lowest energy in the partial proteins list
             if protein.energy <= energy_min_partial[protein.length - 1]:
                 energy_min_partial[protein.length - 1] = protein.energy
                 #print("NEW min partial= ",energy_min_partial[protein.length - 1])
@@ -122,10 +121,10 @@ def next_acid(protein, energy_counter, previous_location):
             and update the energy, or prune
             '''
 
-            #if it is the last amino acid of the protein string
+            # If it is the last amino acid of the protein string
             if protein.length == length_total:
 
-                #update lowest energy among all completed proteins
+                # Update lowest energy among all completed proteins
                 if protein.energy < energy_min_all:
                     energy_min_all = protein.energy
                     print("New minimum energy found : ",energy_min_all)
@@ -133,11 +132,11 @@ def next_acid(protein, energy_counter, previous_location):
                     # print(best_protein)
                     # print("\nMinumum partial energy : ",energy_min_partial)
 
-            #if it is a polar amino acid, add a new acid
+            # If it is a polar amino acid, add a new acid
             elif amino_acid == "P":
                 next_acid(protein, energy_counter, location)
 
-            #if it is a hydrophobic amino acid, there are several possibilities
+            # If it is a hydrophobic amino acid, there are several possibilities
             else:
                 '''
                 if the curent energy is equal to or below the lowest energy of
@@ -146,7 +145,7 @@ def next_acid(protein, energy_counter, previous_location):
                 if protein.energy <= energy_min_partial[protein.length - 1]:
                     next_acid(protein, energy_counter, location)
 
-                # if the curent energy is below the average energy of
+                # If the curent energy is below the average energy of
                 # all partial proteins up to now, compute a random number between
                 # 0 and 1 and if it is below the probability threshold, add a new
                 # amino acid
@@ -156,7 +155,7 @@ def next_acid(protein, energy_counter, previous_location):
                     if r <= prob_below_average:
                         next_acid(protein, energy_counter, location)
 
-                # if the curent energy is bigger the average energy of
+                # If the curent energy is bigger the average energy of
                 # all partial proteins up to now, compute a random number between
                 # 0 and 1 and if it is below the probability threshold, add a new
                 # amino acid
@@ -165,7 +164,7 @@ def next_acid(protein, energy_counter, previous_location):
                     if r <= prob_above_average:
                         next_acid(protein, energy_counter, location)
 
-            #remove the acid before continuing
+            # Remove the acid before continuing
             protein.remove_acid(location, previous_energy)
 
 
