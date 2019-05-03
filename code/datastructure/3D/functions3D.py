@@ -25,30 +25,25 @@ def new_location(location, direction):#, matrix_length):
     '''
     matrix_length = 100000000000
 
-    if len(location) > 2:
-        row, column, layer = location
-    else:
-        row, column = location
+    row, column, layer = location
 
     if direction == "up" and row - 1 >= 0:
-        new_location = [row - 1, column]
+        new_location = [row - 1, column, layer]
 
     elif direction == "down" and row + 1 < matrix_length:
-        new_location = [row + 1, column]
+        new_location = [row + 1, column, layer]
 
     elif direction == "left" and column - 1 >= 0:
-        new_location = [row, column - 1]
+        new_location = [row, column - 1, layer]
 
     elif direction == "right" and column + 1 < matrix_length:
-        new_location = [row, column + 1]
+        new_location = [row, column + 1, layer]
 
-    elif direction == "in":# and 3D +- 1 ? 0 / matrix_length:
-        print("in: not yet implemented")
-        new_location = location
+    elif direction == "in" and layer + 1 < matrix_length:
+        new_location = [row, column, layer + 1]
 
-    elif direction == "out":# and 3D +- 1 ? 0 / matrix_length:
-        print("out: not yet implemented")
-        new_location = location
+    elif direction == "out" and layer - 1 >= 0:
+        new_location = [row, column, layer - 1]
 
     else:
         # print("unknown direction or new location outside matrix")
