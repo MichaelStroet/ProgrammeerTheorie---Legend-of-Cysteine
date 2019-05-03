@@ -14,7 +14,7 @@ class Protein:
         '''
         Initialise a n x n matrix for Acid object
         '''
-        matrix_size = protein_length
+        matrix_size = int(protein_length / 1.)
 
         # Ensure odd matrix_size
         if matrix_size % 2 == 0:
@@ -150,10 +150,19 @@ class Protein:
 
         # Determine the middle (start) of the matrix
         matrix_length = len(self.acids)
+
         start_index = int((matrix_length - 1) / 2.)
         location = [start_index, start_index]
 
         acid_data = []
+        matrix_data = []
+
+        # Matrix corner coordinates
+        low = (0 - 1) - start_index
+        high = (matrix_length) - start_index
+
+        # Data for plotting the matrix borders
+        matrix_data = [[low, low], [low, high], [high, high], [high, low], [low, low]]
 
         # Loop over each acid in the protein and add its info to the data list
         acid = self.acids[location[0], location[1]]
@@ -170,4 +179,4 @@ class Protein:
             location = new_location(location, acid.connections["next"], len(self.acids))
 
         # Plot the acid_data list
-        plot(acid_data, protein_string, self.energy)
+        plot(acid_data, matrix_data, protein_string, self.energy)
