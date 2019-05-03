@@ -35,10 +35,6 @@ def branch_n_bound(protein_string, prob_above_avg, prob_below_avg):
     energy_min_partial = [0] * length_total
     energy_counter = {}
 
-    # Set probabilities for pruning (keep this percentage)
-    # prob_below_average = 0.10
-    # prob_above_average = 0.05
-
     # Place first amino acid[row, column]
     start_location = [length_total - 1, length_total - 1]
     protein.add_acid(protein_string[0], start_location,"")
@@ -59,6 +55,7 @@ def branch_n_bound(protein_string, prob_above_avg, prob_below_avg):
     print(best_protein)
     return best_protein
 
+# Function for calculating the average of the values in a dictionary
 def dict_average(dict):
     sum_energy = 0
     for key, value in dict.items():
@@ -66,7 +63,7 @@ def dict_average(dict):
     values = dict.values()
     return sum_energy / sum(values)
 
-
+# Function that places an amino acid
 def next_acid(protein, energy_counter, previous_location):
 
     global energy_min_all, best_protein
