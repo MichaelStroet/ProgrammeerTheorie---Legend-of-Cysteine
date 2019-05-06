@@ -46,8 +46,6 @@ def random_walk(protein_string, N_tries):
 
         # Run the next random walk
         solution_found, protein = walk(protein, protein_string, [layer, row, column])
-        print("finished a random walk:\n")
-        print(protein)
 
         # When a complete protein has been created, get it's energy
         if solution_found:
@@ -71,17 +69,12 @@ def walk(protein, protein_string, previous_location):
     track of the energy of the protein and returns a protein object.
     '''
 
-    print("new random walk:\n")
-    # print(protein)
-
     # Loop over each amino acid type in the protein string
     for length in range(2, len(protein_string)):
         acid_type = protein_string[length]
-        print(f"previous location = {previous_location}")
 
         # Get the acid objects surrounding the last-placed acid
         neighbors = protein.neighbors(previous_location)
-        print(f"neighbors: {neighbors}")
 
         possible_sites = {}
 
@@ -94,8 +87,6 @@ def walk(protein, protein_string, previous_location):
 
             if acid == 0:
                 possible_sites[direction] = location
-
-        print(f"possible_sites: {possible_sites}")
 
         # If a new acid can be placed, randomly place said acid
         if len(possible_sites) > 0:
@@ -118,8 +109,6 @@ def walk(protein, protein_string, previous_location):
 
                     # Add the next acid to the protein object
                     protein.add_acid(acid_type, location, direction)
-                    print(f"Placed new acid ({acid_type}) at {location}:\n")
-                    # print(protein)
                     previous_location = location
 
                     # Check if the new acid has lowered the energy of the protein
