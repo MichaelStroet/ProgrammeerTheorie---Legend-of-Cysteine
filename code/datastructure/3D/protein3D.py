@@ -119,7 +119,7 @@ class Protein:
 
                 # Loop over each neighbor and check the new energy
                 for direction in neighbor_acids:
-                    location = neighbor_acids[direction]
+                    layer, row, column = neighbor_acids[direction]
                     acid = self.acids[layer, row, column]
 
                     if not acid == 0 and not direction in central_connections:
