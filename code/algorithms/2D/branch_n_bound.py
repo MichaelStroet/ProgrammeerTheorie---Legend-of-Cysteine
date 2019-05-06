@@ -36,7 +36,8 @@ def branch_n_bound(protein_string, prob_above_avg, prob_below_avg):
     energy_counter = {}
 
     # Place first amino acid[row, column]
-    start_location = [length_total - 1, length_total - 1]
+    start_index = int((len(protein.acids) - 1) / 2.)
+    start_location = [start_index, start_index]
     protein.add_acid(protein_string[0], start_location,"")
     protein.acids[start_location[0], start_location[1]].add_connection("down")
 
@@ -162,7 +163,7 @@ def next_acid(protein, energy_counter, previous_location):
                         next_acid(protein, energy_counter, location)
 
             # Remove the acid before continuing
-            protein.remove_acid(location, previous_energy)
+            protein.remove_acid(previous_energy)
 
 
 if __name__ == "__main__":
