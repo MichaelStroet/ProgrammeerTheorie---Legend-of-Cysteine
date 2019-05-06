@@ -10,6 +10,8 @@ directory = os.path.dirname(os.path.realpath(__file__))
 # Add the code paths
 sys.path.append(os.path.join(directory, "code"))
 sys.path.append(os.path.join(directory, "code", "algorithms"))
+sys.path.append(os.path.join(directory, "code", "algorithms", "2D"))
+sys.path.append(os.path.join(directory, "code", "algorithms", "3D"))
 sys.path.append(os.path.join(directory, "code", "datastructure"))
 sys.path.append(os.path.join(directory, "code", "datastructure", "2D"))
 sys.path.append(os.path.join(directory, "code", "datastructure", "3D"))
