@@ -5,8 +5,11 @@
 import matplotlib.pyplot as plt
 
 
-def visualise(protein, protein_string, protein_energy):
+def visualise(protein, matrix, protein_string, protein_energy):
+    '''
 
+    '''
+    print(matrix)
     colors = {
         "H" : "red",
         "P" : "blue",
@@ -16,25 +19,25 @@ def visualise(protein, protein_string, protein_energy):
     L_color = []
     L_label = []
 
-    L_x = []
-    L_y = []
+    protein_x = []
+    protein_y = []
 
     for acid in protein:
         L_color.append(colors[acid[0]])
-        L_x.append(acid[1])
-        L_y.append(acid[2])
+        protein_x.append(acid[1])
+        protein_y.append(acid[2])
 
-    x_min = min(L_x) - 1
-    x_max = max(L_x) + 1
-    y_min = min(L_y) - 1
-    y_max = max(L_y) + 1
+    x_min = min(protein_x) - 1
+    x_max = max(protein_x) + 1
+    y_min = min(protein_y) - 1
+    y_max = max(protein_y) + 1
 
     plt.figure("Folded protein", figsize = (x_max - x_min, y_max - y_min))
 
-    plt.plot(L_x, L_y, '-', color = "black")
+    plt.plot(protein_x, protein_y, '-', color = "black")
 
     for i, color in enumerate(L_color):
-        plt.plot(L_x[i], L_y[i], 'o', color = color, markersize = 10)
+        plt.plot(protein_x[i], protein_y[i], 'o', color = color, markersize = 14, markeredgecolor = "black")
 
     plt.xticks(range(x_min, x_max + 1))
     plt.xlim([x_min, x_max])
@@ -47,8 +50,41 @@ def visualise(protein, protein_string, protein_energy):
     plt.grid(axis = "both")
     plt.legend(loc = "upper right")
 
+    matrix_x = []
+    matrix_y = []
+
+    for corner in matrix:
+        matrix_x.append(corner[0])
+        matrix_y.append(corner[1])
+
+    matrix_min = min(matrix_x)
+    matrix_max = max(matrix_x)
+
+    plt.figure("matrix view", figsize = (6,6))
+
+    plt.plot(protein_x, protein_y, '-', color = "black")
+    plt.plot(matrix_x, matrix_y, '--', color = "black", linewidth = 7)
+
+    for i, color in enumerate(L_color):
+        plt.plot(protein_x[i], protein_y[i], 'o', color = color, markersize = 14, markeredgecolor = "black")
+
+    plt.xticks(range(matrix_min, matrix_max + 1))
+    plt.xlim([matrix_min, matrix_max])
+
+    plt.yticks(range(matrix_min, matrix_max + 1))
+    plt.ylim([matrix_min, matrix_max])
+
+    plt.title(f"{protein_string}\nEnergy: {protein_energy}")
+
+    plt.grid(axis = "both")
+    plt.legend(loc = "upper right")
+
 
 def dictionary_hist(dictionary):
+    '''
+
+    '''
+
     print(dictionary.keys())
     print(list(dictionary.keys()))
 
