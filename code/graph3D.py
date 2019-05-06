@@ -1,12 +1,10 @@
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
+
+
 
 def visualise3D(protein, matrix, protein_string, protein_energy):
-
-    print(protein)
-    print(matrix)
-    print(protein_string)
-    print(protein_energy)
 
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
@@ -18,7 +16,6 @@ def visualise3D(protein, matrix, protein_string, protein_energy):
     }
 
     L_color = []
-    L_label = []
 
     protein_x = []
     protein_y = []
@@ -29,10 +26,6 @@ def visualise3D(protein, matrix, protein_string, protein_energy):
         protein_x.append(acid[1])
         protein_y.append(acid[2])
 
-    print(L_color)
-    print(protein_x)
-    print(protein_y)
-    print(protein_z)
 
     ax.scatter(protein_x, protein_y, protein_z, c=L_color, marker='o')
     ax.plot(protein_x, protein_y, protein_z, c='black', marker='o')
@@ -42,5 +35,13 @@ def visualise3D(protein, matrix, protein_string, protein_energy):
     ax.set_zlabel('Z axis')
 
     plt.title( '3D protein\n {}\n Energy: {}\n'.format(protein_string, protein_energy))
+
+
+    legend_elements = [Line2D([0], [0], marker='o', color='black', label='Hydrophobic', markerfacecolor='r'),
+                        Line2D([0], [0], marker='o', color='black', label='Polar', markerfacecolor='b')]
+    if "C" in protein_string:
+        legend_elements.append(Line2D([0], [0], marker='o', color='black', label='Cysteine', markerfacecolor='y'))
+
+    ax.legend(handles=legend_elements, loc = "upper left")
 
     plt.show()
