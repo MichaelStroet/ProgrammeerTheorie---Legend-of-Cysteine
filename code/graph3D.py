@@ -41,6 +41,6 @@ def visualise3D(protein, matrix, protein_string, protein_energy):
     ax.set_ylabel('Y axis')
     ax.set_zlabel('Z axis')
 
-    plt.title('3D plot')
+    plt.title( '3D protein\n {}\n Energy: {}\n'.format(protein_string, protein_energy))
 
     plt.show()
