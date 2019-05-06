@@ -12,11 +12,16 @@ class Protein:
 
     def __init__(self, protein_length):
         '''
-        Initialise a n x n matrix for Acid object
+        Initialise a list of n 'n x n' matrices of Acid objects
         '''
-        matrix_size = 2 * protein_length - 1
+        matrix_size = int(protein_length / 1.)
+
+        # Ensure odd matrix_size
+        if matrix_size % 2 == 0:
+            matrix_size += 1
 
         self.acids = np.zeros((matrix_size, matrix_size, matrix_size), dtype = Acid)
+        self.last_acid = [0, 0, 0]
         self.energy = 0
         self.length = 0
 
@@ -46,8 +51,11 @@ class Protein:
         '''
         Adds a new acid object to the acid matrix
         '''
-        acid = Acid(type, position, opposite(direction_new_acid))
-        self.acids[position[0], position[1]] = acid
+        row, column, layer = location
+
+        acid = Acid(type, location, opposite(direction_new_acid))
+        self.acids[row, column, layer] = acid
+        self.last_acid = location
         self.length += 1
 
     def remove_acid(self, location, previous_energy):
@@ -55,16 +63,18 @@ class Protein:
         Removes an acid object from the acids matrix
         TO DO: Removes the last acid object from the matrix
         '''
-        acid_connections = self.acids[location[0], location[1]].connections
+        row, column, layer = self.last_acid
+        acid_connections = self.acids[row, column, layer].connections
 
-        for key in ["previous", "next"]:
-            connection = acid_connections[key]
-            neighbor_location = new_location(location, connection)
-            neighbor_acid = self.acids[neighbor_location[0], neighbor_location[1]]
+        prev_connection = acid_connections["previous"]
 
-            neighbor_acid.connections["next"] = ""
+        prev_row, prev_column, prev_layer = new_location([row, column, layer], prev_connection, len(self.acids))
+        prev_acid = self.acids[prev_row, prev_column, prev_layer]
 
-        self.acids[location[0], location[1]] = 0
+        prev_acid.connections["next"] = ""
+
+        self.acids[row, column, layer] = 0
+        self.last_acid = [prev_row, prev_column, prev_layer]
         self.energy = previous_energy
         self.length -= 1
 
@@ -74,22 +84,14 @@ class Protein:
         and returns a dictionary of the location for each direction.
         TO DO: rework for one for loop and smaller matrices
         '''
-        directions = ["up", "down", "left", "right"]
-        locations = []
+        directions = ["up", "down", "left", "right", "in", "out"]
+        neighbor_acids = {}
 
         # Get the locations of all neighbors
         for direction in directions:
-            locations.append(new_location(location, direction))#, matrix_length))
-
-        neighbor_acids = {}
-
-        # Loop over each direction and its location
-        for direction, location in zip(directions, locations):
-
-            # If the new location lies within the matrix, add the object to the dictionary
-            if 0 <= location[0] <= (len(self.acids) - 1) and 0 <= location[1] <= (len(self.acids) - 1):
-                acid = self.acids[location[0], location[1]]
-                neighbor_acids[direction] = location
+            site = new_location(location, direction, len(self.acids))
+            if site:
+                neighbor_acids[direction] = site
 
         return neighbor_acids
 
@@ -97,9 +99,10 @@ class Protein:
         '''
         Calculates the energy of a newly placed Acid object and returns an integer
         '''
+        row, column, layer = location
 
         # Checks if the location contains an actual Acid object
-        central_acid = self.acids[location[0], location[1]]
+        central_acid = self.acids[row, column, layer]
         if not central_acid == 0:
 
             # If the acid is polar, the energy stays the same
@@ -118,7 +121,7 @@ class Protein:
                 # Loop over each neighbor and check the new energy
                 for direction in neighbor_acids:
                     location = neighbor_acids[direction]
-                    acid = self.acids[location[0], location[1]]
+                    acid = self.acids[row, column, layer]
 
                     if not acid == 0 and not direction in central_connections:
 
@@ -147,32 +150,51 @@ class Protein:
 
     def visualise(self, protein_string):
         '''
-        Visualises the protein object in a 2D matplotlib plot
+        Visualises the protein object in a 3D ? plot
         '''
 
         # Determine the middle (start) of the matrix
         matrix_length = len(self.acids)
         start_index = int((matrix_length - 1) / 2.)
-        location = [start_index, start_index]
+        row, column, layer = [start_index, start_index, start_index]
 
         acid_data = []
+        matrix_data = []
+
+        # Matrix corner coordinates
+        low = (0 - 1) - start_index
+        high = (matrix_length) - start_index
+
+        # Data for plotting the matrix borders
+        matrix_data = [
+            [low, low, low],
+            [low, high, low],
+            [low, high, low],
+            [low, high, high],
+            [high, low, low],
+            [high, high, low],
+            [high, low, high],
+            [high, high, high]
+        ]
 
         # Loop over each acid in the protein and add its info to the data list
-        acid = self.acids[location[0], location[1]]
+        acid = self.acids[row, column, layer]
 
         while not acid.connections["next"] == "":
 
-            acid = self.acids[location[0], location[1]]
+            acid = self.acids[row, column, layer]
 
             acid_type = acid.type
             acid_x = acid.position[0] - start_index
             acid_y = acid.position[1] - start_index
+            acid_z = acid.position[2] - start_index
 
             acid_data.append([acid_type, acid_x, acid_y])
-            location = new_location(location, acid.connections["next"])
+            row, column, layer = new_location([row, column, layer], acid.connections["next"])
 
         # Plot the acid_data list
-        plot(acid_data, protein_string, self.energy)
+        print(acid_data, protein_string, self.energy)
+        print(matrix_data)
 
 if __name__ == "__main__":
 
