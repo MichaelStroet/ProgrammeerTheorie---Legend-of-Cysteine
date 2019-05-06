@@ -4,12 +4,14 @@
 
 class Acid:
 
-    def __init__(self, type, position, previous_connection):
+    def __init__(self, type, location, previous_connection):
         '''
         Initialise an amino acid
         '''
+        row, column = location
+
         self.type = type
-        self.position = [position[0], position[1]] # [row,column]
+        self.position = [row, column]
         self.connections = {
             "previous" : previous_connection,
             "next" : ""
@@ -20,7 +22,7 @@ class Acid:
         '''
         Returns a string representation of the amino acid
         '''
-        
+
         arrows = {
             "" : "",
             "first" : "▼",

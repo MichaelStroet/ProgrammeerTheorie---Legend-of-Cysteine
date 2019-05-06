@@ -9,6 +9,7 @@ class Acid:
         Initialise an amino acid
         '''
         row, column, layer = location
+        
         self.type = type
         self.position = [row, column, layer]
         self.connections = {
