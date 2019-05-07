@@ -9,6 +9,9 @@ from graph import visualise as plot
 from functions import opposite, new_location
 
 class Protein:
+    """
+    This class ...
+    """
 
     def __init__(self, protein_length):
         '''
@@ -47,6 +50,7 @@ class Protein:
 
         return string_matrix
 
+
     def add_acid(self, type, location, direction_new_acid):
         '''
         Adds a new acid object to the acid matrix
@@ -58,9 +62,10 @@ class Protein:
         self.last_acid = location
         self.length += 1
 
+
     def remove_acid(self, previous_energy):
         '''
-        Removes an acid object from the acids matrix
+        Removes the last acid object from the acids matrix
         TO DO: Removes the last acid object from the matrix
         '''
         row, column = self.last_acid
@@ -78,6 +83,22 @@ class Protein:
         self.energy = previous_energy
         self.length -= 1
 
+
+    def remove_acid_hillclimber(self, location):
+        """
+        Removes an acid object from the acids matrix
+        """
+        row, column = location
+        acid_connections = self.acids[row, column].connections
+
+        previous_connection = acid_connections["previous"]
+        previous_row, previous_column = new_location([row, column], previous_connection, len(self.acids))
+        previous_acid = self.acids[previous_row, previous_column]
+        previous_acid.connections["next"] = ""
+
+        self.acids[row, column] = 0
+
+
     def neighbors(self, location):
         '''
         Gets all neighboring acid objects from a central acid
@@ -94,6 +115,7 @@ class Protein:
                 neighbor_acids[direction] = site
 
         return neighbor_acids
+
 
     def check_energy(self, location, type):
         '''
@@ -147,6 +169,7 @@ class Protein:
 
         else:
             return 0
+
 
     def visualise(self, protein_string):
         '''
