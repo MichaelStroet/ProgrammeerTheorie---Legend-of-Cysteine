@@ -20,15 +20,15 @@ sys.path.append(os.path.join(directory, "code", "datastructure", "3D"))
 sys.path.append(os.path.join(directory, "data"))
 
 # Import algorithms
-from random_walk import random_walk
-from greedy import greedy
-from branch_n_bound import branch_n_bound
+from random_walk3D import random_walk
+from greedy3D import greedy
+from branch_n_bound3D import branch_n_bound
 
 # Import datastructure and auxiliary functions
 from acid import Acid
-from protein import Protein
+#from protein import Protein
 from acid3D import Acid as Acid3D
-from protein3D import Protein as Protein3D
+from protein3D import Protein
 
 from graph import visualise, dictionary_hist
 from user_input import ask_integer, ask_float
