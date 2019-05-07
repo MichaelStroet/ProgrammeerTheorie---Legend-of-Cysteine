@@ -8,7 +8,7 @@ import numpy as np
 from acid3D import Acid
 from protein3D import Protein
 
-def random_walk(protein_string, N_tries):
+def random_walk(protein_string, N_tries, dimension):
     '''
     Runs a random walk algorithm in which N_tries proteins are randomly
     created from a string of amino acid types. The best conformation,
@@ -18,11 +18,10 @@ def random_walk(protein_string, N_tries):
 
     # Use lenght to establish location of the first amino acid
     protein_length = len(protein_string)
-    protein = Protein(protein_length)
+    protein = Protein(protein_length, dimension)
 
     # Place the first amino acid
-    start_index = int((len(protein.acids) - 1) / 2.)
-    layer, row, column = [start_index, start_index, start_index]
+    layer, row, column = protein.first_acid
     protein.add_acid(protein_string[0], [layer, row, column], "")
     protein.acids[layer, row, column].add_connection("down")
 
@@ -30,7 +29,7 @@ def random_walk(protein_string, N_tries):
     layer, row, column = [layer, row + 1, column]
     protein.add_acid(protein_string[1], [layer, row, column], "up")
 
-    energy_min = 0
+    energy_min = 1
     energy_counter = {}
 
     # Try to fold N_tries proteins

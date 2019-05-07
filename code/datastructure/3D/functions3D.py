@@ -18,7 +18,7 @@ def opposite(direction):
 
     return opposite_directions[direction]
 
-def new_location(location, direction, matrix_length):
+def new_location(location, direction, layer_length, matrix_length):
     '''
     Determines the matrix location in a certain direction from another location
     TO DO: If the new location lies outside the matrix, returns ...?
@@ -40,7 +40,7 @@ def new_location(location, direction, matrix_length):
     elif direction == "right" and column + 1 < matrix_length:
         return [layer, row, column + 1]
 
-    elif direction == "in" and layer + 1 < matrix_length:
+    elif direction == "in" and layer + 1 < layer_length:
         return [layer + 1, row, column]
 
     elif direction == "out" and layer - 1 >= 0:
