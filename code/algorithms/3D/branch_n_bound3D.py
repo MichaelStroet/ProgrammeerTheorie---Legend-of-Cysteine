@@ -5,8 +5,8 @@
 import numpy as np
 import copy
 
-from acid import Acid
-from protein import Protein
+from acid3D import Acid
+from protein3D import Protein
 
 '''
 09/04
@@ -17,6 +17,8 @@ from protein import Protein
  It works!
  22/04
  Added more comments
+ 07/05
+ 3D!
 '''
 
 def branch_n_bound(protein_string, prob_above_avg, prob_below_avg):
@@ -36,15 +38,15 @@ def branch_n_bound(protein_string, prob_above_avg, prob_below_avg):
     energy_counter = {}
 
     # Place first amino acid[row, column]
-    start_location = [length_total - 1, length_total - 1]
+    start_index = int((len(protein.acids) - 1) / 2.)
+    start_location = [start_index, start_index, start_index]
     protein.add_acid(protein_string[0], start_location,"")
-    protein.acids[start_location[0], start_location[1]].add_connection("down")
+    protein.acids[start_location[0], start_location[1], start_location[2]].add_connection("down")
 
     # Place second amino acid underneath first
     previous_location = start_location
-    location = [previous_location[0] + 1, previous_location[1]]
+    location = [previous_location[0], previous_location[1] + 1, previous_location[2]]
     protein.add_acid(protein_string[1], location, "down")
-    #protein.acids[location[0], location[1]].add_connection("up")
     previous_location = location
 
     # Call next_acid function to place a new amino acid
@@ -80,7 +82,7 @@ def next_acid(protein, energy_counter, previous_location):
     # For each possible location, see if there is already an amino acid
     for direction in locations:
         location = locations[direction]
-        acid = protein.acids[location[0],location[1]]
+        acid = protein.acids[location[0],location[1], location[2]]
         if acid == 0:
             possible_sites[direction] = location
 
@@ -94,7 +96,7 @@ def next_acid(protein, energy_counter, previous_location):
 
             amino_acid = protein_str[protein.length]
 
-            previous_acid = protein.acids[previous_location[0], previous_location[1]]
+            previous_acid = protein.acids[previous_location[0], previous_location[1], previous_location[2]]
             previous_acid.add_connection(key_direction)
 
             location = possible_sites[key_direction]
@@ -162,7 +164,7 @@ def next_acid(protein, energy_counter, previous_location):
                         next_acid(protein, energy_counter, location)
 
             # Remove the acid before continuing
-            protein.remove_acid(location, previous_energy)
+            protein.remove_acid(previous_energy)
 
 
 if __name__ == "__main__":
