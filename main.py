@@ -25,12 +25,10 @@ from greedy3D import greedy
 from branch_n_bound3D import branch_n_bound
 
 # Import datastructure and auxiliary functions
-from acid import Acid
-#from protein import Protein
-from acid3D import Acid as Acid3D
-from protein3D import Protein
+#from acid3D import Acid
+#from protein3D import Protein
 
-from graph import visualise, dictionary_hist
+#from graph import visualise, dictionary_hist
 from user_input import ask_integer, ask_float
 
 def read_input():
@@ -45,13 +43,13 @@ def read_input():
         file_lines = file_content.split()
     return file_lines
 
-def run_algorithm(algoritms, chosen_algorithm, chosen_protein):
+def run_algorithm(algorithms, algorithm, protein_string, dimension):
     '''
 
     '''
 
     # Run a random walk
-    if chosen_algorithm == algorithms[0]:
+    if algorithm == algorithms[0]:
 
         N_tries = ask_integer("How many proteins to fold? ")
         while N_tries < 2:
@@ -60,11 +58,11 @@ def run_algorithm(algoritms, chosen_algorithm, chosen_protein):
         print(f">{N_tries}\n")
 
         start_time = time.time()
-        protein, dict = random_walk(chosen_protein, N_tries)
+        protein, dict = random_walk(protein_string, N_tries, dimension)
         end_time = time.time() - start_time
 
     # Run a greedy algorithm
-    elif chosen_algorithm == algorithms[1]:
+    elif algorithm == algorithms[1]:
 
         N_tries = ask_integer("How many proteins to fold? ")
         while N_tries < 2:
@@ -73,11 +71,11 @@ def run_algorithm(algoritms, chosen_algorithm, chosen_protein):
         print(f">{N_tries}\n")
 
         start_time = time.time()
-        protein, dict = greedy(chosen_protein, N_tries)
+        protein, dict = greedy(protein_string, N_tries, dimension)
         end_time = time.time() - start_time
 
     # Run a probability-based branch n bound algorithm
-    elif chosen_algorithm == algorithms[2]:
+    elif algorithm == algorithms[2]:
 
         # Get probabilities
         prob_below_average = ask_float("Choose a probability to discard proteins with energy below the average? ")
@@ -93,23 +91,33 @@ def run_algorithm(algoritms, chosen_algorithm, chosen_protein):
             print("Probability above average: ",prob_above_average)
 
         start_time = time.time()
-        protein = branch_n_bound(chosen_protein, prob_above_average, prob_below_average)
+        protein = branch_n_bound(protein_string, prob_above_average, prob_below_average, dimension)
         end_time = time.time() - start_time
 
     else:
-        print(f"Error: Unknown algorithm '{chosen_algorithm}'")
+        print(f"Error: Unknown algorithm '{algorithm}'")
         exit(1)
 
     return protein, end_time
 
+def print_list(list):
+    for i, element in zip(range(len(list)), list):
+        print(f"{i + 1}: {element}")
+    print()
 
 if __name__ == "__main__":
 
-    algorithms = ["random walk", "greedy", "probabilty-based branch-n-bound"]
+    dimensions = ["2D", "3D"]
+    print_list(dimensions)
 
-    for i, algorithm in zip(range(len(algorithms)), algorithms):
-        print(f"{i + 1}: {algorithm}")
-    print()
+    chosen_dimension = ask_integer("Choose the dimensions: ") - 1
+    while chosen_dimension < 0 or chosen_dimension > len(dimensions) - 1:
+        chosen_dimension = ask_integer("Choose the dimensions: ") - 1
+
+    print(f">{dimensions[chosen_dimension]}\n")
+
+    algorithms = ["random walk", "greedy", "probabilty-based branch-n-bound"]
+    print_list(algorithms)
 
     chosen_algorithm = ask_integer("Choose an algorithm: ") - 1
     while chosen_algorithm < 0 or chosen_algorithm > len(algorithms) - 1:
@@ -118,9 +126,7 @@ if __name__ == "__main__":
     print(f">{algorithms[chosen_algorithm]}\n")
 
     proteins = read_input()
-    for i, protein in zip(range(len(proteins)), proteins):
-        print(f"{i + 1}: {protein}")
-    print()
+    print_list(proteins)
 
     chosen_protein = ask_integer("Choose a protein: ") - 1
     while chosen_protein < 0 or chosen_protein > len(proteins) - 1:
@@ -128,9 +134,10 @@ if __name__ == "__main__":
 
     print(f">{proteins[chosen_protein]}\n")
 
-    protein, end_time = run_algorithm(algorithms, algorithms[chosen_algorithm], proteins[chosen_protein])
-
+    protein, end_time = run_algorithm(algorithms, algorithms[chosen_algorithm], proteins[chosen_protein], dimensions[chosen_dimension])
+    print(protein)
     print(time.strftime('\nElapsed time: %H:%M:%S', time.gmtime(end_time)))
-    protein.visualise(proteins[chosen_protein])
 
-    plt.show()
+    #protein.visualise(proteins[chosen_protein])
+
+    #plt.show()
