@@ -20,7 +20,7 @@ class Protein:
         if matrix_size % 2 == 0:
             matrix_size += 1
 
-        matrix_mid = (matrix_size - 1) / 2
+        matrix_mid = int((matrix_size - 1) / 2)
 
         self.acids = np.zeros((matrix_size, matrix_size), dtype = Acid)
         self.first_acid = [matrix_mid, matrix_mid]
