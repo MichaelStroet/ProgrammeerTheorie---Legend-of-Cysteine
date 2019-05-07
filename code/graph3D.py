@@ -9,8 +9,6 @@ def visualise3D(protein, matrix, protein_string, protein_energy):
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
 
-    print(protein)
-
     colors = {
         "H" : "red",
         "P" : "blue",
@@ -30,8 +28,8 @@ def visualise3D(protein, matrix, protein_string, protein_energy):
         protein_z.append(acid[3])
 
 
-    ax.scatter(protein_x, protein_y, protein_z, c=L_color, marker='o')
-    ax.plot(protein_x, protein_y, protein_z, c='black', marker='o')
+    ax.scatter(protein_x, protein_y, protein_z, c=L_color, marker='o', s =70, depthshade=False)
+    ax.plot(protein_x, protein_y, protein_z, c='black', marker='o', markersize=11)
 
     ax.set_xlabel('X axis')
     ax.set_ylabel('Y axis')
@@ -40,10 +38,10 @@ def visualise3D(protein, matrix, protein_string, protein_energy):
     plt.title( '3D protein\n {}\n Energy: {}\n'.format(protein_string, protein_energy))
 
 
-    legend_elements = [Line2D([0], [0], marker='o', color='black', label='Hydrophobic', markerfacecolor='r'),
-                        Line2D([0], [0], marker='o', color='black', label='Polar', markerfacecolor='b')]
+    legend_elements = [Line2D([0], [0], marker='o', markersize=8, color='black', label='Hydrophobic', markerfacecolor='r'),
+                        Line2D([0], [0], marker='o', markersize=8, color='black', label='Polar', markerfacecolor='b')]
     if "C" in protein_string:
-        legend_elements.append(Line2D([0], [0], marker='o', color='black', label='Cysteine', markerfacecolor='y'))
+        legend_elements.append(Line2D([0], [0], marker='o', markersize=8, color='black', label='Cysteine', markerfacecolor='y'))
 
     ax.legend(handles=legend_elements, loc = "upper left")
 
@@ -61,7 +59,7 @@ def visualise3D(protein, matrix, protein_string, protein_energy):
     plt.yticks(range(y_min, y_max + 1))
     plt.ylim([y_min, y_max])
 
-    #ax.zticks(range(z_min, z_max + 1))
+    ax.set_zticks(range(z_min, z_max + 1))
     ax.set_zlim([z_min, z_max])
 
     #ax.set_zlim(-2, 2)
