@@ -3,6 +3,8 @@
 # Michael Stroet  11293284
 
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
+
 
 
 def visualise(protein, matrix, protein_string, protein_energy):
@@ -17,7 +19,7 @@ def visualise(protein, matrix, protein_string, protein_energy):
     }
 
     L_color = []
-    L_label = []
+    #L_label = []
 
     protein_x = []
     protein_y = []
@@ -48,7 +50,14 @@ def visualise(protein, matrix, protein_string, protein_energy):
     plt.title(f"{protein_string}\nEnergy: {protein_energy}")
 
     plt.grid(axis = "both")
-    plt.legend(loc = "upper right")
+    #plt.legend(loc = "upper right")
+    legend_elements = [Line2D([0], [0], marker='o', color='black', label='Hydrophobic', markerfacecolor='r'),
+                        Line2D([0], [0], marker='o', color='black', label='Polar', markerfacecolor='b')]
+    if "C" in protein_string:
+        legend_elements.append(Line2D([0], [0], marker='o', color='black', label='Cysteine', markerfacecolor='y'))
+
+    plt.legend(handles=legend_elements, loc = "upper left")
+
 
     matrix_x = []
     matrix_y = []
@@ -77,7 +86,14 @@ def visualise(protein, matrix, protein_string, protein_energy):
     plt.title(f"{protein_string}\nEnergy: {protein_energy}")
 
     plt.grid(axis = "both")
-    plt.legend(loc = "upper right")
+    #plt.legend(loc = "upper right")
+
+    legend_elements = [Line2D([0], [0], marker='o', color='black', label='Hydrophobic', markerfacecolor='r'),
+                        Line2D([0], [0], marker='o', color='black', label='Polar', markerfacecolor='b')]
+    if "C" in protein_string:
+        legend_elements.append(Line2D([0], [0], marker='o', color='black', label='Cysteine', markerfacecolor='y'))
+
+    plt.legend(handles=legend_elements, loc = "upper left")
 
 
 def dictionary_hist(dictionary):

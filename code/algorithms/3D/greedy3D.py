@@ -6,12 +6,13 @@
 This algorithm will fold a protein using a greedy algorithm
 Greedy in this case means always placing an amino acid at the location that results in the lowest energy
 """
+
 import copy
 import random
 import numpy as np
 
-from acid import Acid
-from protein import Protein
+from acid3D import Acid
+from protein3D import Protein
 
 def greedy(protein_string, N_tries):
     '''
@@ -25,11 +26,11 @@ def greedy(protein_string, N_tries):
 
     # Place the first two amino acids
     start_index = int((len(protein.acids) - 1) / 2.)
-    location = [start_index, start_index]
+    location = [start_index, start_index, start_index]
     protein.add_acid(protein_string[0], location, "")
-    protein.acids[location[0], location[1]].add_connection("down")
+    protein.acids[location[0], location[1], location[2]].add_connection("down")
 
-    location = [location[0] + 1, location[1]]
+    location = [location[0], location[1] + 1, location[2]]
     protein.add_acid(protein_string[1], location, "down")
 
     energy_min = 0
@@ -87,7 +88,7 @@ def greedy_fold(protein, p_string, p_len, loc_current):
         for direction, loc_new in directions.items():
 
             # Remember the next possible locations
-            if protein.acids[loc_new[0], loc_new[1]] == 0:
+            if protein.acids[loc_new[0], loc_new[1], loc_new[2]] == 0:
                 locs_next[direction] = loc_new
 
         # Check the energy of every next location
@@ -96,7 +97,7 @@ def greedy_fold(protein, p_string, p_len, loc_current):
 
             # Every next location's energy is collected after pseudo placing
             for direction, loc_next in locs_next.items():
-                previous_acid = protein.acids[loc_current[0], loc_current[1]]
+                previous_acid = protein.acids[loc_current[0], loc_current[1], loc_current[2]]
                 previous_acid.add_connection(direction)
 
                 # Acid is placed, energy is stored, acid is removed again

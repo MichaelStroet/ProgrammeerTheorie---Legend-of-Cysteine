@@ -8,10 +8,10 @@ class Acid:
         '''
         Initialise an amino acid
         '''
-        row, column, layer = location
-        
+        layer, row, column = location
+
         self.type = type
-        self.position = [row, column, layer]
+        self.position = [layer, row, column]
         self.connections = {
             "previous" : previous_connection,
             "next" : ""
@@ -26,7 +26,7 @@ class Acid:
         arrows = {
             "" : " ",
             "first" : "▼",
-            "in" : "🞨",
+            "in" : "X",
             "out" : "•",
             "up" : "↑",
             "down" : "↓",

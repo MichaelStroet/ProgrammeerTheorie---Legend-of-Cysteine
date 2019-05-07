@@ -6,7 +6,7 @@ import numpy as np
 
 from acid3D import Acid
 #from graph import visualise as plot
-#from functions import opposite, new_location
+from functions3D import opposite, new_location
 
 class Protein:
 
@@ -47,34 +47,33 @@ class Protein:
 
         return string_matrix
 
-    def add_acid(self, type, position, direction_new_acid):
+    def add_acid(self, type, location, direction_new_acid):
         '''
         Adds a new acid object to the acid matrix
         '''
-        row, column, layer = location
-
+        layer, row, column = location
         acid = Acid(type, location, opposite(direction_new_acid))
-        self.acids[row, column, layer] = acid
+        self.acids[layer, row, column] = acid
         self.last_acid = location
         self.length += 1
 
-    def remove_acid(self, location, previous_energy):
+    def remove_acid(self, previous_energy):
         '''
         Removes an acid object from the acids matrix
         TO DO: Removes the last acid object from the matrix
         '''
-        row, column, layer = self.last_acid
-        acid_connections = self.acids[row, column, layer].connections
+        layer, row, column = self.last_acid
+        acid_connections = self.acids[layer, row, column].connections
 
         prev_connection = acid_connections["previous"]
 
-        prev_row, prev_column, prev_layer = new_location([row, column, layer], prev_connection, len(self.acids))
-        prev_acid = self.acids[prev_row, prev_column, prev_layer]
+        prev_layer, prev_row, prev_column = new_location([layer, row, column], prev_connection, len(self.acids))
+        prev_acid = self.acids[prev_layer, prev_row, prev_column]
 
         prev_acid.connections["next"] = ""
 
-        self.acids[row, column, layer] = 0
-        self.last_acid = [prev_row, prev_column, prev_layer]
+        self.acids[layer, row, column] = 0
+        self.last_acid = [prev_layer, prev_row, prev_column]
         self.energy = previous_energy
         self.length -= 1
 
@@ -99,10 +98,10 @@ class Protein:
         '''
         Calculates the energy of a newly placed Acid object and returns an integer
         '''
-        row, column, layer = location
+        layer, row, column = location
 
         # Checks if the location contains an actual Acid object
-        central_acid = self.acids[row, column, layer]
+        central_acid = self.acids[layer, row, column]
         if not central_acid == 0:
 
             # If the acid is polar, the energy stays the same
@@ -120,8 +119,8 @@ class Protein:
 
                 # Loop over each neighbor and check the new energy
                 for direction in neighbor_acids:
-                    location = neighbor_acids[direction]
-                    acid = self.acids[row, column, layer]
+                    layer, row, column = neighbor_acids[direction]
+                    acid = self.acids[layer, row, column]
 
                     if not acid == 0 and not direction in central_connections:
 
@@ -156,7 +155,7 @@ class Protein:
         # Determine the middle (start) of the matrix
         matrix_length = len(self.acids)
         start_index = int((matrix_length - 1) / 2.)
-        row, column, layer = [start_index, start_index, start_index]
+        layer, row, column = [start_index, start_index, start_index]
 
         acid_data = []
         matrix_data = []
@@ -178,11 +177,11 @@ class Protein:
         ]
 
         # Loop over each acid in the protein and add its info to the data list
-        acid = self.acids[row, column, layer]
+        acid = self.acids[layer, row, column]
 
         while not acid.connections["next"] == "":
 
-            acid = self.acids[row, column, layer]
+            acid = self.acids[layer, row, column]
 
             acid_type = acid.type
             acid_x = acid.position[0] - start_index
@@ -190,7 +189,7 @@ class Protein:
             acid_z = acid.position[2] - start_index
 
             acid_data.append([acid_type, acid_x, acid_y])
-            row, column, layer = new_location([row, column, layer], acid.connections["next"])
+            layer, row, column = new_location([layer, row, column], acid.connections["next"])
 
         # Plot the acid_data list
         print(acid_data, protein_string, self.energy)
