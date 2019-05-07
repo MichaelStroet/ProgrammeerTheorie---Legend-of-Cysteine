@@ -5,8 +5,8 @@
 import numpy as np
 import copy
 
-from acid3D import Acid
-from protein3D import Protein
+from trueacid import Acid
+from trueprotein import Protein
 
 '''
 09/04

@@ -10,25 +10,17 @@ directory = os.path.dirname(os.path.realpath(__file__))
 # Add the code paths
 sys.path.append(os.path.join(directory, "code"))
 sys.path.append(os.path.join(directory, "code", "algorithms"))
-sys.path.append(os.path.join(directory, "code", "algorithms", "2D"))
-sys.path.append(os.path.join(directory, "code", "algorithms", "3D"))
 sys.path.append(os.path.join(directory, "code", "datastructure"))
-sys.path.append(os.path.join(directory, "code", "datastructure", "2D"))
-sys.path.append(os.path.join(directory, "code", "datastructure", "3D"))
 
 # Add the data path
 sys.path.append(os.path.join(directory, "data"))
 
 # Import algorithms
-from random_walk3D import random_walk
-from greedy3D import greedy
-from branch_n_bound3D import branch_n_bound
+from truerandom_walk import random_walk
+from truegreedy import greedy
+from truebranch_n_bound import branch_n_bound
 
-# Import datastructure and auxiliary functions
-#from acid3D import Acid
-#from protein3D import Protein
-
-#from graph import visualise, dictionary_hist
+# Import auxiliary functions
 from user_input import ask_integer, ask_float
 
 def read_input():
