@@ -6,6 +6,7 @@ import numpy as np
 
 from acid3D import Acid
 #from graph import visualise as plot
+from graph3D import visualise3D as plot
 from functions3D import opposite, new_location
 
 class Protein:
@@ -204,11 +205,16 @@ class Protein:
             acid_y = acid.position[1] - start_index
             acid_z = acid.position[2] - start_index
 
+<<<<<<< HEAD
             acid_data.append([acid_type, acid_x, acid_y])
             layer, row, column = new_location([layer, row, column], acid.connections["next"], len(self.acids), len(self.acids[0]))
+=======
+            acid_data.append([acid_type, acid_x, acid_y, acid_z])
+            layer, row, column = new_location([layer, row, column], acid.connections["next"], len(self.acids))
+>>>>>>> 8ec1c8cbc2957269fd15ee4042bda2211669f9d5
 
         # Plot the acid_data list
-        print(acid_data, protein_string, self.energy)
+        plot(acid_data, matrix_data, protein_string, self.energy)
         print(matrix_data)
 
 if __name__ == "__main__":
