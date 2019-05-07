@@ -20,10 +20,13 @@ class Protein:
         if matrix_size % 2 == 0:
             matrix_size += 1
 
+        matrix_mid = int(matrix_size/2)
+
         self.acids = np.zeros((matrix_size, matrix_size), dtype = Acid)
         self.last_acid = [0, 0]
         self.energy = 0
         self.length = 0
+        self.first_acid = [matrix_mid, matrix_mid]  
 
     def __str__(self):
         '''
