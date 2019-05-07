@@ -83,7 +83,7 @@ class Protein:
         matrix_length = len(self.acids[0])
 
         prev_connection = last_connections["previous"]
-        
+
         prev_layer, prev_row, prev_column = new_location(last_location, prev_connection, layer_length, matrix_length)
         prev_acid = self.acids[prev_layer, prev_row, prev_column]
 
@@ -205,13 +205,8 @@ class Protein:
             acid_y = acid.position[1] - start_index
             acid_z = acid.position[2] - start_index
 
-<<<<<<< HEAD
             acid_data.append([acid_type, acid_x, acid_y])
             layer, row, column = new_location([layer, row, column], acid.connections["next"], len(self.acids), len(self.acids[0]))
-=======
-            acid_data.append([acid_type, acid_x, acid_y, acid_z])
-            layer, row, column = new_location([layer, row, column], acid.connections["next"], len(self.acids))
->>>>>>> 8ec1c8cbc2957269fd15ee4042bda2211669f9d5
 
         # Plot the acid_data list
         plot(acid_data, matrix_data, protein_string, self.energy)
