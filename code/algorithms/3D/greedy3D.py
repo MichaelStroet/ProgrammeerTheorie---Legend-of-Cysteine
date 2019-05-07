@@ -14,7 +14,7 @@ import numpy as np
 from acid3D import Acid
 from protein3D import Protein
 
-def greedy(protein_string, N_tries):
+def greedy(protein_string, N_tries, dimension):
     '''
     The input is a string that represents the proteins amino acid sequence
     The output is a protein folded by a greedy algorithm
@@ -22,11 +22,10 @@ def greedy(protein_string, N_tries):
 
     # Use protein length to establish location of first amino acid in a matrix
     protein_length = len(protein_string)
-    protein = Protein(protein_length)
+    protein = Protein(protein_length, dimension)
 
     # Place the first two amino acids
-    start_index = int((len(protein.acids) - 1) / 2.)
-    location = [start_index, start_index, start_index]
+    location = protein.first_acid
     protein.add_acid(protein_string[0], location, "")
     protein.acids[location[0], location[1], location[2]].add_connection("down")
 

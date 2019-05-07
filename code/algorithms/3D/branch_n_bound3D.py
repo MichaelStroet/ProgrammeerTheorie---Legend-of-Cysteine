@@ -21,7 +21,7 @@ from protein3D import Protein
  3D!
 '''
 
-def branch_n_bound(protein_string, prob_above_avg, prob_below_avg):
+def branch_n_bound(protein_string, prob_above_avg, prob_below_avg, dimension):
 
     global protein_str, prob_below_average, prob_above_average, length_total, energy_min_all, energy_min_partial
     prob_below_average = prob_below_avg
@@ -30,16 +30,15 @@ def branch_n_bound(protein_string, prob_above_avg, prob_below_avg):
     length_total = len(protein_string)
 
     # Create the protein matrix
-    protein = Protein(length_total)
+    protein = Protein(length_total, dimension)
 
     # Initialize variables
     energy_min_all = 0
     energy_min_partial = [0] * length_total
     energy_counter = {}
 
-    # Place first amino acid[row, column]
-    start_index = int((len(protein.acids) - 1) / 2.)
-    start_location = [start_index, start_index, start_index]
+    # Place first amino acid[layer, row, column]
+    start_location = protein.first_acid
     protein.add_acid(protein_string[0], start_location,"")
     protein.acids[start_location[0], start_location[1], start_location[2]].add_connection("down")
 
