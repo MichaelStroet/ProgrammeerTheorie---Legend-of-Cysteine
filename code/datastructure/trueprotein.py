@@ -5,8 +5,8 @@
 import numpy as np
 
 from trueacid import Acid
-#from graph import visualise as plot
-from graph3D import visualise3D as plot
+from graph import visualise as plot
+from graph3D import visualise3D as plot3D
 from truefunctions import opposite, new_location
 
 class Protein:
@@ -170,47 +170,69 @@ class Protein:
         '''
 
         # Determine the middle (start) of the matrix
-        matrix_length = len(self.acids)
-        start_index = int((matrix_length - 1) / 2.)
-        layer, row, column = [start_index, start_index, start_index]
+        matrix_length = len(self.acids[0])
+        #start_index = int((matrix_length - 1) / 2.)
+        #print("start_index = [",start_index, start_index, start_index)
+        print("first_acid = ", self.first_acid)
+        layer, row, column = self.first_acid
+        print(row)
 
         acid_data = []
         matrix_data = []
 
         # Matrix corner coordinates
-        low = (0 - 1) - start_index
-        high = (matrix_length) - start_index
+        low = (0 - 1)
+        high = (matrix_length)
 
         # Data for plotting the matrix borders
+        # matrix_data = [
+        #     [low, low, low],
+        #     [low, high, low],
+        #     [low, high, low],
+        #     [low, high, high],
+        #     [high, low, low],
+        #     [high, high, low],
+        #     [high, low, high],
+        #     [high, high, high]
+        # ]
         matrix_data = [
-            [low, low, low],
-            [low, high, low],
-            [low, high, low],
-            [low, high, high],
-            [high, low, low],
-            [high, high, low],
-            [high, low, high],
-            [high, high, high]
+            [low, low],
+            [low, high],
+            [high, high],
+            [high, low],
+            [low, low]
         ]
-
         # Loop over each acid in the protein and add its info to the data list
         acid = self.acids[layer, row, column]
 
         while not acid.connections["next"] == "":
 
             acid = self.acids[layer, row, column]
-
+            print(acid.position)
             acid_type = acid.type
-            acid_x = acid.position[0] - start_index
-            acid_y = acid.position[1] - start_index
-            acid_z = acid.position[2] - start_index
+            acid_x = acid.position[1]
+            acid_y = acid.position[2]
 
-            acid_data.append([acid_type, acid_x, acid_y])
+            #2D
+            if len(self.acids) == 1:
+                print("2d")
+                acid_data.append([acid_type, acid_x, acid_y])
+
+            #3D
+            else:
+                acid_z = acid.position[0]
+                acid_data.append([acid_type, acid_x, acid_y, acid_z])
+
+
             layer, row, column = new_location([layer, row, column], acid.connections["next"], len(self.acids), len(self.acids[0]))
 
+        print(acid_data)
         # Plot the acid_data list
-        plot(acid_data, matrix_data, protein_string, self.energy)
-        print(matrix_data)
+        if len(self.acids) == 1:
+            print("2D")
+            plot(acid_data, matrix_data, protein_string, self.energy)
+        else:
+            plot3D(acid_data, matrix_data, protein_string, self.energy)
 
 if __name__ == "__main__":
 

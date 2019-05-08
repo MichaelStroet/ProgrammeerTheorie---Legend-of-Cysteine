@@ -63,5 +63,3 @@ def visualise3D(protein, matrix, protein_string, protein_energy):
     ax.set_zlim([z_min, z_max])
 
     #ax.set_zlim(-2, 2)
-
-    plt.show()

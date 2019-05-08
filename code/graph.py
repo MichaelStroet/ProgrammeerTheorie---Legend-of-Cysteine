@@ -19,7 +19,6 @@ def visualise(protein, matrix, protein_string, protein_energy):
     }
 
     L_color = []
-    #L_label = []
 
     protein_x = []
     protein_y = []
@@ -34,6 +33,7 @@ def visualise(protein, matrix, protein_string, protein_energy):
     y_min = min(protein_y) - 1
     y_max = max(protein_y) + 1
 
+    # Figure Folded protein
     plt.figure("Folded protein", figsize = (x_max - x_min, y_max - y_min))
 
     plt.plot(protein_x, protein_y, '-', color = "black")
@@ -50,7 +50,6 @@ def visualise(protein, matrix, protein_string, protein_energy):
     plt.title(f"{protein_string}\nEnergy: {protein_energy}")
 
     plt.grid(axis = "both")
-    #plt.legend(loc = "upper right")
     legend_elements = [Line2D([0], [0], marker='o', color='black', label='Hydrophobic', markerfacecolor='r'),
                         Line2D([0], [0], marker='o', color='black', label='Polar', markerfacecolor='b')]
     if "C" in protein_string:
@@ -58,7 +57,7 @@ def visualise(protein, matrix, protein_string, protein_energy):
 
     plt.legend(handles=legend_elements, loc = "upper left")
 
-
+    # Figure Matrix view
     matrix_x = []
     matrix_y = []
 
@@ -69,8 +68,9 @@ def visualise(protein, matrix, protein_string, protein_energy):
     matrix_min = min(matrix_x)
     matrix_max = max(matrix_x)
 
-    plt.figure("matrix view", figsize = (6,6))
-
+    plt.figure("Matrix view", figsize = (6,6))
+    print(protein_x)
+    print(protein_y)
     plt.plot(protein_x, protein_y, '-', color = "black")
     plt.plot(matrix_x, matrix_y, '--', color = "black", linewidth = 7)
 
@@ -86,7 +86,6 @@ def visualise(protein, matrix, protein_string, protein_energy):
     plt.title(f"{protein_string}\nEnergy: {protein_energy}")
 
     plt.grid(axis = "both")
-    #plt.legend(loc = "upper right")
 
     legend_elements = [Line2D([0], [0], marker='o', color='black', label='Hydrophobic', markerfacecolor='r'),
                         Line2D([0], [0], marker='o', color='black', label='Polar', markerfacecolor='b')]
