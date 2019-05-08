@@ -11,7 +11,6 @@ def visualise(protein, matrix, protein_string, protein_energy):
     '''
 
     '''
-    print(matrix)
     colors = {
         "H" : "red",
         "P" : "blue",
@@ -69,8 +68,6 @@ def visualise(protein, matrix, protein_string, protein_energy):
     matrix_max = max(matrix_x)
 
     plt.figure("Matrix view", figsize = (6,6))
-    print(protein_x)
-    print(protein_y)
     plt.plot(protein_x, protein_y, '-', color = "black")
     plt.plot(matrix_x, matrix_y, '--', color = "black", linewidth = 7)
 

@@ -173,9 +173,7 @@ class Protein:
         matrix_length = len(self.acids[0])
         #start_index = int((matrix_length - 1) / 2.)
         #print("start_index = [",start_index, start_index, start_index)
-        print("first_acid = ", self.first_acid)
         layer, row, column = self.first_acid
-        print(row)
 
         acid_data = []
         matrix_data = []
@@ -208,14 +206,12 @@ class Protein:
         while not acid.connections["next"] == "":
 
             acid = self.acids[layer, row, column]
-            print(acid.position)
             acid_type = acid.type
             acid_x = acid.position[1]
             acid_y = acid.position[2]
 
             #2D
             if len(self.acids) == 1:
-                print("2d")
                 acid_data.append([acid_type, acid_x, acid_y])
 
             #3D
@@ -226,10 +222,8 @@ class Protein:
 
             layer, row, column = new_location([layer, row, column], acid.connections["next"], len(self.acids), len(self.acids[0]))
 
-        print(acid_data)
         # Plot the acid_data list
         if len(self.acids) == 1:
-            print("2D")
             plot(acid_data, matrix_data, protein_string, self.energy)
         else:
             plot3D(acid_data, matrix_data, protein_string, self.energy)
