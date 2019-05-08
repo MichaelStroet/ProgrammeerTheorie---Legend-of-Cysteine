@@ -130,6 +130,6 @@ if __name__ == "__main__":
     print(protein)
     print(time.strftime('\nElapsed time: %H:%M:%S', time.gmtime(end_time)))
 
-    #protein.visualise(proteins[chosen_protein])
+    protein.visualise(proteins[chosen_protein])
 
-    #plt.show()
+    plt.show()

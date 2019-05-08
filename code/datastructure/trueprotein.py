@@ -166,23 +166,24 @@ class Protein:
 
     def visualise(self, protein_string):
         '''
-        Visualises the protein object in a 3D ? plot
+        Visualises the protein object in a 2D or 3D plot
         '''
 
         # Determine the middle (start) of the matrix
         matrix_length = len(self.acids[0])
-        #start_index = int((matrix_length - 1) / 2.)
-        #print("start_index = [",start_index, start_index, start_index)
+
+        # Set layer, row and column like the first acid
         layer, row, column = self.first_acid
 
+        # Create lists to keep the acid and matrix data
         acid_data = []
         matrix_data = []
 
-        # Matrix corner coordinates
+        # Set the matrix corner coordinates
         low = (0 - 1)
         high = (matrix_length)
 
-        # Data for plotting the matrix borders
+        # Determine the data for plotting the matrix borders
         # matrix_data = [
         #     [low, low, low],
         #     [low, high, low],
@@ -200,31 +201,33 @@ class Protein:
             [high, low],
             [low, low]
         ]
+
         # Loop over each acid in the protein and add its info to the data list
         acid = self.acids[layer, row, column]
 
         while not acid.connections["next"] == "":
-
             acid = self.acids[layer, row, column]
             acid_type = acid.type
             acid_x = acid.position[1]
             acid_y = acid.position[2]
 
-            #2D
+            # For 2D
             if len(self.acids) == 1:
                 acid_data.append([acid_type, acid_x, acid_y])
 
-            #3D
+            # For 3D
             else:
                 acid_z = acid.position[0]
                 acid_data.append([acid_type, acid_x, acid_y, acid_z])
 
-
+            # Adjust the layer, row and column for the next acid
             layer, row, column = new_location([layer, row, column], acid.connections["next"], len(self.acids), len(self.acids[0]))
 
-        # Plot the acid_data list
+        # Plot the protein
+        # In 2D
         if len(self.acids) == 1:
             plot(acid_data, matrix_data, protein_string, self.energy)
+        # In 3D
         else:
             plot3D(acid_data, matrix_data, protein_string, self.energy)
 
