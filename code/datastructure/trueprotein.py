@@ -174,14 +174,15 @@ class Protein:
 
         # Set layer, row and column like the first acid
         layer, row, column = self.first_acid
+        start_index = row
 
         # Create lists to keep the acid and matrix data
         acid_data = []
         matrix_data = []
 
         # Set the matrix corner coordinates
-        low = (0 - 1)
-        high = (matrix_length)
+        low = (0 - 1) - start_index
+        high = (matrix_length) - start_index
 
         # Determine the data for plotting the matrix borders
         # matrix_data = [
@@ -208,8 +209,8 @@ class Protein:
         while not acid.connections["next"] == "":
             acid = self.acids[layer, row, column]
             acid_type = acid.type
-            acid_x = acid.position[1]
-            acid_y = acid.position[2]
+            acid_x = acid.position[1] - start_index
+            acid_y = acid.position[2] - start_index
 
             # For 2D
             if len(self.acids) == 1:
@@ -217,7 +218,7 @@ class Protein:
 
             # For 3D
             else:
-                acid_z = acid.position[0]
+                acid_z = acid.position[0] - start_index
                 acid_data.append([acid_type, acid_x, acid_y, acid_z])
 
             # Adjust the layer, row and column for the next acid
