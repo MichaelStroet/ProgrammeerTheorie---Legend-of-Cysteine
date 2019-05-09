@@ -30,7 +30,9 @@ def random_walk(protein_string, N_tries, dimension):
     protein.add_acid(protein_string[1], [layer, row, column], "up")
 
     energy_min = 1
+
     energy_counter = {}
+    matrix_sizes = {}
 
     # Try to fold N_tries proteins
     for i in range(N_tries):
@@ -59,7 +61,12 @@ def random_walk(protein_string, N_tries, dimension):
             # Add the energy to a dictionary counter
             energy_counter[energy] = energy_counter.get(energy, 0) + 1
 
-    return protein_min, energy_counter
+            min_matrix_size = protein.smallest_matrix()
+            
+            matrix_sizes[energy] = matrix_sizes.get(energy, {})
+            matrix_sizes[energy][min_matrix_size] = matrix_sizes[energy].get(min_matrix_size, 0) + 1
+
+    return protein_min, energy_counter, matrix_sizes
 
 
 def walk(protein, protein_string, previous_location):

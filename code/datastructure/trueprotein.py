@@ -232,6 +232,38 @@ class Protein:
         else:
             plot3D(acid_data, matrix_data, protein_string, self.energy)
 
+    def smallest_matrix(self):
+
+        # Set layer, row and column like the first acid
+        layer, row, column = self.first_acid
+        start_index = row
+        start_layer = layer
+
+        acids_xyz = [[], [], []]
+
+        # Loop over each acid in the protein and add its info to the data list
+        acid = self.acids[layer, row, column]
+
+        while not acid.connections["next"] == "":
+            acid = self.acids[layer, row, column]
+
+            acids_xyz[0].append(column - start_index)
+            acids_xyz[1].append(row - start_index)
+            acids_xyz[2].append(layer - start_layer)
+
+            # Adjust the layer, row and column for the next acid
+            layer, row, column = new_location([layer, row, column], acid.connections["next"], len(self.acids), len(self.acids[0]))
+
+        min_x, max_x = [min(acids_xyz[0]), max(acids_xyz[0])]
+        min_y, max_y = [min(acids_xyz[1]), max(acids_xyz[1])]
+        min_z, max_z = [min(acids_xyz[2]), max(acids_xyz[2])]
+
+        origin_distances = [abs(min_x), max_x, abs(min_y), max_y, abs(min_z), max_z]
+        max_distance = max(origin_distances)
+
+        return (max_distance * 2) + 1
+
+
 if __name__ == "__main__":
 
     string = "HPHPHPHH"

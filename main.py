@@ -50,8 +50,10 @@ def run_algorithm(algorithms, algorithm, protein_string, dimension):
         print(f">{N_tries}\n")
 
         start_time = time.time()
-        protein, dict = random_walk(protein_string, N_tries, dimension)
+        protein, dict, matrix_sizes = random_walk(protein_string, N_tries, dimension)
         end_time = time.time() - start_time
+
+        print(matrix_sizes)
 
     # Run a greedy algorithm
     elif algorithm == algorithms[1]:
