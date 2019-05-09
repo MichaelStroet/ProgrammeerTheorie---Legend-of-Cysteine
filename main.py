@@ -57,7 +57,7 @@ def run_algorithm(algorithms, algorithm, protein_string, dimension):
         protein, dict, matrix_sizes = random_walk(protein_string, N_tries, dimension)
         end_time = time.time() - start_time
 
-        plot_matrix_sizes(matrix_sizes)
+        plot_matrix_sizes(matrix_sizes, len(protein.acids[0]))
 
     elif algorithm == algorithms[1]:
 
@@ -71,7 +71,7 @@ def run_algorithm(algorithms, algorithm, protein_string, dimension):
         protein, dict, matrix_sizes = greedy(protein_string, N_tries, dimension)
         end_time = time.time() - start_time
 
-        plot_matrix_sizes(matrix_sizes)
+        plot_matrix_sizes(matrix_sizes, len(protein.acids[0]))
 
     # Run a probability-based branch n bound algorithm
     elif algorithm == algorithms[2]:
