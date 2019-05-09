@@ -8,6 +8,8 @@ import copy
 from trueacid import Acid
 from trueprotein import Protein
 
+from dict_average import dict_average
+
 '''
 09/04
 ಠ_ಠ
@@ -55,14 +57,6 @@ def branch_n_bound(protein_string, prob_above_avg, prob_below_avg, dimension):
     print("Minumum energy found ",energy_min_all)
     print(best_protein)
     return best_protein
-
-# Function for calculating the average of the values in a dictionary
-def dict_average(dict):
-    sum_energy = 0
-    for key, value in dict.items():
-        sum_energy += key * value
-    values = dict.values()
-    return sum_energy / sum(values)
 
 # Function that places an amino acid
 def next_acid(protein, energy_counter, previous_location):
