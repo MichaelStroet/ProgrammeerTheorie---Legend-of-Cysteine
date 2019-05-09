@@ -33,7 +33,9 @@ def greedy(protein_string, N_tries, dimension):
     protein.add_acid(protein_string[1], location, "down")
 
     energy_min = 0
+
     energy_counter = {}
+    matrix_sizes = {}
 
     # Try to fold N_tries protein greedy like
     for i in range(N_tries):
@@ -62,7 +64,13 @@ def greedy(protein_string, N_tries, dimension):
             # dictonary for histogram of solutions
             energy_counter[energy] = energy_counter.get(energy, 0) + 1
 
-    return protein_min, energy_counter
+            min_matrix_size = protein.smallest_matrix()
+
+            matrix_sizes[energy] = matrix_sizes.get(energy, {})
+            matrix_sizes[energy][min_matrix_size] = matrix_sizes[energy].get(min_matrix_size, 0) + 1
+
+
+    return protein_min, energy_counter, matrix_sizes
 
 def greedy_fold(protein, p_string, p_len, loc_current):
     '''

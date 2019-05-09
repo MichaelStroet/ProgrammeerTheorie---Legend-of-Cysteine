@@ -68,8 +68,10 @@ def run_algorithm(algorithms, algorithm, protein_string, dimension):
         print(f">{N_tries}\n")
 
         start_time = time.time()
-        protein, dict = greedy(protein_string, N_tries, dimension)
+        protein, dict, matrix_sizes = greedy(protein_string, N_tries, dimension)
         end_time = time.time() - start_time
+
+        plot_matrix_sizes(matrix_sizes)
 
     # Run a probability-based branch n bound algorithm
     elif algorithm == algorithms[2]:
