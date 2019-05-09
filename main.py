@@ -11,6 +11,7 @@ directory = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(directory, "code"))
 sys.path.append(os.path.join(directory, "code", "algorithms"))
 sys.path.append(os.path.join(directory, "code", "datastructure"))
+sys.path.append(os.path.join(directory, "code", "visualisations"))
 
 # Add the data path
 sys.path.append(os.path.join(directory, "data"))
@@ -19,6 +20,9 @@ sys.path.append(os.path.join(directory, "data"))
 from truerandom_walk import random_walk
 from truegreedy import greedy
 from truebranch_n_bound import branch_n_bound
+
+# Import visualisation functions
+from minimal_sizes import plot_matrix_sizes
 
 # Import auxiliary functions
 from user_input import ask_integer, ask_float
@@ -53,9 +57,8 @@ def run_algorithm(algorithms, algorithm, protein_string, dimension):
         protein, dict, matrix_sizes = random_walk(protein_string, N_tries, dimension)
         end_time = time.time() - start_time
 
-        print(matrix_sizes)
+        plot_matrix_sizes(matrix_sizes)
 
-    # Run a greedy algorithm
     elif algorithm == algorithms[1]:
 
         N_tries = ask_integer("How many proteins to fold? ")
