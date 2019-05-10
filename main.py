@@ -90,8 +90,10 @@ def run_algorithm(algorithms, algorithm, protein_string, dimension):
             print("Probability above average: ",prob_above_average)
 
         start_time = time.time()
-        protein = branch_n_bound(protein_string, prob_above_average, prob_below_average, dimension)
+        protein, dict, matrix_sizes = branch_n_bound(protein_string, prob_above_average, prob_below_average, dimension)
         end_time = time.time() - start_time
+
+        plot_matrix_sizes(matrix_sizes, len(protein.acids[0]))
 
     else:
         print(f"Error: Unknown algorithm '{algorithm}'")

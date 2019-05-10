@@ -10,26 +10,18 @@ from trueprotein import Protein
 
 from dict_average import dict_average
 
-'''
-09/04
-ಠ_ಠ
-16/04
- new version
- 18/04
- It works!
- 22/04
- Added more comments
- 07/05
- 3D!
-'''
-
 def branch_n_bound(protein_string, prob_above_avg, prob_below_avg, dimension):
 
     global protein_str, prob_below_average, prob_above_average, length_total, energy_min_all, energy_min_partial
+
     prob_below_average = prob_below_avg
     prob_above_average = prob_above_avg
     protein_str = protein_string
     length_total = len(protein_string)
+
+    global energy_counter, matrix_sizes
+    energy_counter = {}
+    matrix_sizes = {}
 
     # Create the protein matrix
     protein = Protein(length_total, dimension)
@@ -37,7 +29,6 @@ def branch_n_bound(protein_string, prob_above_avg, prob_below_avg, dimension):
     # Initialize variables
     energy_min_all = 0
     energy_min_partial = [0] * length_total
-    energy_counter = {}
 
     # Place first amino acid[layer, row, column]
     start_location = protein.first_acid
@@ -51,15 +42,16 @@ def branch_n_bound(protein_string, prob_above_avg, prob_below_avg, dimension):
     previous_location = location
 
     # Call next_acid function to place a new amino acid
-    next_acid(protein, energy_counter, previous_location)
+    next_acid(protein, previous_location)
 
-    print("\nMinumum energy found per length: ",energy_min_partial)
-    print("Minumum energy found ",energy_min_all)
-    print(best_protein)
-    return best_protein
+    # print("\nMinumum energy found per length: ",energy_min_partial)
+    # print("Minumum energy found ",energy_min_all)
+    # print(best_protein)
+
+    return best_protein, energy_counter, matrix_sizes
 
 # Function that places an amino acid
-def next_acid(protein, energy_counter, previous_location):
+def next_acid(protein, previous_location):
 
     global energy_min_all, best_protein
 
@@ -115,18 +107,23 @@ def next_acid(protein, energy_counter, previous_location):
 
             # If it is the last amino acid of the protein string
             if protein.length == length_total:
+                energy = protein.energy
 
                 # Update lowest energy among all completed proteins
-                if protein.energy < energy_min_all:
-                    energy_min_all = protein.energy
+                if energy < energy_min_all:
+                    energy_min_all = energy
                     print("New minimum energy found : ",energy_min_all)
                     best_protein = copy.deepcopy(protein)
-                    # print(best_protein)
-                    # print("\nMinumum partial energy : ",energy_min_partial)
+
+                min_matrix_size = protein.smallest_matrix()
+
+                matrix_sizes[energy] = matrix_sizes.get(energy, {})
+                matrix_sizes[energy][min_matrix_size] = matrix_sizes[energy].get(min_matrix_size, 0) + 1
+
 
             # If it is a polar amino acid, add a new acid
             elif amino_acid == "P":
-                next_acid(protein, energy_counter, location)
+                next_acid(protein, location)
 
             # If it is a hydrophobic or cysteine amino acid, there are several possibilities
             else:
@@ -135,7 +132,7 @@ def next_acid(protein, energy_counter, previous_location):
                 the partial protein, add a new amino acid
                 '''
                 if protein.energy <= energy_min_partial[protein.length - 1]:
-                    next_acid(protein, energy_counter, location)
+                    next_acid(protein, location)
 
                 # If the curent energy is below the average energy of
                 # all partial proteins up to now, compute a random number between
@@ -145,7 +142,7 @@ def next_acid(protein, energy_counter, previous_location):
                     r = np.random.random()
 
                     if r <= prob_below_average:
-                        next_acid(protein, energy_counter, location)
+                        next_acid(protein, location)
 
                 # If the curent energy is bigger the average energy of
                 # all partial proteins up to now, compute a random number between
@@ -154,7 +151,7 @@ def next_acid(protein, energy_counter, previous_location):
                 else:
                     r = np.random.random()
                     if r <= prob_above_average:
-                        next_acid(protein, energy_counter, location)
+                        next_acid(protein, location)
 
             # Remove the acid before continuing
             protein.remove_acid(previous_energy)
