@@ -23,6 +23,7 @@ from truebranch_n_bound import branch_n_bound
 
 # Import visualisation functions
 from minimal_sizes import plot_matrix_sizes
+from graph1D import plot1D
 
 # Import auxiliary functions
 from user_input import ask_integer, ask_float
@@ -43,6 +44,12 @@ def run_algorithm(algorithms, algorithm, protein_string, dimension):
     '''
 
     '''
+
+    if dimension == "1D":
+        plot1D(protein_string)
+        plt.show()
+
+        exit("Error: Couldn't fold protein in only one dimension")
 
     # Run a random walk
     if algorithm == algorithms[0]:
@@ -108,7 +115,7 @@ def print_list(list):
 
 if __name__ == "__main__":
 
-    dimensions = ["2D", "3D"]
+    dimensions = ["1D", "2D", "3D"]
     print_list(dimensions)
 
     chosen_dimension = ask_integer("Choose the dimensions: ") - 1
@@ -136,9 +143,11 @@ if __name__ == "__main__":
     print(f">{proteins[chosen_protein]}\n")
 
     protein, end_time = run_algorithm(algorithms, algorithms[chosen_algorithm], proteins[chosen_protein], dimensions[chosen_dimension])
-    print(protein)
-    print(time.strftime('\nElapsed time: %H:%M:%S', time.gmtime(end_time)))
 
-    protein.visualise(proteins[chosen_protein])
+    if protein and end_time:
+        print(protein)
+        print(time.strftime('\nElapsed time: %H:%M:%S', time.gmtime(end_time)))
+
+        protein.visualise(proteins[chosen_protein])
 
     plt.show()
