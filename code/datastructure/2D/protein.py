@@ -84,21 +84,6 @@ class Protein:
         self.length -= 1
 
 
-    def remove_acid_hillclimber(self, location):
-        """
-        Removes an acid object from the acids matrix
-        """
-        row, column = location
-        acid_connections = self.acids[row, column].connections
-
-        previous_connection = acid_connections["previous"]
-        previous_row, previous_column = new_location([row, column], previous_connection, len(self.acids))
-        previous_acid = self.acids[previous_row, previous_column]
-        previous_acid.connections["next"] = ""
-
-        self.acids[row, column] = 0
-
-
     def neighbors(self, location):
         '''
         Gets all neighboring acid objects from a central acid
