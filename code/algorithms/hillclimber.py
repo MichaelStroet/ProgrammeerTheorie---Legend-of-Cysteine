@@ -41,20 +41,50 @@ def hillclimber(start_protein, dimension):
 
     print(acid_locations)
 
-    # create a random part of the protein to be removed
+    # determine index and range
     acid_index = len(acid_locations) - 1
-    random_start = random.randint(1, acid_index)            # for now the first acid needs to stay in place
-    random_end = random.randint(random_start, acid_index)
-    print(random_start, random_end)
+    cut_range = 2                                                    # deletes range - 1 
 
-    # every acid of the random part is removed
-    for i in range(random_end, random_start -1 , - 1):
-        location = acid_locations[i]
-        start_protein.remove_acid_hillclimber(location)
-        print(location)
+    # make two cuts in the protein, leaving atleast one acid
+    cut_start = random.randint(-1, acid_index - 2)                   # start -1 to end -2
+    cut_end = cut_start + cut_range
 
-    # remember the 
-    print(first_acid)
+    print("start ", cut_start,"; end: ", cut_end)
+
+
+    # determine the connections of the cut
+    if not cut_start == -1:
+        start_acid_row = acid_locations[cut_start][0]
+        start_acid_column = acid_locations[cut_start][1]
+        start_acid = start_protein.acids[start_acid_row, start_acid_column]
+
+        print(start_acid.connections)
+        start_acid.connections["next"] = ""
+        print(start_acid.connections)
+
+    else:
+        print("cuts first protein off")
+
+    if not cut_end == acid_index + 1:
+        end_acid_row = acid_locations[cut_end][0]
+        end_acid_column = acid_locations[cut_end][1]
+        end_acid = start_protein.acids[end_acid_row, end_acid_column]
+
+        print(end_acid.connections)
+        end_acid.connections["previous"] = ""
+        print(end_acid.connections)
+
+    else: 
+        print("cuts the last protein off")
+
+    # every acid between the start and end is removed
+    for i in range(cut_start + 1 , cut_end):
+        acid_row = acid_locations[i][0]
+        acid_column = acid_locations[i][1]
+        print(i, acid_row, acid_column)
+        start_protein.acids[acid_row, acid_column] = 0
+
     print(start_protein)
 
+    # 
     pass
