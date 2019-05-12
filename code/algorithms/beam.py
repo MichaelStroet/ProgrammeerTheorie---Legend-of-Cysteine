@@ -28,9 +28,9 @@ import re
 from trueacid import Acid
 from trueprotein import Protein
 
-def beamsearch(protein_string, N_tries, dimension):
+def beamsearch(protein_string, dimension):
 
-    global best_nodes
+    global best_nodes, protein_length
     # Use protein length to establish location of first amino acid in a matrix
     protein_length = len(protein_string)
     protein = Protein(protein_length, dimension)
@@ -51,6 +51,9 @@ def beamsearch(protein_string, N_tries, dimension):
 
     next_acid(protein, protein_string, energy_counter, previous_location)
 
+    return protein_min, energy_counter
+
+
 # Function that places an amino acid
 def next_acid(protein, protein_string, energy_counter, previous_location):
 
@@ -59,7 +62,7 @@ def next_acid(protein, protein_string, energy_counter, previous_location):
     see whether the matrix box left, up & right are empty,
     if so store their locations and direction in a dictionnary
     '''
-
+    global protein_min
     locations = protein.neighbors(previous_location)
     possible_sites = {}
     energy = {}
@@ -151,3 +154,24 @@ def next_acid(protein, protein_string, energy_counter, previous_location):
                     loc_next = locations[needed_direction]
                     print("loc_next: ", loc_next)
                     protein.add_acid(acid_type, loc_next, needed_direction)
+                    protein.energy += best_nodes[nod]
+                    previous_location = loc_next
+                    next_acid(protein, protein_string, energy_counter, previous_location)
+                    protein_min = protein
+                elif len(needed_length) > 0:
+                    while protein.length > int(needed_length[0]):
+                        print(protein)
+                        protein.remove_acid(energy_value)
+                    print("locations: ", locations)
+                    print("type: ", acid_type)
+                    loc_next = locations[needed_direction]
+                    print("loc_next: ", loc_next)
+                    #add connection
+                    protein.add_acid(acid_type, loc_next, needed_direction)
+                    protein.energy += best_nodes[nod]
+                    previous_location = loc_next
+                    next_acid(protein, protein_string, energy_counter, previous_location)
+                    protein_min = protein
+
+                else:
+                    print("else")
