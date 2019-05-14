@@ -39,7 +39,6 @@ def plot_matrix_sizes(matrix_sizes, used_size):
         y_min = 0
         y_max = used_size + 1
 
-
         plt.figure("Matrix sizes per energy", figsize = (6, 6))
 
         line_width = 2
@@ -53,9 +52,11 @@ def plot_matrix_sizes(matrix_sizes, used_size):
 
 
         plt.xlabel("Energy")
+        plt.xticks(range(x_min, x_max, 1))
         plt.xlim([x_min, x_max])
 
         plt.ylabel("Matrix size")
+        plt.yticks(range(1, y_max, 2))
         plt.ylim([y_min, y_max])
 
         plt.title("Minimal matrix sizes per energy")
