@@ -5,8 +5,8 @@
 import numpy as np
 import copy
 
-from trueacid import Acid
-from trueprotein import Protein
+from acid import Acid
+from protein import Protein
 
 from dict_average import dict_average
 

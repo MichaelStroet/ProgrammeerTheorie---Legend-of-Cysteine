@@ -5,8 +5,8 @@
 import copy
 import numpy as np
 
-from trueacid import Acid
-from trueprotein import Protein
+from acid import Acid
+from protein import Protein
 
 def random_walk(protein_string, N_tries, dimension):
     '''
@@ -62,7 +62,7 @@ def random_walk(protein_string, N_tries, dimension):
             energy_counter[energy] = energy_counter.get(energy, 0) + 1
 
             min_matrix_size = protein.smallest_matrix()
-            
+
             matrix_sizes[energy] = matrix_sizes.get(energy, {})
             matrix_sizes[energy][min_matrix_size] = matrix_sizes[energy].get(min_matrix_size, 0) + 1
 

@@ -11,8 +11,8 @@ import copy
 import random
 import numpy as np
 
-from trueacid import Acid
-from trueprotein import Protein
+from acid import Acid
+from protein import Protein
 
 def greedy(protein_string, N_tries, dimension):
     '''

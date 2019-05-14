@@ -4,10 +4,10 @@
 
 import numpy as np
 
-from trueacid import Acid
+from acid import Acid
 from graph import visualise as plot
 from graph3D import visualise3D as plot3D
-from truefunctions import opposite, new_location
+from functions import opposite, new_location
 
 class Protein:
 

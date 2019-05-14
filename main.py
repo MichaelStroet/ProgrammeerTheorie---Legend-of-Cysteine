@@ -17,9 +17,9 @@ sys.path.append(os.path.join(directory, "code", "visualisations"))
 sys.path.append(os.path.join(directory, "data"))
 
 # Import algorithms
-from truerandom_walk import random_walk
-from truegreedy import greedy
-from truebranch_n_bound import branch_n_bound
+from random_walk import random_walk
+from greedy import greedy
+from branch_n_bound import branch_n_bound
 
 # Import visualisation functions
 from minimal_sizes import plot_matrix_sizes
