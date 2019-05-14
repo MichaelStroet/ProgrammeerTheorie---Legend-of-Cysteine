@@ -52,7 +52,7 @@ def plot_matrix_sizes(matrix_sizes, used_size):
 
 
         plt.xlabel("Energy")
-        plt.xticks(range(x_min, x_max, 1))
+        plt.xticks(range(x_min, x_max + 1, 1))
         plt.xlim([x_min, x_max])
 
         plt.ylabel("Matrix size")
