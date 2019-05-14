@@ -11,7 +11,7 @@ class Acid:
         layer, row, column = location
 
         self.type = type
-        self.position = [layer, row, column]
+        self.location = [layer, row, column]
         self.connections = {
             "previous" : previous_connection,
             "next" : ""

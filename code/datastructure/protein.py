@@ -33,7 +33,8 @@ class Protein:
         self.acids = np.zeros((layer_size, matrix_size, matrix_size), dtype = Acid)
         self.first_acid = [layer_mid, matrix_mid, matrix_mid]
         self.last_acid = self.first_acid
-        self.matrix_length = matrix_size
+        self.layer_size = layer_size
+        self.matrix_size = matrix_size
         self.energy = 0
         self.length = 0
 
@@ -59,12 +60,12 @@ class Protein:
 
         return string_matrix
 
-    def add_acid(self, type, location, direction_new_acid):
+    def add_acid(self, type, location, direction_previous):
         '''
         Adds a new acid object to the acid matrix
         '''
         layer, row, column = location
-        acid = Acid(type, location, opposite(direction_new_acid))
+        acid = Acid(type, location, opposite(direction_previous))
         self.acids[layer, row, column] = acid
         self.last_acid = location
         self.length += 1
@@ -79,12 +80,10 @@ class Protein:
 
         last_acid = self.acids[layer, row, column]
         last_connections = last_acid.connections
-        layer_length = len(self.acids)
-        matrix_length = len(self.acids[0])
 
         prev_connection = last_connections["previous"]
 
-        prev_layer, prev_row, prev_column = new_location(last_location, prev_connection, layer_length, matrix_length)
+        prev_layer, prev_row, prev_column = new_location(last_location, prev_connection, self.layer_size, self.matrix_size)
         prev_acid = self.acids[prev_layer, prev_row, prev_column]
 
         prev_acid.connections["next"] = ""
@@ -105,7 +104,7 @@ class Protein:
 
         # Get the locations of all neighbors
         for direction in directions:
-            site = new_location(location, direction, len(self.acids), len(self.acids[0]))
+            site = new_location(location, direction, self.layer_size, self.matrix_size)
             if site:
                 neighbor_acids[direction] = site
 
@@ -169,9 +168,6 @@ class Protein:
         Visualises the protein object in a 2D or 3D plot
         '''
 
-        # Determine the middle (start) of the matrix
-        matrix_length = len(self.acids[0])
-
         # Set layer, row and column like the first acid
         layer, row, column = self.first_acid
         start_index = row
@@ -182,7 +178,7 @@ class Protein:
 
         # Set the matrix corner coordinates
         low = (0 - 1) - start_index
-        high = (matrix_length) - start_index
+        high = (self.matrix_size) - start_index
 
         # Determine the data for plotting the matrix borders
         # matrix_data = [
@@ -209,8 +205,8 @@ class Protein:
         while not acid.connections["next"] == "":
             acid = self.acids[layer, row, column]
             acid_type = acid.type
-            acid_x = acid.position[1] - start_index
-            acid_y = acid.position[2] - start_index
+            acid_x = acid.location[1] - start_index
+            acid_y = acid.location[2] - start_index
 
             # For 2D
             if len(self.acids) == 1:
@@ -218,11 +214,11 @@ class Protein:
 
             # For 3D
             else:
-                acid_z = acid.position[0] - start_index
+                acid_z = acid.location[0] - start_index
                 acid_data.append([acid_type, acid_x, acid_y, acid_z])
 
             # Adjust the layer, row and column for the next acid
-            layer, row, column = new_location([layer, row, column], acid.connections["next"], len(self.acids), len(self.acids[0]))
+            layer, row, column = new_location([layer, row, column], acid.connections["next"],  self.layer_size, self.matrix_size)
 
         # Plot the protein
         # In 2D
