@@ -30,10 +30,10 @@ class Protein:
             layer_mid = 0
             layer_size = 1
 
-        self.matrix_length = matrix_size
         self.acids = np.zeros((layer_size, matrix_size, matrix_size), dtype = Acid)
         self.first_acid = [layer_mid, matrix_mid, matrix_mid]
         self.last_acid = self.first_acid
+        self.matrix_length = matrix_size
         self.energy = 0
         self.length = 0
 
