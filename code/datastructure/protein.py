@@ -60,6 +60,19 @@ class Protein:
 
         return string_matrix
 
+    def place_first_two(self, protein_string):
+        '''
+        Places the first two amino acids
+        '''
+        # Place the first acid
+        location = self.first_acid
+        self.add_acid(protein_string[0], location, "")
+        self.get_acid(location).add_connection("down")
+
+        # Place the second acid underneath the first
+        location = [location[0], location[1] + 1, location[2]]
+        self.add_acid(protein_string[1], location, "down")
+
     def get_acid(self, location):
         '''
         Finds and returns the object at that location
@@ -116,6 +129,22 @@ class Protein:
                 neighbor_acids[direction] = site
 
         return neighbor_acids
+
+    def possible_sites(self):
+        '''
+        Determines the possible sites for placing a new acid
+        '''
+        possible_sites = {}
+        
+        # Get the acid objects surrounding the last-placed acid
+        neighbors = self.neighbors(self.last_acid)
+
+        # Determine in which neighboring spots a new acid can be placed
+        for direction, location in neighbors.items():
+            if self.get_acid(location) == 0:
+                possible_sites[direction] = location
+
+        return possible_sites
 
     def check_energy_typeless(self, location):
         '''
