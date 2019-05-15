@@ -60,6 +60,13 @@ class Protein:
 
         return string_matrix
 
+    def get_acid(self, location):
+        '''
+        Finds and returns the object at that location
+        '''
+        layer, row, column = location
+        return self.acids[layer, row, column]
+
     def add_acid(self, type, location, direction_previous):
         '''
         Adds a new acid object to the acid matrix
