@@ -19,6 +19,7 @@ sys.path.append(os.path.join(directory, "data"))
 # Import algorithms
 from random_walk import random_walk
 from greedy import greedy
+from greedy_lookahead import greedy as greedy_la
 from branch_n_bound import branch_n_bound
 
 # Import visualisation functions
@@ -54,9 +55,9 @@ def run_algorithm(algorithms, algorithm, protein_string, dimension):
     # Run a random walk
     if algorithm == algorithms[0]:
 
-        N_tries = ask_integer("How many proteins to fold? ")
+        N_tries = ask_integer("How many proteins to fold [2-∞]? ")
         while N_tries < 2:
-            N_tries = ask_integer("How many proteins to fold? ")
+            N_tries = ask_integer("How many proteins to fold [2-∞]? ")
 
         print(f">{N_tries}\n")
 
@@ -66,11 +67,12 @@ def run_algorithm(algorithms, algorithm, protein_string, dimension):
 
         plot_matrix_sizes(matrix_sizes, len(protein.acids[0]))
 
+    # Run a normal greedy search
     elif algorithm == algorithms[1]:
 
-        N_tries = ask_integer("How many proteins to fold? ")
+        N_tries = ask_integer("How many proteins to fold [2-∞]? ")
         while N_tries < 2:
-            N_tries = ask_integer("How many proteins to fold? ")
+            N_tries = ask_integer("How many proteins to fold [2-∞]? ")
 
         print(f">{N_tries}\n")
 
@@ -80,20 +82,41 @@ def run_algorithm(algorithms, algorithm, protein_string, dimension):
 
         plot_matrix_sizes(matrix_sizes, len(protein.acids[0]))
 
-    # Run a probability-based branch n bound algorithm
+    # Run a normal greedy search with look_ahead
     elif algorithm == algorithms[2]:
 
+        N_tries = ask_integer("How many proteins to fold [2-∞]? ")
+        while N_tries < 2:
+            N_tries = ask_integer("How many proteins to fold [2-∞]? ")
+
+        print(f">{N_tries}\n")
+
+        look_aheads = ask_integer("How many steps to look ahead [0-∞]? ")
+        while look_aheads < 0:
+            look_aheads = ask_integer("How many steps to look ahead [0-∞]? ")
+
+        print(f">{look_aheads}\n")
+
+        start_time = time.time()
+        protein, dict, matrix_sizes = greedy_la(protein_string, look_aheads, N_tries, dimension)
+        end_time = time.time() - start_time
+
+        plot_matrix_sizes(matrix_sizes, len(protein.acids[0]))
+
+    # Run a probability-based branch n bound algorithm
+    elif algorithm == algorithms[3]:
+
         # Get probabilities
-        prob_below_average = ask_float("Choose a probability to discard proteins with energy below the average? ")
+        prob_below_average = ask_float("Choose a probability to discard proteins with energy below the average [0.0-1.0]? ")
         while 0 > prob_below_average or prob_below_average > 1:
             print("A probability is between 0 and 1. Try again.")
-            prob_below_average = ask_float("Choose a probability to discard proteins with energy below the average? ")
+            prob_below_average = ask_float("Choose a probability to discard proteins with energy below the average [0.0-1.0]? ")
             print("Probability below average: ",prob_below_average)
 
-        prob_above_average = ask_float("Choose a probability to discard proteins with energy above the average? ")
+        prob_above_average = ask_float("Choose a probability to discard proteins with energy above the average [0.0-1.0]? ")
         while 0 > prob_above_average or prob_above_average > 1:
             print("A probability is between 0 and 1. Try again.")
-            prob_above_average = ask_float("Choose a probability to discard proteins with energy above the average? ")
+            prob_above_average = ask_float("Choose a probability to discard proteins with energy above the average [0.0-1.0]? ")
             print("Probability above average: ",prob_above_average)
 
         start_time = time.time()
@@ -124,7 +147,7 @@ if __name__ == "__main__":
 
     print(f">{dimensions[chosen_dimension]}\n")
 
-    algorithms = ["random walk", "greedy", "probabilty-based branch-n-bound"]
+    algorithms = ["random walk", "greedy", "greedy look-ahead", "probabilty-based branch-n-bound"]
     print_list(algorithms)
 
     chosen_algorithm = ask_integer("Choose an algorithm: ") - 1
