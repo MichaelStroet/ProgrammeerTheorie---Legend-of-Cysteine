@@ -117,14 +117,66 @@ class Protein:
 
         return neighbor_acids
 
+    def check_energy_typeless(self, location):
+        '''
+        Calculates the energy of an Acid object and returns an integer
+        '''
+        # Checks if the location contains an actual Acid object
+        central_acid = self.get_acid(location)
+        if not central_acid == 0:
+
+            type = central_acid.type
+
+            # If the acid is polar, the energy stays the same
+            if type == "P":
+                return 0
+
+            elif type == "H" or type == "C":
+
+                central_connections = central_acid.connections.values()
+
+                # Get the neighboring locations
+                neighbor_acids = self.neighbors(location)
+
+                new_energy = 0
+
+                # Loop over each neighbor and check the new energy
+                for direction, location in neighbor_acids.items():
+                    acid = self.get_acid(location)
+
+                    if not acid == 0 and not direction in central_connections:
+
+                        # If the neighbor pair is H-H, the energy decreases by 1,
+                        # If the neighbor pair is H-C, the energy decreases by 1,
+                        if type == "H":
+                            if acid.type == "H" or acid.type == "C":
+                                new_energy -= 1
+
+                        # If the neighbor pair is C-H, the energy decreases by 1,
+                        # If the neighbor pair is C-C, the energy decreases by 5
+                        else:
+                            if acid.type == "H":
+                                new_energy -= 1
+
+                            elif acid.type == "C":
+                                new_energy -= 5
+
+                return new_energy
+
+            else:
+                print(f"Unknown amino acid type: '{type}'")
+                exit(1)
+
+        else:
+            return 0
+
     def check_energy(self, location, type):
         '''
-        Calculates the energy of a newly placed Acid object and returns an integer
+        Calculates the energy of an Acid object and returns an integer
         '''
-        layer, row, column = location
 
         # Checks if the location contains an actual Acid object
-        central_acid = self.acids[layer, row, column]
+        central_acid = self.get_acid(location)
         if not central_acid == 0:
 
             # If the acid is polar, the energy stays the same
@@ -141,19 +193,19 @@ class Protein:
                 new_energy = 0
 
                 # Loop over each neighbor and check the new energy
-                for direction in neighbor_acids:
-                    layer, row, column = neighbor_acids[direction]
-                    acid = self.acids[layer, row, column]
+                for direction, neighbor_location in neighbor_acids.items():
+                    acid = self.get_acid(neighbor_location)
 
                     if not acid == 0 and not direction in central_connections:
 
-                        # If the neighbor pair is H-H or H-C, the energy decreases by 1
+                        # If the neighbor pair is H-H, the energy decreases by 1,
+                        # If the neighbor pair is H-C, the energy decreases by 1,
                         if type == "H":
                             if acid.type == "H" or acid.type == "C":
                                 new_energy -= 1
 
                         # If the neighbor pair is C-H, the energy decreases by 1,
-                        # and if it is C-C, the energy decreases by 5
+                        # If the neighbor pair is C-C, the energy decreases by 5
                         else:
                             if acid.type == "H":
                                 new_energy -= 1
