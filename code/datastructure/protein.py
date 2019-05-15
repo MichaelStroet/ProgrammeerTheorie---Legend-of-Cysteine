@@ -135,7 +135,7 @@ class Protein:
         Determines the possible sites for placing a new acid
         '''
         possible_sites = {}
-        
+
         # Get the acid objects surrounding the last-placed acid
         neighbors = self.neighbors(self.last_acid)
 
@@ -146,9 +146,9 @@ class Protein:
 
         return possible_sites
 
-    def check_energy_typeless(self, location):
+    def new_energy(self, location):
         '''
-        Calculates the energy of an Acid object and returns an integer
+        Calculates the energy of an Acid object and updates the energy property
         '''
         # Checks if the location contains an actual Acid object
         central_acid = self.get_acid(location)
@@ -167,8 +167,6 @@ class Protein:
                 # Get the neighboring locations
                 neighbor_acids = self.neighbors(location)
 
-                new_energy = 0
-
                 # Loop over each neighbor and check the new energy
                 for direction, location in neighbor_acids.items():
                     acid = self.get_acid(location)
@@ -179,18 +177,16 @@ class Protein:
                         # If the neighbor pair is H-C, the energy decreases by 1,
                         if type == "H":
                             if acid.type == "H" or acid.type == "C":
-                                new_energy -= 1
+                                protein.energy -= 1
 
                         # If the neighbor pair is C-H, the energy decreases by 1,
                         # If the neighbor pair is C-C, the energy decreases by 5
                         else:
                             if acid.type == "H":
-                                new_energy -= 1
+                                protein.energy -= 1
 
                             elif acid.type == "C":
-                                new_energy -= 5
-
-                return new_energy
+                                protein.energy -= 5
 
             else:
                 print(f"Unknown amino acid type: '{type}'")
