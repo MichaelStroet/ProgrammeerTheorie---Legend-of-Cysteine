@@ -21,13 +21,13 @@ def random_walk(protein_string, N_tries, dimension):
     protein = Protein(protein_length, dimension)
 
     # Place the first amino acid
-    layer, row, column = protein.first_acid
-    protein.add_acid(protein_string[0], [layer, row, column], "")
-    protein.acids[layer, row, column].add_connection("down")
+    location = protein.first_acid
+    protein.add_acid(protein_string[0], location, "")
+    protein.get_acid(location).add_connection("down")
 
     # Place the second amino acid below the first
-    layer, row, column = [layer, row + 1, column]
-    protein.add_acid(protein_string[1], [layer, row, column], "up")
+    location = [location[0], location[1] + 1, location[2]]
+    protein.add_acid(protein_string[1], location, "up")
 
     energy_min = 1
 
@@ -46,7 +46,7 @@ def random_walk(protein_string, N_tries, dimension):
             protein.remove_acid(0)
 
         # Run the next random walk
-        solution_found, protein = walk(protein, protein_string, [layer, row, column])
+        solution_found, protein = walk(protein, protein_string, location)
 
         # When a complete protein has been created, get it's energy
         if solution_found:
@@ -84,15 +84,13 @@ def walk(protein, protein_string, previous_location):
 
         possible_sites = {}
 
-        # Determine in which neighbor spots a new acid can be placed
+        # Determine in which neighboring spots a new acid can be placed
         for direction in neighbors:
-            location = neighbors[direction]
-            layer, row, column = location
-
-            acid = protein.acids[layer, row, column]
+            layer, row, column = neighbors[direction]
+            acid = protein.get_acid(neighbors[direction])
 
             if acid == 0:
-                possible_sites[direction] = location
+                possible_sites[direction] = neighbors[direction]
 
         # If a new acid can be placed, randomly place said acid
         if len(possible_sites) > 0:
@@ -107,8 +105,7 @@ def walk(protein, protein_string, previous_location):
                 if random_number <= site_probability:
 
                     # Add the "next" connection to the previously-placed acid
-                    prev_layer, prev_row, prev_column = previous_location
-                    previous_acid = protein.acids[prev_layer, prev_row, prev_column]
+                    previous_acid = protein.get_acid(previous_location)
                     previous_acid.add_connection(direction)
 
                     location = possible_sites[direction]
