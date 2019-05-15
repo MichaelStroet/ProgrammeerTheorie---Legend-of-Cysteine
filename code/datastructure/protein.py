@@ -177,16 +177,16 @@ class Protein:
                         # If the neighbor pair is H-C, the energy decreases by 1,
                         if type == "H":
                             if acid.type == "H" or acid.type == "C":
-                                protein.energy -= 1
+                                self.energy -= 1
 
                         # If the neighbor pair is C-H, the energy decreases by 1,
                         # If the neighbor pair is C-C, the energy decreases by 5
                         else:
                             if acid.type == "H":
-                                protein.energy -= 1
+                                self.energy -= 1
 
                             elif acid.type == "C":
-                                protein.energy -= 5
+                                self.energy -= 5
 
             else:
                 print(f"Unknown amino acid type: '{type}'")
