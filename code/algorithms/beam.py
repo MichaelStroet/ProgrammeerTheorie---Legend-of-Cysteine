@@ -27,6 +27,9 @@ import re
 
 from trueacid import Acid
 from trueprotein import Protein
+from truefunctions import opposite
+from truefunctions import new_location
+
 
 def beamsearch(protein_string, dimension):
 
@@ -63,10 +66,16 @@ def next_acid(protein, protein_string, energy_counter, previous_location):
     if so store their locations and direction in a dictionnary
     '''
     global protein_min
+    print("*****NEW START******")
+    print(previous_location)
     locations = protein.neighbors(previous_location)
+    print(locations)
     possible_sites = {}
     energy = {}
     protein_energy ={}
+    acid_type = protein_string[protein.length]
+    print(acid_type)
+
 
     # For each possible location, see if there is already an amino acid
     for direction in locations:
@@ -78,9 +87,11 @@ def next_acid(protein, protein_string, energy_counter, previous_location):
     # If there are possible sites (it is not stuck)
     if len(possible_sites) > 0:
         previous_energy = protein.energy
+        print("energy: ", protein.energy)
 
         for direction, site in possible_sites.items():
             acid_type = protein_string[protein.length]
+            print("type: ", acid_type)
 
             previous_acid = protein.acids[previous_location[0], previous_location[1], previous_location[2]]
             previous_acid.add_connection(direction)
@@ -89,27 +100,37 @@ def next_acid(protein, protein_string, energy_counter, previous_location):
             protein.add_acid(acid_type, site, direction)
             energy[direction] = protein.check_energy(site, acid_type)
             total_energy = previous_energy + protein.check_energy(site, acid_type)
-            print("total energy: ", total_energy)
+            print("TOTAL energy: ", total_energy)
             protein_energy[direction] = total_energy
+            print("length before: ", protein.length)
             protein.remove_acid(previous_energy)
+            print("length after: ", protein.length)
+
 
         print("Protein_energy: ", protein_energy)
         print("Best_nodes: ", best_nodes)
+        print("\n")
 
         for key, energy_value in protein_energy.items():
 
             nested_values = list(best_nodes.values())
+            print("IN FOR LOOP")
+            print("energy value: ", energy_value)
+
             print("list of best nodes values: ", nested_values)
             minimum_value = min(nested_values)
             maximum_value = max(nested_values)
 
-            print("energy value: ", energy_value)
             print("min: ", minimum_value)
             print("max: ", maximum_value)
 
+            """
+                UPDATE BEST NODES
+            """
             if energy_value < minimum_value:
                 print(energy_value, "smaller than min")
                 for node_value in best_nodes:
+                    # replace node with biggest energy with the new node
                     if best_nodes[node_value] == maximum_value:
                         print(f"{best_nodes[node_value]} == {maximum_value}]")
                         print("before: ", best_nodes)
@@ -125,6 +146,7 @@ def next_acid(protein, protein_string, energy_counter, previous_location):
             elif energy_value < maximum_value:
                 print(energy_value, "smaller than max")
                 for node_value in best_nodes:
+                    # replace node with biggest energy with the new node
                     if best_nodes[node_value] == maximum_value:
                         print(f"{best_nodes[node_value]} == {maximum_value}]")
                         print("before: ", best_nodes)
@@ -132,6 +154,7 @@ def next_acid(protein, protein_string, energy_counter, previous_location):
                         #print("node value: ", node_value)
                         print("length: ", protein.length)
                         new_key = str(protein.length) + str(key)
+                        print("new key: ", new_key)
                         best_nodes[new_key] = best_nodes.pop(node_value)
                         #print("middle: ", best_nodes)
                         best_nodes[new_key] = energy_value
@@ -141,37 +164,75 @@ def next_acid(protein, protein_string, energy_counter, previous_location):
                 print("else: ", energy_value)
 
             print("best_nodes: ", best_nodes)
-            print("length: ", protein.length)
+            print("Protein length: ", protein.length)
 
+            """
+                PLACE NEXT AMINO ACID
+            """
             for nod in best_nodes:
-                print("nod: ", nod)
+                print("***nod: ", nod)
                 needed_length = re.findall('\d+',nod)
                 needed_direction = ''.join(filter(str.isalpha, nod))
                 print(needed_direction)
+
+                #next acid in best nodes is at the right length
                 if int(needed_length[0]) == protein.length:
                     print("locations: ", locations)
                     print("type: ", acid_type)
                     loc_next = locations[needed_direction]
                     print("loc_next: ", loc_next)
+                    print("acid: ", previous_acid)
+                    previous_acid.add_connection(needed_direction)
                     protein.add_acid(acid_type, loc_next, needed_direction)
                     protein.energy += best_nodes[nod]
+                    best_nodes["99up"] = best_nodes.pop(nod)
+                    best_nodes["99up"] = 1
                     previous_location = loc_next
-                    next_acid(protein, protein_string, energy_counter, previous_location)
                     protein_min = protein
+                    next_acid(protein, protein_string, energy_counter, previous_location)
+                    break
+                    break
+
+                #next acid in best nodes is not at the right length
                 elif len(needed_length) > 0:
+                    print("needed length: ", int(needed_length[0]))
+                    print("PREVIOUS ACID: ", previous_acid)
                     while protein.length > int(needed_length[0]):
                         print(protein)
-                        protein.remove_acid(energy_value)
+                        print("length before: ", protein.length)
+                        protein.remove_acid(previous_energy)
+                        print(previous_acid.connections)
+                        direction_back = previous_acid.connections['previous']
+                        print("direction: ", direction_back)
+                        location_previous_acid = new_location(previous_location, direction_back, len(protein.acids), len(protein.acids[0]))
+                        #print(previous_acid)
+                        previous_acid = protein.acids[location_previous_acid[0], location_previous_acid[1], location_previous_acid[2]]
+                        print(previous_acid)
+                        print("length after: ", protein.length)
+
+                    print(protein)
                     print("locations: ", locations)
+                    acid_type = protein_string[protein.length]
                     print("type: ", acid_type)
+                    print("previous acid : ", previous_acid)
+                    locations = protein.neighbors(previous_acid.position)
                     loc_next = locations[needed_direction]
                     print("loc_next: ", loc_next)
-                    #add connection
+                    previous_acid.add_connection(needed_direction)
                     protein.add_acid(acid_type, loc_next, needed_direction)
                     protein.energy += best_nodes[nod]
+                    best_nodes["99up"] = best_nodes.pop(nod)
+                    best_nodes["99up"] = 1
                     previous_location = loc_next
-                    next_acid(protein, protein_string, energy_counter, previous_location)
                     protein_min = protein
+                    print(protein)
+                    next_acid(protein, protein_string, energy_counter, previous_location)
+                    break
+                    break
 
                 else:
                     print("else")
+    if protein.length == protein_length:
+        return(True, protein)
+    else:
+        return(False, protein)
