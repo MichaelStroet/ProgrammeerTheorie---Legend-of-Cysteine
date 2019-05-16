@@ -13,9 +13,9 @@ class Protein:
 
     def __init__(self, protein_length, dimension):
         '''
-        Initialise a list of n 'n x n' matrices of Acid objects
+        Initialise a list of m 'n x n' matrices of Acid objects
         '''
-        matrix_size = int(protein_length / 1.)
+        matrix_size = int(protein_length / 2.)
 
         # Ensure odd matrix_size
         if matrix_size % 2 == 0:
@@ -136,13 +136,21 @@ class Protein:
         '''
         possible_sites = {}
 
+        first_row = self.first_acid[1]
+        current_row = self.last_acid[1]
+
         # Get the acid objects surrounding the last-placed acid
         neighbors = self.neighbors(self.last_acid)
 
         # Determine in which neighboring spots a new acid can be placed
         for direction, location in neighbors.items():
             if self.get_acid(location) == 0:
-                possible_sites[direction] = location
+                # If the current protein is a straight line down, remove symmetrical options
+                if current_row - first_row == self.length - 1:
+                    if direction in ["down", "left", "out"]:
+                        possible_sites[direction] = location
+                else:
+                    possible_sites[direction] = location
 
         return possible_sites
 

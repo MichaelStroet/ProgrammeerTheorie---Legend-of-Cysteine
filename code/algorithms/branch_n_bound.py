@@ -61,15 +61,8 @@ def next_acid(protein, previous_location):
     if so store their locations and direction in a dictionnary
     '''
 
-    locations = protein.neighbors(previous_location)
-    possible_sites = {}
-
-    # For each possible location, see if there is already an amino acid
-    for direction in locations:
-        location = locations[direction]
-        acid = protein.acids[location[0],location[1], location[2]]
-        if acid == 0:
-            possible_sites[direction] = location
+    # Get the possible sites for placing a new acid
+    possible_sites = protein.possible_sites()
 
     # If there are possible sites (it is not stuck)
     if len(possible_sites) > 0:
@@ -86,6 +79,7 @@ def next_acid(protein, previous_location):
 
             location = possible_sites[key_direction]
             protein.add_acid(amino_acid, location, key_direction)
+            print(protein)
 
             # Calculate the new energy of the (partial) protein
             new_energy = protein.check_energy(location, amino_acid)

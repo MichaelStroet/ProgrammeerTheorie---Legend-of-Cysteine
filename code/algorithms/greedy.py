@@ -89,14 +89,9 @@ def greedy_fold(protein, p_string, p_len, loc_current):
 
         # Check the type of the to be placed acid an its possible locations
         acid_type = p_string[acid_index]
-        directions = protein.neighbors(loc_current)
 
-        # Check if any directions are a valid location for amino acid placement
-        for direction, loc_new in directions.items():
-
-            # Remember the next possible locations
-            if protein.acids[loc_new[0], loc_new[1], loc_new[2]] == 0:
-                locs_next[direction] = loc_new
+        # Get the possible sites for placing a new acid
+        locs_next = protein.possible_sites()
 
         # Check the energy of every next location
         if len(locs_next) > 0:

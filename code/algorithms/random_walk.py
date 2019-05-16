@@ -79,19 +79,9 @@ def walk(protein, protein_string, previous_location):
     for length in range(2, len(protein_string)):
         acid_type = protein_string[length]
 
-        # Get the acid objects surrounding the last-placed acid
-        neighbors = protein.neighbors(previous_location)
-
-        possible_sites = {}
-
-        # Determine in which neighboring spots a new acid can be placed
-        for direction in neighbors:
-            layer, row, column = neighbors[direction]
-            acid = protein.get_acid(neighbors[direction])
-
-            if acid == 0:
-                possible_sites[direction] = neighbors[direction]
-
+        # Get the possible sites for placing a new acid
+        possible_sites = protein.possible_sites()
+        
         # If a new acid can be placed, randomly place said acid
         if len(possible_sites) > 0:
             divider = 1. / len(possible_sites)
