@@ -129,7 +129,7 @@ def run_algorithm(algorithms, algorithm, protein_string, dimension):
         print(f"Error: Unknown algorithm '{algorithm}'")
         exit(1)
 
-    return protein, end_time
+    return protein, dict, end_time
 
 def print_list(list):
     for i, element in zip(range(len(list)), list):
@@ -165,10 +165,11 @@ if __name__ == "__main__":
 
     print(f">{proteins[chosen_protein]}\n")
 
-    protein, end_time = run_algorithm(algorithms, algorithms[chosen_algorithm], proteins[chosen_protein], dimensions[chosen_dimension])
+    protein, energies, end_time = run_algorithm(algorithms, algorithms[chosen_algorithm], proteins[chosen_protein], dimensions[chosen_dimension])
 
-    if protein and end_time:
+    if protein and energies and end_time:
         print(protein)
+        print(energies)
         print(time.strftime('\nElapsed time: %H:%M:%S', time.gmtime(end_time)))
 
         protein.visualise(proteins[chosen_protein])

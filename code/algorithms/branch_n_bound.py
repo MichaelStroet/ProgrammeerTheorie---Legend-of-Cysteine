@@ -62,7 +62,7 @@ def next_acid(protein, previous_location):
     '''
 
     # Get the possible sites for placing a new acid
-    possible_sites = protein.possible_sites()
+    possible_sites = protein.possible_sites(protein.last_acid)
 
     # If there are possible sites (it is not stuck)
     if len(possible_sites) > 0:

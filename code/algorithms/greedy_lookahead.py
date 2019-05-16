@@ -81,7 +81,7 @@ def look_ahead(protein, look_aheads, protein_string, acid_index):
     acid_type = protein_string[acid_index]
 
     # Get the possible sites for placing a new acid
-    possible_sites = protein.possible_sites()
+    possible_sites = protein.possible_sites(protein.last_acid)
 
     energies = {}
 
@@ -129,7 +129,7 @@ def greedy_fold(protein, protein_string, look_aheads):
         locs_possible = []
 
         # Get the possible sites for placing a new acid
-        possible_sites = protein.possible_sites()
+        possible_sites = protein.possible_sites(protein.last_acid)
 
         energies = {}
 

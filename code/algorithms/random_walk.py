@@ -80,8 +80,8 @@ def walk(protein, protein_string, previous_location):
         acid_type = protein_string[length]
 
         # Get the possible sites for placing a new acid
-        possible_sites = protein.possible_sites()
-        
+        possible_sites = protein.possible_sites(protein.last_acid)
+
         # If a new acid can be placed, randomly place said acid
         if len(possible_sites) > 0:
             divider = 1. / len(possible_sites)
