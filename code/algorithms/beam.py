@@ -20,7 +20,7 @@ from functions import new_location
 from operator import itemgetter
 
 
-def beamsearch(pr_string, dimension, width):
+def beamsearch(pr_string, width, dimension):
 
     global best_nodes, protein_length, protein_string, energy_counter, beam_list, proteins, B_width
     protein_string = pr_string
@@ -53,9 +53,10 @@ def beamsearch(pr_string, dimension, width):
     # for i in range(len(proteins)):
     #     print(proteins[i].energy)
     protein_min = proteins[0]
+    energy_min = protein_min.energy
     #print(protein_min.energy)
 
-    return protein_min, energy_counter
+    return protein_min, energy_min
 
 def next_layer(the_protein, prev_location):
     '''
