@@ -130,27 +130,27 @@ class Protein:
 
         return neighbor_acids
 
-    def possible_sites(self):
+    def possible_sites(self, location):
         '''
         Determines the possible sites for placing a new acid
         '''
         possible_sites = {}
 
         first_row = self.first_acid[1]
-        current_row = self.last_acid[1]
+        current_row = location[1]
 
         # Get the acid objects surrounding the last-placed acid
-        neighbors = self.neighbors(self.last_acid)
+        neighbors = self.neighbors(location)
 
         # Determine in which neighboring spots a new acid can be placed
-        for direction, location in neighbors.items():
-            if self.get_acid(location) == 0:
+        for direction, neighbor_location in neighbors.items():
+            if self.get_acid(neighbor_location) == 0:
                 # If the current protein is a straight line down, remove symmetrical options
                 if current_row - first_row == self.length - 1:
                     if direction in ["down", "left", "out"]:
-                        possible_sites[direction] = location
+                        possible_sites[direction] = neighbor_location
                 else:
-                    possible_sites[direction] = location
+                    possible_sites[direction] = neighbor_location
 
         return possible_sites
 

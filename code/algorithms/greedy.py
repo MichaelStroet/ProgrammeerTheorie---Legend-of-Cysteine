@@ -91,7 +91,7 @@ def greedy_fold(protein, p_string, p_len, loc_current):
         acid_type = p_string[acid_index]
 
         # Get the possible sites for placing a new acid
-        locs_next = protein.possible_sites()
+        locs_next = protein.possible_sites(protein.last_acid)
 
         # Check the energy of every next location
         if len(locs_next) > 0:
