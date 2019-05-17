@@ -42,12 +42,12 @@ def hillclimber(start_protein):
     print(acid_locations)
 
     # determine index and range
-    acid_index = len(acid_locations) - 1
-    cut_range = 5                                                    # deletes range - 1 
+    acid_index = len(acid_locations)
+    cut_range = 5                                                  # deletes range - 1 
 
     # make two cuts in the protein, leaving atleast one acid
-    cut_start = random.randint(-1, acid_index - 2)                   # start -1 to end -2
-    cut_end = cut_start + cut_range
+    cut_start = random.randint(-1, acid_index - cut_range)                   # start -1 to end -5
+    cut_end = cut_start + cut_range + 1
 
     # remember the acids that the newly placed acids will need to be attached to
     start, end = 0, 0
@@ -56,25 +56,30 @@ def hillclimber(start_protein):
 
 
     # determine the acid before the cut
-    if not cut_start <= -1:
+    if cut_start > -1:
         start_layer, start_row, start_column = acid_locations[cut_start]
         start = start_protein.acids[start_layer, start_row, start_column]
 
-        print(start.location)
-        # remove the next connection it had
+        # remove the next connection
         start.connections["next"] = ""
 
+    else: 
+        print("removes first acid")
+
     # determine the acid after the second cut
-    if not cut_end >= acid_index + 1:
+    if cut_end < acid_index:
         end_layer, end_row, end_column = acid_locations[cut_end]
         end = start_protein.acids[end_layer, end_row, end_column]
 
-        print(end.location)
-        # remove the previous connection the acid had
+        # remove the previous connection
         end.connections["previous"] = ""
+
+    else:
+        print("removes last acid")
 
     # every acid between the start and end is removed
     acid_cut_locations = []
+
     for i in range(cut_start + 1 , cut_end):
         acid_cut_locations.append(acid_locations[i])
         acid_layer, acid_row, acid_column = acid_locations[i]
