@@ -87,8 +87,7 @@ def run_algorithm(algorithms, algorithm, protein_string, dimension):
 
         # Run the algorithm and keep track of the time
         start_time = time.time()
-        print("Hill Climber not yet implemented")
-        #protein, dict, matrix_sizes = hillclimber(protein_string, dimension)
+        protein, dict, matrix_sizes = branch_n_bound(protein_string, prob_above_average, prob_below_average, dimension)
         elapsed_time = time.time() - start_time
 
     # Run a hill climber
@@ -99,7 +98,8 @@ def run_algorithm(algorithms, algorithm, protein_string, dimension):
 
         # Run the algorithm and keep track of the time
         start_time = time.time()
-        protein, dict, matrix_sizes = branch_n_bound(protein_string, prob_above_average, prob_below_average, dimension)
+        print("Hill Climber not yet implemented")
+        protein, dict, matrix_sizes = [1,2,3]#hillclimber(protein_string, dimension)
         elapsed_time = time.time() - start_time
 
     return protein, dict, matrix_sizes, elapsed_time

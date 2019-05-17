@@ -50,28 +50,19 @@ if __name__ == "__main__":
 
     # Run the chosen algorithm
     results = run_algorithm(algorithms, choice_algorithm, choice_protein, choice_dimension)
+    protein, energies, matrix_sizes, elapsed_time = results
 
-    if len(results) == 4:
-        protein, energies, matrix_sizes, elapsed_time = results
+    # Saves the results to file
+    if save_results == "Yes":
+        protein.visualise(choice_protein)
+        plot_matrix_sizes(matrix_sizes, protein.matrix_size)
 
-        # Saves the results to file
-        if save_results == "Yes":
-            protein.visualise(choice_protein)
-            plot_matrix_sizes(matrix_sizes, protein.matrix_size)
+    # Displays and prints the results
+    if choice_show == "Yes":
+        protein.visualise(choice_protein)
+        plot_matrix_sizes(matrix_sizes, protein.matrix_size)
 
-        # Displays and prints the results
-        if choice_show == "Yes":
-            protein.visualise(choice_protein)
-            plot_matrix_sizes(matrix_sizes, protein.matrix_size)
+        print(time.strftime('\nElapsed time: %H:%M:%S', time.gmtime(elapsed_time)))
+        print(f"Energies:\n{energies}")
 
-            print(time.strftime('\nElapsed time: %H:%M:%S', time.gmtime(elapsed_time)))
-            print(f"Energies:\n{energies}")
-
-            plt.show()
-
-    else:
-        print(f"Error: Missing variable(s) in [protein, energies, matrix_sizes, elapsed_time]:")
-        for variable in results:
-            print(f"{variable}\n")
-
-        exit(1)
+        plt.show()
