@@ -26,27 +26,16 @@ def branch_n_bound(protein_string, prob_above_avg, prob_below_avg, dimension):
     # Create the protein matrix
     protein = Protein(length_total, dimension)
 
-    # Initialize variables
+    # Initialize energy variables
     energy_min_all = 0
     energy_min_partial = [0] * length_total
 
-    # Place first amino acid[layer, row, column]
-    start_location = protein.first_acid
-    protein.add_acid(protein_string[0], start_location,"")
-    protein.acids[start_location[0], start_location[1], start_location[2]].add_connection("down")
-
-    # Place second amino acid underneath first
-    previous_location = start_location
-    location = [previous_location[0], previous_location[1] + 1, previous_location[2]]
-    protein.add_acid(protein_string[1], location, "down")
-    previous_location = location
+    # Place first two amino acids
+    protein.place_first_two(protein_string)
+    previous_location = protein.last_acid
 
     # Call next_acid function to place a new amino acid
     next_acid(protein, previous_location)
-
-    # print("\nMinumum energy found per length: ",energy_min_partial)
-    # print("Minumum energy found ",energy_min_all)
-    # print(best_protein)
 
     return best_protein, energy_counter, matrix_sizes
 
@@ -64,7 +53,7 @@ def next_acid(protein, previous_location):
     # Get the possible sites for placing a new acid
     possible_sites = protein.possible_sites(protein.last_acid)
 
-    # If there are possible sites (it is not stuck)
+    # If there are possible sites (the protein is not stuck)
     if len(possible_sites) > 0:
 
         previous_energy = protein.energy

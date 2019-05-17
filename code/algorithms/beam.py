@@ -7,15 +7,11 @@ This algorithm will fold a protein using a beam search algorithm
 """
 
 import copy
-import random
-import numpy as np
 import re
 import operator
-import heapq
 
 from acid import Acid
 from protein import Protein
-from functions import opposite
 from functions import new_location
 from operator import itemgetter
 
@@ -32,35 +28,31 @@ def beamsearch(pr_string, width, dimension):
     protein = Protein(protein_length, dimension)
 
     # Place the first two amino acids
-    location = protein.first_acid
-    protein.add_acid(protein_string[0], location, "")
-    protein.acids[location[0], location[1], location[2]].add_connection("down")
+    protein.place_first_two(protein_string)
+    previous_location = [protein.last_acid]
 
-    location = [location[0], location[1] + 1, location[2]]
-    protein.add_acid(protein_string[1], location, "down")
-    previous_location = [location]
-
-    energy_min = 0
+    # Initialize dictionaries
     energy_counter = {}
-    proteins = {}
     matrix_sizes = {}
 
+    # Initialize the proteins dictionary that keeps track of the protein objects
+    proteins = {}
     for i in range(B_width):
         proteins[i] = protein
-    #print(proteins)
 
+    # Initialize the list that keeps the direction of new acids and energy of the protein
     beam_list = [0] * B_width
 
+    # Start the search
     next_layer(protein, previous_location)
 
-    # for i in range(len(proteins)):
-    #     print(proteins[i].energy)
+    # Take the top protein as best protein
     protein_min = proteins[0]
     energy_min = protein_min.energy
-    #print(protein_min.energy)
 
     return protein_min, energy_min, matrix_sizes
 
+# Function that calculates the next steps and chooses the ones with minimal energy
 def next_layer(the_protein, prev_location):
     '''
     Check possible sites for the next amino acid,
@@ -68,143 +60,110 @@ def next_layer(the_protein, prev_location):
     if so store their locations and direction in a dictionnary
     '''
 
-    global protein_min
-
     prev_locs = []
-    list = []
+
+    # Initialize the temporary list that holds copies of the offocial proteins
+    # This list is needed as the official list can only be updated once all new
+    # proteins have been folded, otherwise we may lose the protein we wanted
+    # to continue folding as it may already have been replaced by a new folding
     temporary_proteins = [0] * B_width
-    #print("BEAM: ", beam_list)
+
     acid_type = protein_string[the_protein.length]
 
-    #print("PREVIOUS LOCATION: ", prev_location)
+    # Create a dictionary that keeps track of all the children
     beam_possibilities = {}
 
+    # For each location
     for i in range(len(prev_location)):
+        # Initialize dictionaries
         protein_energy ={}
-        possible_sites = {}
         energy = {}
 
-
         previous_location = prev_location[i]
-        #print(previous_location)
+
         if any(proteins):
-            #print(proteins[i])
             protein = proteins[i]
         else:
             protein = the_protein
-        # if any(beam_list):
 
-            # for j in range(len(beam_list)):
-            #     for k in range(len(beam_list[j])):
-            #         k = 1
-            #         print("list : ", beam_list[0][1])
-            #         print(beam_list[j][k])
-            #         dir = beam_list[j][k]
-            #         loc = new_location(previous_location, dir, len(protein.acids), len(protein.acids[0]))
-            #         previous_acid = protein.acids[previous_location[0], previous_location[1], previous_location[2]]
-            #         print(previous_acid)
-            #         previous_acid.add_connection(dir)
-            #         protein.add_acid(acid_type, loc, dir)
-            #         print(protein)
-            #         print(protein.check_energy(loc, acid_type))
+        possible_sites = protein.possible_sites(previous_location)
 
-        locations = protein.neighbors(previous_location)
-
-        # For each possible location, see if there is already an amino acid
-        for direction in locations:
-            location = locations[direction]
-            acid = protein.acids[location[0],location[1], location[2]]
-            if acid == 0:
-                possible_sites[direction] = location
-
-        # If there are possible sites (it is not stuck)
+        # If there are possible sites (the protein is not stuck)
         if len(possible_sites) > 0:
+
             previous_energy = protein.energy
 
             for direction, site in possible_sites.items():
 
                 acid_type = protein_string[protein.length]
 
+                # Determine the previous acid and add the connection
                 previous_acid = protein.acids[previous_location[0], previous_location[1], previous_location[2]]
-                #print(previous_acid)
                 previous_acid.add_connection(direction)
 
-                # Acid is placed, energy is stored, acid is removed again
+                # Place the acid and store the energy
                 protein.add_acid(acid_type, site, direction)
                 energy[direction] = protein.check_energy(site, acid_type)
                 total_energy = previous_energy + protein.check_energy(site, acid_type)
-                #print("TOTAL energy: ", total_energy)
                 protein_energy[direction] = total_energy
 
+                # If the protein is complete, calculate the smallest matrix size
                 if protein.length == protein_length:
                     min_matrix_size = protein.smallest_matrix()
-
                     matrix_sizes[total_energy] = matrix_sizes.get(total_energy, {})
                     matrix_sizes[total_energy][min_matrix_size] = matrix_sizes[total_energy].get(min_matrix_size, 0) + 1
 
+                # Create a variable that remembers the place of the protein in the list (i) and the direction of the next acid
                 direction = str(i) + str(direction)
+
+                # Add it to the dictionary of all children
                 beam_possibilities[direction] = total_energy
+
+                # Remove the acid
                 protein.remove_acid(previous_energy)
+
+            # Sort all the children and reconvert it into a dict
             sorted_possibilities = sorted(beam_possibilities.items(), key=operator.itemgetter(1))
             beam_possibilities = dict(sorted_possibilities)
-            #print(sorted_possibilities)
-            #print(beam_possibilities)
-            list.append(beam_possibilities)
-            #beam_possibilities["low"] = -1
-            #beam_possibilities["high"] = -2
 
-    #print("POSSIBILITIES: ",beam_possibilities)
-
+    # Set i to zero for indexing in the beam_list
     i = 0
-    #print(sorted(beam_possibilities, key=beam_possibilities.get))
 
+    # For each protein in the beam
     for key in sorted(beam_possibilities, key=beam_possibilities.get)[:B_width]:
-        #print(key, beam_possibilities[key])
+
+        # Retrieve the place of the protein in the previous locations list
         needed_protein = int(re.findall('\d+',key)[0])
-        #print(needed_protein)
+
+        # Retrieve the direction of the acid
         needed_direction = ''.join(filter(str.isalpha, key))
-        #print(needed_direction)
+
+        # Retrieve the location of the previous acid
         previous_loc = prev_location[needed_protein]
+
+        # Get a list of the neighboring sites to get the acid's new location
         needed_locations = protein.neighbors(previous_loc)
         needed_loc = needed_locations[needed_direction]
         prev_locs.append(needed_loc)
-        #print(needed_protein)
-        #print(beam_list[i])
-        temporary_proteins[i] = copy.deepcopy(proteins[needed_protein])
-        #print(temporary_proteins[i])
-        prev_acid = temporary_proteins[i].acids[previous_loc[0], previous_loc[1], previous_loc[2]]
-        #print(prev_acid)
-        prev_acid.add_connection(needed_direction)
 
+        # Make a copy of the protein in the temporary list and add the new acid
+        temporary_proteins[i] = copy.deepcopy(proteins[needed_protein])
+        prev_acid = temporary_proteins[i].acids[previous_loc[0], previous_loc[1], previous_loc[2]]
+        prev_acid.add_connection(needed_direction)
         temporary_proteins[i].add_acid(acid_type, needed_loc, needed_direction)
         needed_energy = temporary_proteins[i].check_energy(needed_loc, acid_type)
         temporary_proteins[i].energy += needed_energy
-        #print(temporary_proteins[i])
 
+        # Add the direction and energy to the beam list and update the index
         beam_list[i] = beam_possibilities[key]
         beam_list[i] = [beam_list[i], key]
         i+=1
-    #print(beam_list)
-    #print("PROTEINS: ", proteins[0], proteins[1], proteins[2])
-    #print("TEMP: ", temporary_proteins[0], temporary_proteins[1], temporary_proteins[2])
 
-
+    # Update the official proteins dictionary
     for i in range(len(beam_list)):
-        # print(beam_list[i])
-        # needed_protein = int(re.findall('\d+',key)[0])
-        # needed_direction = ''.join(filter(str.isalpha, key))
         proteins[i] = temporary_proteins[i]
-        # last_index = len(beam_list[i]) - 1
-        # direction = beam_list[i][last_index]
-        # print(direction)
-        # #previous_acid.add_connection(direction)
-        # #protein.add_acid(acid_type, locations[direction], direction)
-        # location = locations[direction]
-        # prev_locs.append(location)
 
-    #print("prev: ", prev_locs)
-    #print("PROTEINS: ", proteins[0], proteins[1], proteins[2])
-
+    # Check if the protein is complete, if so return, if not continue searching
     if proteins[0].length == protein_length:
         return(temporary_proteins)
     else:
