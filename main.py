@@ -78,8 +78,11 @@ def run_algorithm(algorithms, algorithm, protein_string, dimension):
         print(f">{B_width}\n")
 
         start_time = time.time()
-        protein, dict = beamsearch(protein_string, B_width, dimension)
+        protein, dict, matrix_sizes = beamsearch(protein_string, B_width, dimension)
         end_time = time.time() - start_time
+
+        plot_matrix_sizes(matrix_sizes, len(protein.acids[0]))
+
 
     # Run a normal greedy search
     elif algorithm == algorithms[2]:

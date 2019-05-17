@@ -22,9 +22,11 @@ from operator import itemgetter
 
 def beamsearch(pr_string, width, dimension):
 
-    global best_nodes, protein_length, protein_string, energy_counter, beam_list, proteins, B_width
+    global best_nodes, protein_length, protein_string, energy_counter, beam_list, proteins, B_width, matrix_sizes
+
     protein_string = pr_string
     B_width = width
+
     # Use protein length to establish location of first amino acid in a matrix
     protein_length = len(protein_string)
     protein = Protein(protein_length, dimension)
@@ -41,6 +43,7 @@ def beamsearch(pr_string, width, dimension):
     energy_min = 0
     energy_counter = {}
     proteins = {}
+    matrix_sizes = {}
 
     for i in range(B_width):
         proteins[i] = protein
@@ -56,7 +59,7 @@ def beamsearch(pr_string, width, dimension):
     energy_min = protein_min.energy
     #print(protein_min.energy)
 
-    return protein_min, energy_min
+    return protein_min, energy_min, matrix_sizes
 
 def next_layer(the_protein, prev_location):
     '''
@@ -132,6 +135,13 @@ def next_layer(the_protein, prev_location):
                 total_energy = previous_energy + protein.check_energy(site, acid_type)
                 #print("TOTAL energy: ", total_energy)
                 protein_energy[direction] = total_energy
+
+                if protein.length == protein_length:
+                    min_matrix_size = protein.smallest_matrix()
+
+                    matrix_sizes[total_energy] = matrix_sizes.get(total_energy, {})
+                    matrix_sizes[total_energy][min_matrix_size] = matrix_sizes[total_energy].get(min_matrix_size, 0) + 1
+
                 direction = str(i) + str(direction)
                 beam_possibilities[direction] = total_energy
                 protein.remove_acid(previous_energy)
