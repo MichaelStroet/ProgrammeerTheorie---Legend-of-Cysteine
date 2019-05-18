@@ -2,6 +2,24 @@
 # Sophie Stiekema 10992499
 # Michael Stroet  11293284
 
+'''
+Probability based Branch and Bound
+
+This algorithm will fold a protein using a probability based version of the
+Branch and Bound algorithm.  If the probabilities for pruning are set to 1 and 1,
+this algorithm behaves as a depth-first alhorithm and searches the whole statespace
+for the best solution.
+
+This code was inspired by the pseudo-code from:
+
+Mao Chen, Wen-Qi Huang,
+A Branch and Bound Algorithm for the Protein Folding Problem in the HP Lattice Model,
+Genomics, Proteomics & Bioinformatics,
+Volume 3, Issue 4,
+2005,
+Pages 225-230
+'''
+
 import numpy as np
 import copy
 
@@ -12,6 +30,7 @@ from dict_average import dict_average
 
 def branch_n_bound(protein_string, prob_above_avg, prob_below_avg, dimension):
 
+    # Set global variables
     global protein_str, prob_below_average, prob_above_average, length_total, energy_min_all, energy_min_partial
 
     prob_below_average = prob_below_avg
@@ -19,6 +38,7 @@ def branch_n_bound(protein_string, prob_above_avg, prob_below_avg, dimension):
     protein_str = protein_string
     length_total = len(protein_string)
 
+    # Initialize global dictionaries
     global energy_counter, matrix_sizes
     energy_counter = {}
     matrix_sizes = {}
@@ -80,10 +100,9 @@ def next_acid(protein, previous_location):
             # Update lowest energy in the partial proteins list
             if protein.energy <= energy_min_partial[protein.length - 1]:
                 energy_min_partial[protein.length - 1] = protein.energy
-                #print("NEW min partial= ",energy_min_partial[protein.length - 1])
 
             '''
-            Now we will see whether to continue adding acids to this protein or
+            Now we will see whether to continue adding acids to this protein
             and update the energy, or prune
             '''
 
@@ -97,11 +116,10 @@ def next_acid(protein, previous_location):
                     print("New minimum energy found : ",energy_min_all)
                     best_protein = copy.deepcopy(protein)
 
+                # Calculate the smallest matrix sixe
                 min_matrix_size = protein.smallest_matrix()
-
                 matrix_sizes[energy] = matrix_sizes.get(energy, {})
                 matrix_sizes[energy][min_matrix_size] = matrix_sizes[energy].get(min_matrix_size, 0) + 1
-
 
             # If it is a polar amino acid, add a new acid
             elif amino_acid == "P":
@@ -109,10 +127,10 @@ def next_acid(protein, previous_location):
 
             # If it is a hydrophobic or cysteine amino acid, there are several possibilities
             else:
-                '''
-                if the curent energy is equal to or below the lowest energy of
-                the partial protein, add a new amino acid
-                '''
+
+                # If the curent energy is equal to or below the lowest energy of
+                # the partial protein, add a new amino acid
+
                 if protein.energy <= energy_min_partial[protein.length - 1]:
                     next_acid(protein, location)
 
@@ -141,16 +159,3 @@ def next_acid(protein, previous_location):
 
 if __name__ == "__main__":
     branch_n_bound("HHPHHHPH")
-
-
-
-'''
-Pseudo-code for the Branch & Bound algorithm inspired from:
-
-Mao Chen, Wen-Qi Huang,
-A Branch and Bound Algorithm for the Protein Folding Problem in the HP Lattice Model,
-Genomics, Proteomics & Bioinformatics,
-Volume 3, Issue 4,
-2005,
-Pages 225-230
-'''
