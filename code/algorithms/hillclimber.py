@@ -41,15 +41,14 @@ def hillclimber(start_protein, iterations):
         acid_z, acid_y, acid_x = new_location([acid_z, acid_y, acid_x], acid.connections["next"], 1, start_protein.matrix_size)
 
     print(acid_locations)
+    protein = copy.deepcopy(start_protein)
 
+    # remove and add acids every iteration
     for i in range(0, iterations):
-        protein = copy.deepcopy(start_protein)
-        print(protein)
-        incomplete_protein = remove_acids(protein, acid_locations)
-        print(incomplete_protein)
-        protein = new_path(incomplete_protein)
-        print("iteration:", i+1)
-
+        protein_searched = copy.deepcopy(start_protein)
+        incomplete_protein, removed_acids, binding_sites = remove_acids(protein, acid_locations)
+        protein_searched = new_path(incomplete_protein, binding_sites, removed_acids, 0)
+        print("iteration:", i + 1)
 
 
 def remove_acids(protein, acid_locations):
@@ -59,7 +58,7 @@ def remove_acids(protein, acid_locations):
 
     # determine index and range
     acid_index = len(acid_locations) - 1
-    cut_range = 5
+    cut_range = 2
 
     # make two cuts in the protein, leaving atleast one acid
     cut_start = random.randint(-1, acid_index - cut_range)
@@ -87,29 +86,36 @@ def remove_acids(protein, acid_locations):
         end.connections["previous"] = ""
 
     # every acid between the start and end is removed
-    acid_cut_locations = []
-
+    acids_removed = []
     for i in range(cut_start + 1 , cut_end):
-        acid_cut_locations.append(acid_locations[i])
         acid_layer, acid_row, acid_column = acid_locations[i]
-        protein.acids[acid_layer, acid_row, acid_column] = 0
+        acid_removed = protein.acids[acid_layer, acid_row, acid_column]
+        acids_removed.append(acid_removed)
+        acid_removed = 0
 
     print(protein)
-    print("cut away acid:", acid_cut_locations)
+    print("cut away acids:", len(acids_removed))
+
+    return protein, acids_removed, [start, end]
+
+
+def new_path(protein, binding_sites, removed_acids, index):
+    print("lets start a new journey, a path to the unknown")
+    start, end = binding_sites
 
     # if there is a start and end acid outside of the cut
     if not start == 0 and not end == 0:
-        print(start.location, end.location)
+        print("start, end:", start.location, end.location)
 
     # when the last acid is cut off 
     elif not start == 0:
-        print(start.location)
+        print("start:", start.location)
 
     # when the first acid is cut off
     else:
-        print(end.location)
+        print("end:",end.location)
+    print(protein)
+    return(protein)
 
 
-def new_path(start_protein):
-    print(start_protein)
-    return(start_protein)
+# for add acid I need: type, location and direction_previous
