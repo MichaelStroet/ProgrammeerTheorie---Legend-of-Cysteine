@@ -96,12 +96,12 @@ class Protein:
         '''
         # Get the location and 'previous' connection from the last acid of the protein
         last_location = self.last_acid
-        last_acid = get_acid(last_location)
+        last_acid = self.get_acid(last_location)
         last_connection = last_acid.connections["previous"]
 
         # Get the location of the second to last acid location
         previous_location = new_location(last_location, last_connection, self.layer_size, self.matrix_size)
-        prev_acid = get_acid(previous_location)
+        prev_acid = self.get_acid(previous_location)
 
         # Set the 'next' conncection of the previous acid to none
         prev_acid.connections["next"] = ""
@@ -306,9 +306,9 @@ class Protein:
         acids_z = []
 
         # Loop over each acid in the protein and add its info to the data lists
-        acid = get_acid(location)
+        acid = self.get_acid(location)
         while not acid.connections["next"] == "":
-            acid = get_acid(location)
+            acid = self.get_acid(location)
             layer, row, column = location
 
             acids_x.append(column - start_index)
