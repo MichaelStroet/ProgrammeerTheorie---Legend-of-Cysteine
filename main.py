@@ -32,8 +32,8 @@ def parse_data():
     '''
 
     # Opens the file as a list of strings and returns it
-    with open("data/input.txt", "r") as f:
-        file_content = f.read()
+    with open("data/input.txt", "r") as file:
+        file_content = file.read()
         file_lines = file_content.split()
 
     return file_lines
@@ -54,27 +54,42 @@ if __name__ == "__main__":
     # Run the chosen algorithm
     results = run_algorithm(algorithms, choice_algorithm, choice_protein, choice_dimension)
     protein, energies, matrix_sizes, elapsed_time = results
+    elapsed_HHMMSS = time.strftime("%H:%M:%S", time.gmtime(elapsed_time))
 
-    print(time.strftime('\nAlgorithm finished\nElapsed time: %H:%M:%S', time.gmtime(elapsed_time)))
+    print(f"\nAlgorithm finished\nElapsed time: {elapsed_HHMMSS}")
 
-    # Saves the results to file
+    # Saves the results to a csv file and saves the figures as png files
     if choice_save == "Yes":
-        textfile = open("results/test.txt", "w", encoding = "utf-8")
-        if textfile:
-            # TEMPORARY
-            string = f'''
-            Results and metadata,
-            Dimension: {choice_dimension},
-            Protein: {choice_protein},
-            Algorithm: {choice_algorithm},
-            Parameters: results has dict with parameters,
-            Elapsed time: {elapsed_time},
-            Lowest energy: {protein.energy},
-            Energies: {energies},
-            Matrix sizes: {matrix_sizes}'''
 
-            textfile.write(string)
-            textfile.close()
+        parameters = {"Matrix size": "",
+            "Iterations" : "",
+            "Look-aheads" : "",
+            "Prob. above" : "",
+            "Prob. below" : "",
+            "Beam width" : "",
+            "???" : ""}
+        start_time = "13:43:02 27-04-1967"
+
+        with open("results/results.csv", "a", encoding = "utf-8") as file:
+            row = ""
+            row += f"{start_time},"                 # Start time
+            row += f"{elapsed_HHMMSS},"             # Elapsed time
+            row += f"{choice_dimension},"           # Dimension
+            row += f"{choice_protein},"             # Protein
+            row += f"{choice_algorithm},"           # Algorithm
+            row += f"{protein.energy},"             # Lowest energy
+            row += f"{parameters['Matrix size']},"  # Matrix size
+            row += f"{parameters['Iterations']},"   # Iterations
+            row += f"{parameters['Look-aheads']},"  # Look-aheads
+            row += f"{parameters['Prob. above']},"  # Probability above average
+            row += f"{parameters['Prob. below']},"  # Probability below average
+            row += f"{parameters['Beam width']},"   # Beam width
+            row += f"{parameters['???']},"          # Hillclimber parameter(s)?
+            row += f"{energies},"                   # Energies
+            row += f"{matrix_sizes}"                # Matrix sizes
+            row += "\n"
+
+            file.write(row)
 
             protein.visualise(choice_protein)
             plt.savefig(f"results/figures/testfig.png")
