@@ -3,6 +3,8 @@
 # Michael Stroet  11293284
 
 """
+Beam Search
+
 This algorithm will fold a protein using a beam search algorithm
 """
 
@@ -18,6 +20,7 @@ from operator import itemgetter
 
 def beamsearch(pr_string, width, dimension):
 
+    # Set global variables
     global best_nodes, protein_length, protein_string, energy_counter, beam_list, proteins, B_width, matrix_sizes
 
     protein_string = pr_string

@@ -11,6 +11,7 @@ from greedy import greedy
 from greedy_lookahead import greedy as greedy_la
 from beam import beamsearch
 from branch_n_bound import branch_n_bound
+from hillclimber import hillclimber
 
 # Import visualisation functions
 from graph1D import plot1D
@@ -54,7 +55,7 @@ def run_algorithm(algorithms, algorithm, protein_string, dimension):
         protein, dict, matrix_sizes = greedy(protein_string, N_runs, dimension)
         elapsed_time = time.time() - start_time
 
-    # Run a normal greedy search with look_ahead
+    # Run a greedy search with look_ahead
     elif algorithm == algorithms[2]:
 
         # Ask the user for the number of runs and look-aheads
@@ -87,6 +88,18 @@ def run_algorithm(algorithms, algorithm, protein_string, dimension):
         # Run the algorithm and keep track of the time
         start_time = time.time()
         protein, dict, matrix_sizes = branch_n_bound(protein_string, prob_above_average, prob_below_average, dimension)
+        elapsed_time = time.time() - start_time
+
+    # Run a hill climber
+    elif algorithm == algorithms[5]:
+
+        # Ask the user for
+
+
+        # Run the algorithm and keep track of the time
+        start_time = time.time()
+        print("Hill Climber not yet implemented")
+        protein, dict, matrix_sizes = [1,2,3]#hillclimber(protein_string, dimension)
         elapsed_time = time.time() - start_time
 
     return protein, dict, matrix_sizes, elapsed_time
