@@ -78,11 +78,11 @@ if __name__ == "__main__":
             row += f"{parameters['Prob. above']},"  # Probability above average
             row += f"{parameters['Prob. below']},"  # Probability below average
             row += f"{parameters['Beam width']},"   # Beam width
-            row += f"{parameters['???']},"          # Hillclimber parameter(s)?
+            row += f"{parameters['???']}"          # Hillclimber parameter(s)?
             row += "\n"
 
             file.write(row)
-            
+
             protein.visualise(choice_protein)
             plt.savefig(f"results/figures/testfig.png")
             plt.clf()
