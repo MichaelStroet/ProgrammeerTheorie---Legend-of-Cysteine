@@ -46,8 +46,10 @@ def branch_n_bound(protein_string, prob_above_avg, prob_below_avg, dimension):
     # Create the protein matrix
     protein = Protein(length_total, dimension)
 
-    # Initialize energy variables
+    # Initialize energy variable that keeps the lowest energy for a complete protein
     energy_min_all = 0
+
+    # Initialize energy variable that keeps the lowest energy for a protein of each length
     energy_min_partial = [0] * length_total
 
     # Place first two amino acids
@@ -116,7 +118,7 @@ def next_acid(protein, previous_location):
                     print("New minimum energy found : ",energy_min_all)
                     best_protein = copy.deepcopy(protein)
 
-                # Calculate the smallest matrix sixe
+                # Determine the smallest matrix size needed for this protein
                 min_matrix_size = protein.smallest_matrix()
                 matrix_sizes[energy] = matrix_sizes.get(energy, {})
                 matrix_sizes[energy][min_matrix_size] = matrix_sizes[energy].get(min_matrix_size, 0) + 1
@@ -130,7 +132,6 @@ def next_acid(protein, previous_location):
 
                 # If the curent energy is equal to or below the lowest energy of
                 # the partial protein, add a new amino acid
-
                 if protein.energy <= energy_min_partial[protein.length - 1]:
                     next_acid(protein, location)
 

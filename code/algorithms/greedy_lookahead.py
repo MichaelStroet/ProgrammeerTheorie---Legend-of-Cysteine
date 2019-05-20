@@ -3,7 +3,7 @@
 # Michael Stroet  11293284
 
 """
-This algorithm will fold a protein using a greedy algorithm
+This algorithm will fold a protein using a greedy algorithm with look-ahead
 Greedy in this case means always placing an amino acid at the location that results in the lowest energy
 """
 
@@ -24,12 +24,8 @@ def greedy(protein_string, look_aheads, N_tries, dimension):
     protein = Protein(len(protein_string), dimension)
 
     # Place the first two amino acids
-    location = protein.first_acid
-    protein.add_acid(protein_string[0], location, "")
-    protein.get_acid(location).add_connection("down")
-
-    location = [location[0], location[1] + 1, location[2]]
-    protein.add_acid(protein_string[1], location, "down")
+    protein.place_first_two(protein_string)
+    location = protein.last_acid
 
     energy_min = 0
 
@@ -52,17 +48,17 @@ def greedy(protein_string, look_aheads, N_tries, dimension):
         if solution_found:
             energy = protein.energy
 
-            # When its energy is lower than lowest energy found, the protein is saved
+            # When its energy is lower than lowest energy found, save the protein
             if energy < energy_min:
                 energy_min = energy
                 protein_min = copy.deepcopy(protein)
                 print(f"found new lowest energy: {energy_min}")
 
-            # dictonary for histogram of solutions
+            # Update the dictonary for histogram of solutions
             energy_counter[energy] = energy_counter.get(energy, 0) + 1
 
+            # Determine the smallest matrix size needed for this protein
             min_matrix_size = protein.smallest_matrix()
-
             matrix_sizes[energy] = matrix_sizes.get(energy, {})
             matrix_sizes[energy][min_matrix_size] = matrix_sizes[energy].get(min_matrix_size, 0) + 1
 
@@ -120,17 +116,19 @@ def greedy_fold(protein, protein_string, look_aheads):
     The ouput is a folded protein
     '''
 
-    # Every direction for the following amino acid
+    # For every direction for the following amino acid
     for acid_index in range(2, len(protein_string)):
 
         # Check the type of the next acid
         acid_type = protein_string[acid_index]
 
-        locs_possible = []
+        # Initialize list of locations with smallest energies
+        low_energy_locations = []
 
         # Get the possible sites for placing a new acid
         possible_sites = protein.possible_sites(protein.last_acid)
 
+        # Initialize the dictionary to keep track of the lowest energies
         energies = {}
 
         # Check the energy of every next location
@@ -155,14 +153,14 @@ def greedy_fold(protein, protein_string, look_aheads):
                 # Return the matrix to its previous state
                 protein.remove_acid(previous_energy)
 
-            # Compare energy, lowest else random
+            # Compare energy, choose lowest else random
             energy_mean = np.mean(list(energies.values()))
             for key, value in energies.items():
                 if value <= energy_mean:
-                    locs_possible.append(key)
+                    low_energy_locations.append(key)
 
-            # chooses a random direction from the possible locations then adds that acid
-            loc_choice = random.choice(list(locs_possible))
+            # Choose a random direction from the possible locations then adds that acid
+            loc_choice = random.choice(list(low_energy_locations))
             location = possible_sites[loc_choice]
 
             # Add the acid object to the protein and connect it to the previous amino acids

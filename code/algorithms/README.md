@@ -3,5 +3,5 @@ Elk bestand bevat een eigen algoritme:
 - Greedy
 - Greedy Lookahead
 - Beam search
-- Hill Climber
 - Branch and Bound
+- Hill Climber

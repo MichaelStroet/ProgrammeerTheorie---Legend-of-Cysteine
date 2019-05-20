@@ -56,14 +56,14 @@ def beamsearch(pr_string, width, dimension):
     return protein_min, energy_min, matrix_sizes
 
 # Function that calculates the next steps and chooses the ones with minimal energy
-def next_layer(the_protein, prev_location):
+def next_layer(the_protein, list_locations):
     '''
     Check possible sites for the next amino acid,
     see whether the matrix box left, up & right are empty,
     if so store their locations and direction in a dictionnary
     '''
 
-    prev_locs = []
+    previous_locations = []
 
     # Initialize the temporary list that holds copies of the offocial proteins
     # This list is needed as the official list can only be updated once all new
@@ -77,12 +77,12 @@ def next_layer(the_protein, prev_location):
     beam_possibilities = {}
 
     # For each location
-    for i in range(len(prev_location)):
+    for i in range(len(list_locations)):
         # Initialize dictionaries
         protein_energy ={}
         energy = {}
 
-        previous_location = prev_location[i]
+        previous_location = list_locations[i]
 
         if any(proteins):
             protein = proteins[i]
@@ -110,7 +110,7 @@ def next_layer(the_protein, prev_location):
                 total_energy = previous_energy + protein.check_energy(site, acid_type)
                 protein_energy[direction] = total_energy
 
-                # If the protein is complete, calculate the smallest matrix size
+                # If the protein is complete, determine the smallest matrix size needed for this protein
                 if protein.length == protein_length:
                     min_matrix_size = protein.smallest_matrix()
                     matrix_sizes[total_energy] = matrix_sizes.get(total_energy, {})
@@ -142,17 +142,17 @@ def next_layer(the_protein, prev_location):
         needed_direction = ''.join(filter(str.isalpha, key))
 
         # Retrieve the location of the previous acid
-        previous_loc = prev_location[needed_protein]
+        previous_loc = list_locations[needed_protein]
 
         # Get a list of the neighboring sites to get the acid's new location
         needed_locations = protein.neighbors(previous_loc)
         needed_loc = needed_locations[needed_direction]
-        prev_locs.append(needed_loc)
+        previous_locations.append(needed_loc)
 
         # Make a copy of the protein in the temporary list and add the new acid
         temporary_proteins[i] = copy.deepcopy(proteins[needed_protein])
-        prev_acid = temporary_proteins[i].acids[previous_loc[0], previous_loc[1], previous_loc[2]]
-        prev_acid.add_connection(needed_direction)
+        previous_acid = temporary_proteins[i].acids[previous_loc[0], previous_loc[1], previous_loc[2]]
+        previous_acid.add_connection(needed_direction)
         temporary_proteins[i].add_acid(acid_type, needed_loc, needed_direction)
         needed_energy = temporary_proteins[i].check_energy(needed_loc, acid_type)
         temporary_proteins[i].energy += needed_energy
@@ -170,4 +170,4 @@ def next_layer(the_protein, prev_location):
     if proteins[0].length == protein_length:
         return(temporary_proteins)
     else:
-        next_layer(protein, prev_locs)
+        next_layer(protein, previous_locations)

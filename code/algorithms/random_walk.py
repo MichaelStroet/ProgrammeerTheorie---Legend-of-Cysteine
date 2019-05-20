@@ -20,14 +20,9 @@ def random_walk(protein_string, N_tries, dimension):
     protein_length = len(protein_string)
     protein = Protein(protein_length, dimension)
 
-    # Place the first amino acid
-    location = protein.first_acid
-    protein.add_acid(protein_string[0], location, "")
-    protein.get_acid(location).add_connection("down")
-
-    # Place the second amino acid below the first
-    location = [location[0], location[1] + 1, location[2]]
-    protein.add_acid(protein_string[1], location, "up")
+    # Place the first two amino acids
+    protein.place_first_two(protein_string)
+    location = protein.last_acid
 
     energy_min = 1
 
@@ -48,7 +43,7 @@ def random_walk(protein_string, N_tries, dimension):
         # Run the next random walk
         solution_found, protein = walk(protein, protein_string, location)
 
-        # When a complete protein has been created, get it's energy
+        # When a complete protein has been created, get its energy
         if solution_found:
             energy = protein.energy
 
@@ -61,8 +56,8 @@ def random_walk(protein_string, N_tries, dimension):
             # Add the energy to a dictionary counter
             energy_counter[energy] = energy_counter.get(energy, 0) + 1
 
+            # Determine the smallest matrix size needed for this protein
             min_matrix_size = protein.smallest_matrix()
-
             matrix_sizes[energy] = matrix_sizes.get(energy, {})
             matrix_sizes[energy][min_matrix_size] = matrix_sizes[energy].get(min_matrix_size, 0) + 1
 
@@ -82,7 +77,7 @@ def walk(protein, protein_string, previous_location):
         # Get the possible sites for placing a new acid
         possible_sites = protein.possible_sites(protein.last_acid)
 
-        # If a new acid can be placed, randomly place said acid
+        # If a new acid can be placed, randomly place it
         if len(possible_sites) > 0:
             divider = 1. / len(possible_sites)
             random_number = np.random.random()

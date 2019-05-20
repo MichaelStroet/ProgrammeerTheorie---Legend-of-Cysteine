@@ -25,12 +25,8 @@ def greedy(protein_string, N_tries, dimension):
     protein = Protein(protein_length, dimension)
 
     # Place the first two amino acids
-    location = protein.first_acid
-    protein.add_acid(protein_string[0], location, "")
-    protein.acids[location[0], location[1], location[2]].add_connection("down")
-
-    location = [location[0], location[1] + 1, location[2]]
-    protein.add_acid(protein_string[1], location, "down")
+    protein.place_first_two(protein_string)
+    location = protein.last_acid
 
     energy_min = 0
 
@@ -55,20 +51,19 @@ def greedy(protein_string, N_tries, dimension):
         if solution_found:
             energy = protein.energy
 
-            # When its energy is lower than lowest energy found, the protein is saved
+            # When its energy is lower than lowest energy found, save the protein
             if energy < energy_min:
                 energy_min = energy
                 protein_min = copy.deepcopy(protein)
                 print(f"found new lowest energy: {energy_min}")
 
-            # dictonary for histogram of solutions
+            # Update the dictonary for histogram of solutions
             energy_counter[energy] = energy_counter.get(energy, 0) + 1
 
+            # Determine the smallest matrix size needed for this protein
             min_matrix_size = protein.smallest_matrix()
-
             matrix_sizes[energy] = matrix_sizes.get(energy, {})
             matrix_sizes[energy][min_matrix_size] = matrix_sizes[energy].get(min_matrix_size, 0) + 1
-
 
     return protein_min, energy_counter, matrix_sizes
 
@@ -79,48 +74,52 @@ def greedy_fold(protein, p_string, p_len, loc_current):
     The ouput is a folded protein
     '''
 
-    # Every direction for the following amino acid
+    # For every direction for the following amino acid
     for acid_index in range(2, p_len):
 
         # Clean slate for location based items
-        locs_next = {}
-        locs_possible = []
-        energy = {}
+        possible_sites = {}
 
-        # Check the type of the to be placed acid an its possible locations
+        # Initialize list of locations with smallest energies
+        low_energy_locations = []
+
+        # Initialize the dictionary to keep track of the lowest energies
+        energies = {}
+
+        # Check the type of the to be placed acid and its possible locations
         acid_type = p_string[acid_index]
 
         # Get the possible sites for placing a new acid
-        locs_next = protein.possible_sites(protein.last_acid)
+        possible_sites = protein.possible_sites(protein.last_acid)
 
         # Check the energy of every next location
-        if len(locs_next) > 0:
+        if len(possible_sites) > 0:
             previous_energy = protein.energy
 
-            # Every next location's energy is collected after pseudo placing
-            for direction, loc_next in locs_next.items():
+            # Collect every next location's energy after pseudo placing
+            for direction, loc_next in possible_sites.items():
                 previous_acid = protein.acids[loc_current[0], loc_current[1], loc_current[2]]
                 previous_acid.add_connection(direction)
 
-                # Acid is placed, energy is stored, acid is removed again
+                # Place the acid, store its energy and remove the acid
                 protein.add_acid(acid_type, loc_next, direction)
-                energy[direction] = protein.check_energy(loc_next, acid_type)
+                energies[direction] = protein.check_energy(loc_next, acid_type)
                 protein.remove_acid(previous_energy)
 
-            # Compare energy, lowest else random
-            energy_mean = np.mean(list(energy.values()))
-            for key, value in energy.items():
+            # Compare energy, choose lowest else random
+            energy_mean = np.mean(list(energies.values()))
+            for key, value in energies.items():
                 if value <= energy_mean:
-                    locs_possible.append(key)
+                    low_energy_locations.append(key)
 
-            # chooses a random direction from the possible locations then adds that acid
-            loc_choice = random.choice(list(locs_possible))
-            location = locs_next[loc_choice]
+            # Choose a random direction from the possible locations then add that acid
+            loc_choice = random.choice(list(low_energy_locations))
+            location = possible_sites[loc_choice]
 
             # Add the acid object to the protein and connect it to the previous amino acids
             previous_acid.add_connection(loc_choice)
             protein.add_acid(acid_type, location, loc_choice)
-            protein.energy += energy[loc_choice]
+            protein.energy += energies[loc_choice]
 
             # Change the current location
             loc_current = location
