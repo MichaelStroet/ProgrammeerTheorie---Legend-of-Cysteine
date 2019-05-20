@@ -50,14 +50,15 @@ def ask_number(lower_limit, upper_limit, answer_type, message):
     '''
     # Keep asking for a number until the user enters a valid integer
     if answer_type == "integer":
-
         number = ask_integer(message)
         while number < lower_limit or number > upper_limit:
             number = ask_integer(message)
 
     # Keep asking for a number until the user enters a valid float
     elif answer_type == "float":
-        pass
+        number = ask_float(message)
+        while number < lower_limit or number > upper_limit:
+            number = ask_float(message)
 
     else:
         print(f"Error: Unknown type {answer_type}")

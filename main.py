@@ -7,14 +7,17 @@ import matplotlib.pyplot as plt
 
 directory = os.path.dirname(os.path.realpath(__file__))
 
-# Add the code paths
+# Add a path to the folders containing the code
 sys.path.append(os.path.join(directory, "code"))
 sys.path.append(os.path.join(directory, "code", "algorithms"))
 sys.path.append(os.path.join(directory, "code", "datastructure"))
 sys.path.append(os.path.join(directory, "code", "visualisations"))
 
-# Add the data path
+# Add a path to the data folder
 sys.path.append(os.path.join(directory, "data"))
+
+# Add a path to the results folder
+sys.path.append(os.path.join(directory, "results"))
 
 # Import visualisation functions
 from minimal_sizes import plot_matrix_sizes
@@ -52,17 +55,37 @@ if __name__ == "__main__":
     results = run_algorithm(algorithms, choice_algorithm, choice_protein, choice_dimension)
     protein, energies, matrix_sizes, elapsed_time = results
 
+    print(time.strftime('\nAlgorithm finished\nElapsed time: %H:%M:%S', time.gmtime(elapsed_time)))
+
     # Saves the results to file
-    if save_results == "Yes":
-        protein.visualise(choice_protein)
-        plot_matrix_sizes(matrix_sizes, protein.matrix_size)
+    if choice_save == "Yes":
+        textfile = open("results/test.txt", "w", encoding = "utf-8")
+        if textfile:
+            # TEMPORARY
+            string = f'''
+            Results and metadata,
+            Dimension: {choice_dimension},
+            Protein: {choice_protein},
+            Algorithm: {choice_algorithm},
+            Parameters: results has dict with parameters,
+            Elapsed time: {elapsed_time},
+            Lowest energy: {protein.energy},
+            Energies: {energies},
+            Matrix sizes: {matrix_sizes}'''
+
+            textfile.write(string)
+            textfile.close()
+
+            protein.visualise(choice_protein)
+            plt.savefig(f"results/figures/testfig.png")
+            plt.clf()
+
+            plot_matrix_sizes(matrix_sizes, protein.matrix_size)
+            plt.savefig(f"results/figures/testmatrices.png")
+            plt.clf()
 
     # Displays and prints the results
     if choice_show == "Yes":
-        protein.visualise(choice_protein)
-        plot_matrix_sizes(matrix_sizes, protein.matrix_size)
-
-        print(time.strftime('\nElapsed time: %H:%M:%S', time.gmtime(elapsed_time)))
         print(f"Energies:\n{energies}")
 
         plt.show()
