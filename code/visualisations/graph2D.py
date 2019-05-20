@@ -6,9 +6,9 @@ import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 
 
-def plot1D(protein_string):
+def plot2D(acid_data, protein_string, protein_energy):
     '''
-    Draws a plot of a 'folded' protein in 1D
+    Draws a plot of a folded protein in 2D and it's minimal matrix sizes per energy found
     '''
 
     # Assign each amino acid a color
@@ -21,28 +21,28 @@ def plot1D(protein_string):
     # Create lists to contain the color and coordinates of each amino acid
     L_color = []
     protein_x = []
-    protein_y = [0] * len(protein_string)
+    protein_y = []
 
     # Fill the lists for each amino acid
-    for i, acid in enumerate(protein_string):
-        L_color.append(colors[acid])
-        protein_x.append(i)
+    for acid in acid_data:
+        L_color.append(colors[acid[0]])
+        protein_x.append(acid[1])
+        protein_y.append(acid[2])
 
     # Determine the minimum and maximum values of x and y
     x_min = min(protein_x) - 1
     x_max = max(protein_x) + 1
-    y_min = -0.5
-    y_max = 0.5
+    y_min = min(protein_y) - 1
+    y_max = max(protein_y) + 1
 
     '''
-    This figure contains the 1D protein line
+    This figure contains the 2D folded protein
     '''
-    plt.figure("Line protein", figsize = (10,4))
+    plt.figure("2D folded protein", figsize = (x_max - x_min, y_max - y_min))
 
-    # Draw the acid connections
+    # Draw the protein
     plt.plot(protein_x, protein_y, '-', color = "black")
 
-    # Draw the acids
     for i, color in enumerate(L_color):
         plt.plot(protein_x[i], protein_y[i], 'o', color = color, markersize = 14, markeredgecolor = "black")
 
@@ -50,11 +50,13 @@ def plot1D(protein_string):
     plt.xticks(range(x_min, x_max + 1))
     plt.xlim([x_min, x_max])
 
-    plt.yticks([])
+    plt.yticks(range(y_min, y_max + 1))
     plt.ylim([y_min, y_max])
 
     # Set the title
-    plt.title(f"{protein_string}\nEnergy: unexpectedly 0")
+    plt.title(f"{protein_string}\nEnergy: {protein_energy}")
+
+    plt.grid(axis = "both")
 
     # Create the legend
     legend_elements = [Line2D([0], [0], marker='o', color='black', label='Hydrophobic', markerfacecolor='r'),

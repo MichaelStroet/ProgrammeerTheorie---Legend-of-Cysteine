@@ -6,13 +6,15 @@ from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 
-'''
-This function draws a plot of a folded protein in 3D
-NOT ACTUALLY USING MATRIX (YET?)
-'''
-def visualise3D(protein, matrix, protein_string, protein_energy):
+def plot3D(acid_data, protein_string, protein_energy):
+    '''
+    Draws a plot of a folded protein in 3D and it's minimal matrix sizes per energy found
+    '''
 
-    fig = plt.figure()
+    '''
+    This figure contains the 3D folded protein
+    '''
+    fig = plt.figure("3D folded protein")
     ax = fig.add_subplot(111, projection='3d')
 
     # Assign each amino acid a color
@@ -29,7 +31,7 @@ def visualise3D(protein, matrix, protein_string, protein_energy):
     protein_z = []
 
     # Fill the lists for each amino acid
-    for acid in protein:
+    for acid in acid_data:
         L_color.append(colors[acid[0]])
         protein_x.append(acid[1])
         protein_y.append(acid[2])

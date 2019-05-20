@@ -5,8 +5,8 @@
 import numpy as np
 
 from acid import Acid
-from graph import visualise as plot
-from graph3D import visualise3D as plot3D
+from graph2D import plot2D
+from graph3D import plot3D
 from functions import opposite, new_location
 
 class Protein:
@@ -42,7 +42,6 @@ class Protein:
         '''
         Returns a string representation of the acid matrix
         '''
-
         string_matrix = ""
         matrix_length = len(self.acids)
 
@@ -75,41 +74,41 @@ class Protein:
 
     def get_acid(self, location):
         '''
-        Finds and returns the object at that location
+        Finds and returns the object at that location in the matrix
         '''
-        layer, row, column = location
-        return self.acids[layer, row, column]
+        return self.acids[location[0], location[1], location[2]]
 
     def add_acid(self, type, location, direction_previous):
         '''
         Adds a new acid object to the acid matrix
         '''
-        layer, row, column = location
+        # Create the acid object
         acid = Acid(type, location, opposite(direction_previous))
-        self.acids[layer, row, column] = acid
+
+        # Add the acid object to the matrix and update the protein properties
+        self.acids[location[0], location[1], location[2]] = acid
         self.last_acid = location
         self.length += 1
 
     def remove_acid(self, previous_energy):
         '''
-        Removes an acid object from the acids matrix
-        TO DO: Removes the last acid object from the matrix
+        Removes the last acid object from the matrix
         '''
+        # Get the location and 'previous' connection from the last acid of the protein
         last_location = self.last_acid
-        layer, row, column = last_location
+        last_acid = get_acid(last_location)
+        last_connection = last_acid.connections["previous"]
 
-        last_acid = self.acids[layer, row, column]
-        last_connections = last_acid.connections
+        # Get the location of the second to last acid location
+        previous_location = new_location(last_location, last_connection, self.layer_size, self.matrix_size)
+        prev_acid = get_acid(previous_location)
 
-        prev_connection = last_connections["previous"]
-
-        prev_layer, prev_row, prev_column = new_location(last_location, prev_connection, self.layer_size, self.matrix_size)
-        prev_acid = self.acids[prev_layer, prev_row, prev_column]
-
+        # Set the 'next' conncection of the previous acid to none
         prev_acid.connections["next"] = ""
 
-        self.acids[layer, row, column] = 0
-        self.last_acid = [prev_layer, prev_row, prev_column]
+        # Remove the last acid and update the protein properties
+        self.acids[last_location[0], last_location[1], last_location[2]] = 0
+        self.last_acid = previous_location
         self.energy = previous_energy
         self.length -= 1
 
@@ -117,7 +116,6 @@ class Protein:
         '''
         Gets all neighboring acid objects from a central acid
         and returns a dictionary of the location for each direction.
-        TO DO: rework for one for loop and smaller matrices
         '''
         directions = ["up", "down", "left", "right", "in", "out"]
         neighbor_acids = {}
@@ -142,6 +140,9 @@ class Protein:
         # Get the acid objects surrounding the last-placed acid
         neighbors = self.neighbors(location)
 
+        '''
+        TO DO: First step into a new dimension is symmetrical!
+        '''
         # Determine in which neighboring spots a new acid can be placed
         for direction, neighbor_location in neighbors.items():
             if self.get_acid(neighbor_location) == 0:
@@ -206,8 +207,8 @@ class Protein:
     def check_energy(self, location, type):
         '''
         Calculates the energy of an Acid object and returns an integer
+        TO DO: Remove type and make clear this can check any random acid
         '''
-
         # Checks if the location contains an actual Acid object
         central_acid = self.get_acid(location)
         if not central_acid == 0:
@@ -259,103 +260,72 @@ class Protein:
         '''
         Visualises the protein object in a 2D or 3D plot
         '''
+        # Set the first location to the first acid and get the begin indeces of the matrix
+        location = self.first_acid
+        start_layer = location[0]
+        start_index = location[1]
 
-        # Set layer, row and column like the first acid
-        layer, row, column = self.first_acid
-        start_index = row
-
-        # Create lists to keep the acid and matrix data
         acid_data = []
-        matrix_data = []
-
-        # Set the matrix corner coordinates
-        low = (0 - 1) - start_index
-        high = (self.matrix_size) - start_index
-
-        # Determine the data for plotting the matrix borders
-        # matrix_data = [
-        #     [low, low, low],
-        #     [low, high, low],
-        #     [low, high, low],
-        #     [low, high, high],
-        #     [high, low, low],
-        #     [high, high, low],
-        #     [high, low, high],
-        #     [high, high, high]
-        # ]
-        matrix_data = [
-            [low, low],
-            [low, high],
-            [high, high],
-            [high, low],
-            [low, low]
-        ]
 
         # Loop over each acid in the protein and add its info to the data list
-        acid = self.acids[layer, row, column]
-
+        acid = self.get_acid(location)
         while not acid.connections["next"] == "":
-            acid = self.acids[layer, row, column]
+            acid = self.get_acid(location)
+
             acid_type = acid.type
+
+            # Determine the location relative to the first acid
             acid_x = acid.location[1] - start_index
             acid_y = acid.location[2] - start_index
+            acid_z = acid.location[0] - start_layer
 
-            # For 2D
-            if len(self.acids) == 1:
-                acid_data.append([acid_type, acid_x, acid_y])
+            acid_data.append([acid_type, acid_x, acid_y, acid_z])
 
-            # For 3D
-            else:
-                acid_z = acid.location[0] - start_index
-                acid_data.append([acid_type, acid_x, acid_y, acid_z])
-
-            # Adjust the layer, row and column for the next acid
-            layer, row, column = new_location([layer, row, column], acid.connections["next"],  self.layer_size, self.matrix_size)
+            # Determine the location of the next acid
+            location = new_location(location, acid.connections["next"], self.layer_size, self.matrix_size)
 
         # Plot the protein
         # In 2D
-        if len(self.acids) == 1:
-            plot(acid_data, matrix_data, protein_string, self.energy)
+        if self.layer_size == 1:
+            plot2D(acid_data, protein_string, self.energy)
         # In 3D
         else:
-            plot3D(acid_data, matrix_data, protein_string, self.energy)
+            plot3D(acid_data, protein_string, self.energy)
 
     def smallest_matrix(self):
+        '''
+        Determines the smallest matrix size in which the current protein can fit
+        '''
+        # Set the first location to the first acid and get the begin indeces of the matrix
+        location = self.first_acid
+        start_layer = location[0]
+        start_index = location[1]
 
-        # Set layer, row and column like the first acid
-        layer, row, column = self.first_acid
-        start_index = row
-        start_layer = layer
+        acids_x = []
+        acids_y = []
+        acids_z = []
 
-        acids_xyz = [[], [], []]
-
-        # Loop over each acid in the protein and add its info to the data list
-        acid = self.acids[layer, row, column]
-
+        # Loop over each acid in the protein and add its info to the data lists
+        acid = get_acid(location)
         while not acid.connections["next"] == "":
-            acid = self.acids[layer, row, column]
+            acid = get_acid(location)
+            layer, row, column = location
 
-            acids_xyz[0].append(column - start_index)
-            acids_xyz[1].append(row - start_index)
-            acids_xyz[2].append(layer - start_layer)
+            acids_x.append(column - start_index)
+            acids_y.append(row - start_index)
+            acids_z.append(layer - start_layer)
 
             # Adjust the layer, row and column for the next acid
-            layer, row, column = new_location([layer, row, column], acid.connections["next"], len(self.acids), len(self.acids[0]))
+            location = new_location(location, acid.connections["next"], self.layer_size, self.matrix_size)
 
-        min_x, max_x = [min(acids_xyz[0]), max(acids_xyz[0])]
-        min_y, max_y = [min(acids_xyz[1]), max(acids_xyz[1])]
-        min_z, max_z = [min(acids_xyz[2]), max(acids_xyz[2])]
+        # Determine the minimal and maximum value of each dimension
+        min_x, max_x = [min(acids_x), max(acids_x)]
+        min_y, max_y = [min(acids_y), max(acids_y)]
+        min_z, max_z = [min(acids_z), max(acids_z)]
 
+        # Determine the largest distance from the first acid
         origin_distances = [abs(min_x), max_x, abs(min_y), max_y, abs(min_z), max_z]
         max_distance = max(origin_distances)
 
+        # Return the minimal matrix size
         return (max_distance * 2) + 1
-
-
-if __name__ == "__main__":
-
-    string = "HPHPHPHH"
-    length = len(string)
-    protein = Protein(length)
-
-    print(protein)
