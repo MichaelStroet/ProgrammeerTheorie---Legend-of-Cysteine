@@ -37,8 +37,8 @@ def run_algorithm(algorithms, algorithm, protein_string, dimension):
     parameters = {"Matrix size": "",
         "Iterations" : "",
         "Look-aheads" : "",
-        "Prob. above" : "",
         "Prob. below" : "",
+        "Prob. above" : "",
         "Beam width" : "",
         "???" : ""}
 
