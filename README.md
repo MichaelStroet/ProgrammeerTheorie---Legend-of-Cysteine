@@ -19,8 +19,6 @@ Eiwitten zijn strengen van aminozuren. Deze kunnen op allerlei manieren gevouwen
 In dit experiment proberen wij een eiwit zo stabiel mogelijk te vouwen. Dit gebeurt als de hydrofobe of Cysteine aminozuren tegen over elkaar geplaatst zijn. Twee Cysteine eiwitten verlagen de energie met - 5, een Cysteine en een hydrofobe of twee hydrofoben aminozuuren verlagen de energie met -1. Polaire aminozuren hebben geen invloed op de stabiliteit.
 
 
-![Gevouwen Eiwit](/Desktop/Folded_protein2.png)
-Format: ![Alt Text](url)
 
 # Random Walk
 # Greedy
@@ -29,6 +27,7 @@ Format: ![Alt Text](url)
 # Beam Search
 Beam Search is een algoritme dat per lengte alle mogelijke opties sorteert en doorgaat met de paar beste. Bij aanvang van het programma kiest de gebruiker de "Beam Width", dit is hoeveel verschillende eiwitten bijgehouden worden. Beam Search garandeert alleen de beste oplossing als de Beam width op oneindig gezet wordt. Dan gedraagt hij zich al een breadth-first algoritme en gaat zo de hele toestandsruimte af. Bij elke nieuwe lengte kijkt het algoitme naar de energie van elk eiwit die tot nu toe gevouwen is, dan plaatst hij de volgende aminozuur alleen bij die eiwitten en ordert dan weer alle mogelijke locaties van de volgende aminozuur bij deze eiwitten, dan maakt hij weer een selectie van de beste enzovoort.
 Het programma runt net zo lang tot er geen aminozuren meer zijn om te plaatsen. Dan retourneert hij de proteine met de laagste energie, die bovenaan de lijst staat.
+![Beam Search](assets/README-25a489a1.png)
 
 # Probability Based Branch and Bound
 Branch and Bound is een paradigma dat gebaseerd is op het depth-first algorithme. Het is recursief en non-stack. Onze versie van Branch and Bound is "probability-based", omdat wij met een element van kans werken kunnen wij niet de beste oplossing garanderen. Deze methode zou wel sneller moeten zijn omdat er vaker gepruned wordt.
