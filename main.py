@@ -86,6 +86,8 @@ if __name__ == "__main__":
 
     # Displays and prints the results
     if choice_show == "Yes":
+        protein.visualise(choice_protein)
+        plot_matrix_sizes(matrix_sizes, protein.matrix_size)
         print(f"Energies:\n{energies}")
 
         plt.show()
