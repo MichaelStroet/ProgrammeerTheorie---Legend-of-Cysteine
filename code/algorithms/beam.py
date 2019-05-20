@@ -18,17 +18,20 @@ from functions import new_location
 from operator import itemgetter
 
 
-def beamsearch(pr_string, width, dimension):
+def beamsearch(pr_string, width, dimension, matrix_size):
+    '''
 
+    '''
     # Set global variables
     global best_nodes, protein_length, protein_string, energy_counter, beam_list, proteins, B_width, matrix_sizes
 
     protein_string = pr_string
+    protein_length = len(protein_string)
+
     B_width = width
 
-    # Use protein length to establish location of first amino acid in a matrix
-    protein_length = len(protein_string)
-    protein = Protein(protein_length, dimension)
+    # Create a protein object with a specific matrix size
+    protein = Protein(matrix_size, dimension)
 
     # Place the first two amino acids
     protein.place_first_two(protein_string)

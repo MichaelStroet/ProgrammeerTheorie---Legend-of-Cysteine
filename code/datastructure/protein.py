@@ -11,11 +11,10 @@ from functions import opposite, new_location
 
 class Protein:
 
-    def __init__(self, protein_length, dimension):
+    def __init__(self, matrix_size, dimension):
         '''
         Initialise a list of m 'n x n' matrices of Acid objects
         '''
-        matrix_size = int(protein_length / 2.)
 
         # Ensure odd matrix_size
         if matrix_size % 2 == 0:

@@ -14,15 +14,14 @@ import numpy as np
 from acid import Acid
 from protein import Protein
 
-def greedy(protein_string, N_tries, dimension):
+def greedy(protein_string, N_tries, dimension, matrix_size):
     '''
     The input is a string that represents the proteins amino acid sequence
     The output is a protein folded by a greedy algorithm
     '''
-
-    # Use protein length to establish location of first amino acid in a matrix
+    # Create a protein object with a specific matrix size
+    protein = Protein(matrix_size, dimension)
     protein_length = len(protein_string)
-    protein = Protein(protein_length, dimension)
 
     # Place the first two amino acids
     protein.place_first_two(protein_string)

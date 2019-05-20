@@ -28,8 +28,10 @@ from protein import Protein
 
 from dict_average import dict_average
 
-def branch_n_bound(protein_string, prob_above_avg, prob_below_avg, dimension):
+def branch_n_bound(protein_string, prob_above_avg, prob_below_avg, dimension, matrix_size):
+    '''
 
+    '''
     # Set global variables
     global protein_str, prob_below_average, prob_above_average, length_total, energy_min_all, energy_min_partial
 
@@ -43,8 +45,8 @@ def branch_n_bound(protein_string, prob_above_avg, prob_below_avg, dimension):
     energy_counter = {}
     matrix_sizes = {}
 
-    # Create the protein matrix
-    protein = Protein(length_total, dimension)
+    # Create a protein object with a specific matrix size
+    protein = Protein(matrix_size, dimension)
 
     # Initialize energy variable that keeps the lowest energy for a complete protein
     energy_min_all = 0

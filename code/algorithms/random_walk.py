@@ -8,17 +8,15 @@ import numpy as np
 from acid import Acid
 from protein import Protein
 
-def random_walk(protein_string, N_tries, dimension):
+def random_walk(protein_string, N_tries, dimension, matrix_size):
     '''
     Runs a random walk algorithm in which N_tries proteins are randomly
     created from a string of amino acid types. The best conformation,
     the one that has the lowest energy, is saved and returned along with
     a dictionary of all N_tries energy counts.
     '''
-
-    # Use lenght to establish location of the first amino acid
-    protein_length = len(protein_string)
-    protein = Protein(protein_length, dimension)
+    # Create a protein object with a specific matrix size
+    protein = Protein(matrix_size, dimension)
 
     # Place the first two amino acids
     protein.place_first_two(protein_string)

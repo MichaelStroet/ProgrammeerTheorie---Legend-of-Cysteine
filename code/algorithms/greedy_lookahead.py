@@ -3,7 +3,7 @@
 # Michael Stroet  11293284
 
 """
-Greedy with look-ahead 
+Greedy with look-ahead
 This algorithm will fold a protein using a greedy algorithm with look-ahead
 Greedy in this case means always placing an amino acid at the location that results in the lowest energy
 """
@@ -15,14 +15,13 @@ import numpy as np
 from acid import Acid
 from protein import Protein
 
-def greedy(protein_string, look_aheads, N_tries, dimension):
+def greedy(protein_string, look_aheads, N_tries, dimension, matrix_size):
     '''
     The input is a string that represents the proteins amino acid sequence
     The output is a protein folded by a greedy look_ahead algorithm
     '''
-
-    # Use protein length to establish location of first amino acid in a matrix
-    protein = Protein(len(protein_string), dimension)
+    # Create a protein object with a specific matrix size
+    protein = Protein(matrix_size, dimension)
 
     # Place the first two amino acids
     protein.place_first_two(protein_string)

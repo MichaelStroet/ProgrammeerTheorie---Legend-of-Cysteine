@@ -2,6 +2,8 @@
 # Sophie Stiekema 10992499
 # Michael Stroet  11293284
 
+import numpy as np
+
 def is_integer(string):
     '''
     Determines if the given string represents an integer
@@ -67,6 +69,28 @@ def ask_number(lower_limit, upper_limit, answer_type, message):
     print(f">{number}\n")
 
     return number
+
+def ask_matrix_size(protein_length):
+
+        # Calculate the Length / 2 matriz size
+        length_2div3 = int(np.ceil(2 * protein_length / 3.))
+        length_1div2 = int(np.ceil(protein_length / 2.))
+        length_1div3 = int(np.ceil(protein_length / 3.))
+        length_1div4 = int(np.ceil(protein_length / 4.))
+
+        # Ask the user for the matrix size
+        lower_limit = int(np.ceil(protein_length**0.5))
+        upper_limit = int(2 * protein_length - 1)
+
+        print(f"Protein length: {protein_length}")
+        print(f"2/3 of length : {length_2div3}")
+        print(f"1/2 of length : {length_1div2}")
+        print(f"1/3 of length : {length_1div3}")
+        print(f"1/4 of length : {length_1div4}\n")
+
+        matrix_size = ask_number(lower_limit, upper_limit, "integer", f"What matrix_size to use [{lower_limit}-{upper_limit}]?: ")
+
+        return matrix_size
 
 def print_list(list):
     '''

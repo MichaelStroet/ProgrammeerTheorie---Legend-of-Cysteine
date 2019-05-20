@@ -53,22 +53,16 @@ if __name__ == "__main__":
 
     # Run the chosen algorithm
     results = run_algorithm(algorithms, choice_algorithm, choice_protein, choice_dimension)
-    protein, energies, matrix_sizes, elapsed_time = results
+    protein, energies, matrix_sizes, start, elapsed_time, parameters = results
+
+    # Convert the unix timestamps to dates and/or hours, minutes and seconds)
+    start_time = time.strftime("%H:%M:%S %d-%m-%Y", time.gmtime(start))
     elapsed_HHMMSS = time.strftime("%H:%M:%S", time.gmtime(elapsed_time))
 
     print(f"\nAlgorithm finished\nElapsed time: {elapsed_HHMMSS}")
 
     # Saves the results to a csv file and saves the figures as png files
     if choice_save == "Yes":
-
-        parameters = {"Matrix size": "",
-            "Iterations" : "",
-            "Look-aheads" : "",
-            "Prob. above" : "",
-            "Prob. below" : "",
-            "Beam width" : "",
-            "???" : ""}
-        start_time = "13:43:02 27-04-1967"
 
         with open("results/results.csv", "a", encoding = "utf-8") as file:
             row = ""
@@ -104,5 +98,6 @@ if __name__ == "__main__":
         protein.visualise(choice_protein)
         plot_matrix_sizes(matrix_sizes, protein.matrix_size)
         print(f"Energies:\n{energies}")
+        print(f"Matrix sizes:\n{matrix_sizes}")
 
         plt.show()
