@@ -3,6 +3,7 @@
 # Michael Stroet  11293284
 
 """
+Greedy with look-ahead 
 This algorithm will fold a protein using a greedy algorithm with look-ahead
 Greedy in this case means always placing an amino acid at the location that results in the lowest energy
 """

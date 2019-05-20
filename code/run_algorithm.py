@@ -55,7 +55,7 @@ def run_algorithm(algorithms, algorithm, protein_string, dimension):
         protein, dict, matrix_sizes = greedy(protein_string, N_runs, dimension)
         elapsed_time = time.time() - start_time
 
-    # Run a greedy search with look_ahead
+    # Run a greedy search with look-ahead
     elif algorithm == algorithms[2]:
 
         # Ask the user for the number of runs and look-aheads
@@ -78,10 +78,10 @@ def run_algorithm(algorithms, algorithm, protein_string, dimension):
         protein, dict, matrix_sizes = beamsearch(protein_string, beam_width, dimension)
         elapsed_time = time.time() - start_time
 
-    # Run a probability-based branch n bound algorithm
+    # Run a probability-based branch and bound algorithm
     elif algorithm == algorithms[4]:
 
-        # Ask the user for the probabilities
+        # Ask the user for the probabilities for pruning
         prob_below_average = ask_number(0.0, 1.0, "float", "Choose a probability to discard proteins with energy below the average [0.0-1.0]?: ")
         prob_above_average = ask_number(0.0, 1.0, "float", "Choose a probability to discard proteins with energy above the average [0.0-1.0]?: ")
 
