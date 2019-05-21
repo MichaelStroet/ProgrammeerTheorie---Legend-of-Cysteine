@@ -9,6 +9,7 @@ from graph2D import plot2D
 from graph3D import plot3D
 from functions import opposite, new_location
 
+
 class Protein:
 
     def __init__(self, matrix_size, dimension):
@@ -30,6 +31,7 @@ class Protein:
             layer_size = 1
 
         self.acids = np.zeros((layer_size, matrix_size, matrix_size), dtype = Acid)
+        self.acid_list = []
         self.first_acid = [layer_mid, matrix_mid, matrix_mid]
         self.last_acid = self.first_acid
         self.layer_size = layer_size
@@ -86,6 +88,7 @@ class Protein:
 
         # Add the acid object to the matrix and update the protein properties
         self.acids[location[0], location[1], location[2]] = acid
+        self.acid_list.append(acid)
         self.last_acid = location
         self.length += 1
 
@@ -107,13 +110,57 @@ class Protein:
 
         # Remove the last acid and update the protein properties
         self.acids[last_location[0], last_location[1], last_location[2]] = 0
+        self.acid_list.pop()
         self.last_acid = previous_location
         self.energy = previous_energy
         self.length -= 1
 
+    def get_acid_index(self, index):
+        """
+        Returns an acid object from a list
+        """
+        return self.acid_list[index]
+
+    def remove_acid_index(self, index):
+        """Removes an acid object and updates the energy"""
+        acid = self.get_acid_index(index)
+        self.energy -= self.calculate_energy(acid.location)
+        self._update_acid_location(acid, None)
+
+    def add_acid_index(self, index, location):
+        """
+        Adds an acid object based on an index
+        """
+        acid = self.get_acid_index(index)
+        self._update_acid_location(acid, location)
+        self.energy += self.calculate_energy(acid.location)
+        # Update connections
+        self._update_acid_connections(index)
+        pass
+
+    def _update_acid_connections(self, index, direction):
+        acid = self.get_acid_index(index)
+        # 1 update the connection of the 
+        # 2 
+        pass
+
+    def _update_acid_location(self, acid, location):
+        """
+        Updates locations for an acid
+        """
+        # update matrix location
+        if acid.location:
+            self.acids[acid.location] = 0
+
+        # update acid location
+        acid.location = location
+
+        if location:
+            self.acids[location] = acid
+
     def neighbors(self, location):
         '''
-        Gets all neighboring acid objects from a central acid
+        Gets all neighbouring acid objects from a central acid
         and returns a dictionary of the location for each direction.
         '''
         directions = ["up", "down", "left", "right", "in", "out"]
@@ -154,7 +201,7 @@ class Protein:
 
         return possible_sites
 
-    def new_energy(self, location):
+    def calculate_energy(self, location):
         '''
         Calculates the energy of an Acid object and updates the energy property
         '''
@@ -181,20 +228,19 @@ class Protein:
 
                     if not acid == 0 and not direction in central_connections:
 
-                        # If the neighbor pair is H-H, the energy decreases by 1,
-                        # If the neighbor pair is H-C, the energy decreases by 1,
+                        # If the neighbor pair is H-H or H-C the energy decreases by 1
                         if type == "H":
                             if acid.type == "H" or acid.type == "C":
-                                self.energy -= 1
+                                return -1
 
                         # If the neighbor pair is C-H, the energy decreases by 1,
                         # If the neighbor pair is C-C, the energy decreases by 5
                         else:
                             if acid.type == "H":
-                                self.energy -= 1
+                                return -1
 
                             elif acid.type == "C":
-                                self.energy -= 5
+                                return -5
 
             else:
                 print(f"Unknown amino acid type: '{type}'")
@@ -202,6 +248,12 @@ class Protein:
 
         else:
             return 0
+
+    def new_energy(self, location):
+        """
+        Updates the energy of the protein
+        """
+        self.energy += self.calculate_energy(location)
 
     def check_energy(self, location, type):
         '''
