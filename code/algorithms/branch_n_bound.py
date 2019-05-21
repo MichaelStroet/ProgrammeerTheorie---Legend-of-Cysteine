@@ -94,8 +94,7 @@ def next_acid(protein, previous_location):
             protein.add_acid(amino_acid, location, key_direction)
 
             # Calculate the new energy of the (partial) protein
-            new_energy = protein.check_energy(location, amino_acid)
-            protein.energy += new_energy
+            protein.new_energy(protein.last_acid)
 
             # Add the energy to the dictionary counter & calculate the average
             energy_counter[protein.energy] = energy_counter.get(protein.energy, 0) + 1

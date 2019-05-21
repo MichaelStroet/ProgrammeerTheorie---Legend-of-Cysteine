@@ -118,7 +118,7 @@ def greedy_fold(protein, p_string, p_len, loc_current):
             # Add the acid object to the protein and connect it to the previous amino acids
             previous_acid.add_connection(loc_choice)
             protein.add_acid(acid_type, location, loc_choice)
-            protein.energy += energies[loc_choice]
+            protein.new_energy(protein.last_acid)
 
             # Change the current location
             loc_current = location

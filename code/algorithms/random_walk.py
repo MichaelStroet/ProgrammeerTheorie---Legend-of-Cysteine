@@ -98,8 +98,7 @@ def walk(protein, protein_string, previous_location):
                     previous_location = location
 
                     # Check if the new acid has lowered the energy of the protein
-                    new_energy = protein.check_energy(location, acid_type)
-                    protein.energy += new_energy
+                    protein.new_energy(protein.last_acid)
 
                     break
 

@@ -159,7 +159,7 @@ def next_layer(the_protein, list_locations):
         temporary_proteins[i].add_acid(acid_type, needed_loc, needed_direction)
         needed_energy = temporary_proteins[i].check_energy(needed_loc, acid_type)
         temporary_proteins[i].energy += needed_energy
-
+    
         # Add the direction and energy to the beam list and update the index
         beam_list[i] = beam_possibilities[key]
         beam_list[i] = [beam_list[i], key]
