@@ -227,7 +227,7 @@ class Protein:
                     acid = self.get_acid(location)
 
                     if not acid == 0 and not direction in central_connections:
-
+                        print("checking energy")
                         # If the neighbor pair is H-H or H-C the energy decreases by 1
                         if type == "H":
                             if acid.type == "H" or acid.type == "C":
@@ -241,13 +241,11 @@ class Protein:
 
                             elif acid.type == "C":
                                 return -5
-
             else:
                 print(f"Unknown amino acid type: '{type}'")
                 exit(1)
 
-        else:
-            return 0
+        return 0
 
     def new_energy(self, location):
         """
