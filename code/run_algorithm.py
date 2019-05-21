@@ -8,8 +8,7 @@ import matplotlib.pyplot as plt
 
 # Import algorithms
 from random_walk import random_walk
-from greedy import greedy
-from greedy_lookahead import greedy as greedy_la
+from greedy_lookahead import greedy
 from beam import beamsearch
 from branch_n_bound import branch_n_bound
 from hillclimber import hillclimber
@@ -58,20 +57,8 @@ def run_algorithm(algorithms, algorithm, protein_string, dimension):
         protein, energies, matrix_sizes = random_walk(protein_string, N_runs, dimension, matrix_size)
         elapsed_time = time.time() - start_time
 
-    # Run a normal greedy search
-    elif algorithm == algorithms[1]:
-
-        # Ask the user for the number of runs
-        N_runs = ask_number(2, 1E100, "integer", "How many proteins to fold [2-∞]?: ")
-        parameters["Iterations"] = f"{N_runs}"
-
-        # Run the algorithm and keep track of the time
-        start_time = time.time()
-        protein, energies, matrix_sizes = greedy(protein_string, N_runs, dimension, matrix_size)
-        elapsed_time = time.time() - start_time
-
     # Run a greedy search with look-ahead
-    elif algorithm == algorithms[2]:
+    elif algorithm == algorithms[1]:
 
         # Ask the user for the number of runs and look-aheads
         N_runs = ask_number(2, 1E100, "integer", "How many proteins to fold [2-∞]?: ")
@@ -82,11 +69,11 @@ def run_algorithm(algorithms, algorithm, protein_string, dimension):
 
         # Run the algorithm and keep track of the time
         start_time = time.time()
-        protein, energies, matrix_sizes = greedy_la(protein_string, look_aheads, N_runs, dimension, matrix_size)
+        protein, energies, matrix_sizes = greedy(protein_string, look_aheads, N_runs, dimension, matrix_size)
         elapsed_time = time.time() - start_time
 
     # Run a beam search
-    elif algorithm == algorithms[3]:
+    elif algorithm == algorithms[2]:
 
         # Ask the user for the beam width
         beam_width = ask_number(1, 1E100, "integer", "What is the beam width [1-∞]?: ")
@@ -98,7 +85,7 @@ def run_algorithm(algorithms, algorithm, protein_string, dimension):
         elapsed_time = time.time() - start_time
 
     # Run a probability-based branch and bound algorithm
-    elif algorithm == algorithms[4]:
+    elif algorithm == algorithms[3]:
 
         # Ask the user for the probabilities for pruning
         prob_below_average = ask_number(0.0, 1.0, "float", "Choose a probability to discard proteins with energy below the average [0.0-1.0]?: ")
@@ -113,7 +100,7 @@ def run_algorithm(algorithms, algorithm, protein_string, dimension):
         elapsed_time = time.time() - start_time
 
     # Run a hill climber
-    elif algorithm == algorithms[5]:
+    elif algorithm == algorithms[4]:
 
         # Ask the user for
 

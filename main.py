@@ -44,7 +44,7 @@ if __name__ == "__main__":
     save_results = ["Yes", "No"]
     show_results = ["Yes", "No"]
     dimensions = ["1D", "2D", "3D"]
-    algorithms = ["Random Walk", "Greedy", "Greedy - Look-ahead", "Beam Search", "Branch-n-Bound - probabilty-based", "Hill Climber"]
+    algorithms = ["Random Walk", "Greedy - Look-ahead", "Beam Search", "Branch-n-Bound - probabilty-based", "Hill Climber"]
     proteins = parse_data()
 
     # Get the user's choices
