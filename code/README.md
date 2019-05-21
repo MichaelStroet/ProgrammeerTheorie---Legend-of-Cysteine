@@ -1,3 +1,5 @@
+# Code 
+
 In de algorithms map zijn alle bestanden te vinden voor alle algoritmes die aangeroepen worden in main.
 In de datastructure map zijn er twee bestanden die de Protein en Acid clas aanmaken en nog een betsand die meerdere functies bevat die in andere bestanden gebruikt worden.
 In de visualisations map zijn de betsanden te vinden die zorgen voor het maken van de grafieken van de eiwitten in 1D, 2D en 3D.

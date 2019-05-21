@@ -56,7 +56,8 @@ Wij hebben 6 verschillende algoritmes geimplementeerd:
 - Beam Search
 - Branch and Bound
 - Hill Climber
-[code/algorithms/README.md](https://github.com/MichaelStroet/ProgrammeerTheorie---Legend-of-Cysteine/blob/master/code/algorithms/README.md)
+
+Voor meer informatie zie: [code/algorithms/README.md](https://github.com/MichaelStroet/ProgrammeerTheorie---Legend-of-Cysteine/blob/master/code/algorithms/README.md)
 
 
 ## Dankwoord
