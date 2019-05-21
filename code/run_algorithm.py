@@ -40,7 +40,7 @@ def run_algorithm(algorithms, algorithm, protein_string, dimension):
         "Prob. below" : "",
         "Prob. above" : "",
         "Beam width" : "",
-        "???" : ""}
+        "Cut size" : ""}
 
     # Ask the user for the matrix size to use
     matrix_size = ask_matrix_size(len(protein_string))
@@ -117,7 +117,7 @@ def run_algorithm(algorithms, algorithm, protein_string, dimension):
 
         # Ask the user for
 
-        parameters["???"] = ""
+        parameters["Cut size"] = ""
 
         # Run the algorithm and keep track of the time
         start_time = time.time()

@@ -56,7 +56,7 @@ if __name__ == "__main__":
     protein, energies, matrix_sizes, start, elapsed_time, parameters = results
 
     # Convert the unix timestamps to dates and/or hours, minutes and seconds)
-    start_time = time.strftime("%H:%M:%S %d-%m-%Y", time.gmtime(start))
+    start_time = time.strftime("%d-%m-%Y_%H-%M-%S", time.gmtime(start))
     elapsed_HHMMSS = time.strftime("%H:%M:%S", time.gmtime(elapsed_time))
 
     print(f"\nAlgorithm finished\nElapsed time: {elapsed_HHMMSS}")
@@ -78,17 +78,21 @@ if __name__ == "__main__":
             row += f"{parameters['Prob. below']},"  # Probability below average
             row += f"{parameters['Prob. above']},"  # Probability above average
             row += f"{parameters['Beam width']},"   # Beam width
-            row += f"{parameters['???']}"          # Hillclimber parameter(s)?
+            row += f"{parameters['Cut size']}"      # Cut size
             row += "\n"
 
             file.write(row)
 
+            newfigurepath = os.path.join(directory, "results", "figures", f"{start_time}")
+            if not os.path.exists(newfigurepath):
+                os.makedirs(newfigurepath)
+
             protein.visualise(choice_protein)
-            plt.savefig(f"results/figures/testfig.png")
+            plt.savefig(os.path.join(newfigurepath, "protein.png"))
             plt.clf()
 
             plot_matrix_sizes(matrix_sizes, protein.matrix_size)
-            plt.savefig(f"results/figures/testmatrices.png")
+            plt.savefig(os.path.join(newfigurepath, "matrix_sizes.png"))
             plt.clf()
 
     # Displays and prints the results
