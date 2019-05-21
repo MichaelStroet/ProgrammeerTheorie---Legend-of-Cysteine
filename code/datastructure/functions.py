@@ -17,6 +17,7 @@ def opposite(direction):
     }
 
     return opposite_directions[direction]
+    
 
 def new_location(location, direction, layer_length, matrix_length):
     '''
