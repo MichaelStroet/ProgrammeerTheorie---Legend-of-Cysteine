@@ -18,24 +18,23 @@ from functions import new_location
 from operator import itemgetter
 
 
-def beamsearch(pr_string, width, dimension, matrix_size):
+def beamsearch(p_string, width, dimension, matrix_size):
     '''
 
     '''
     # Set global variables
-    global best_nodes, protein_length, protein_string, energy_counter, beam_list, proteins, B_width, matrix_sizes
+    global best_nodes, protein_length, protein_string, energy_counter, beam_list, proteins, B_width, matrix_sizes, initial_protein
 
-    protein_string = pr_string
+    protein_string = p_string
     protein_length = len(protein_string)
-
     B_width = width
 
     # Create a protein object with a specific matrix size
-    protein = Protein(matrix_size, dimension)
+    initial_protein = Protein(matrix_size, dimension)
 
     # Place the first two amino acids
-    protein.place_first_two(protein_string)
-    previous_location = [protein.last_acid]
+    initial_protein.place_first_two(protein_string)
+    previous_location = [initial_protein.last_acid]
 
     # Initialize dictionaries
     energy_counter = {}
@@ -44,13 +43,13 @@ def beamsearch(pr_string, width, dimension, matrix_size):
     # Initialize the proteins dictionary that keeps track of the protein objects
     proteins = {}
     for i in range(B_width):
-        proteins[i] = protein
+        proteins[i] = initial_protein
 
     # Initialize the list that keeps the direction of new acids and energy of the protein
     beam_list = [0] * B_width
 
     # Start the search
-    next_layer(protein, previous_location)
+    find_possibilities(previous_location)
 
     # Take the top protein as best protein
     protein_min = proteins[0]
@@ -59,22 +58,10 @@ def beamsearch(pr_string, width, dimension, matrix_size):
     return protein_min, energy_min, matrix_sizes
 
 # Function that calculates the next steps and chooses the ones with minimal energy
-def next_layer(the_protein, list_locations):
+def find_possibilities(list_locations):
     '''
-    Check possible sites for the next amino acid,
-    see whether the matrix box left, up & right are empty,
-    if so store their locations and direction in a dictionnary
+    Caluclate energy for all possible locations for all chosen children
     '''
-
-    previous_locations = []
-
-    # Initialize the temporary list that holds copies of the offocial proteins
-    # This list is needed as the official list can only be updated once all new
-    # proteins have been folded, otherwise we may lose the protein we wanted
-    # to continue folding as it may already have been replaced by a new folding
-    temporary_proteins = [0] * B_width
-
-    acid_type = protein_string[the_protein.length]
 
     # Create a dictionary that keeps track of all the children
     beam_possibilities = {}
@@ -82,15 +69,15 @@ def next_layer(the_protein, list_locations):
     # For each location
     for i in range(len(list_locations)):
         # Initialize dictionaries
-        protein_energy ={}
-        energy = {}
+        #protein_energy ={}
+        #energy = {}
 
         previous_location = list_locations[i]
 
         if any(proteins):
             protein = proteins[i]
         else:
-            protein = the_protein
+            protein = initial_protein
 
         possible_sites = protein.possible_sites(previous_location)
 
@@ -109,9 +96,7 @@ def next_layer(the_protein, list_locations):
 
                 # Place the acid and store the energy
                 protein.add_acid(acid_type, site, direction)
-                energy[direction] = protein.check_energy(site, acid_type)
-                total_energy = previous_energy + protein.check_energy(site, acid_type)
-                protein_energy[direction] = total_energy
+                total_energy = protein.energy
 
                 # If the protein is complete, determine the smallest matrix size needed for this protein
                 if protein.length == protein_length:
@@ -132,6 +117,20 @@ def next_layer(the_protein, list_locations):
             sorted_possibilities = sorted(beam_possibilities.items(), key=operator.itemgetter(1))
             beam_possibilities = dict(sorted_possibilities)
 
+    # Call function that keeps only the proteins with the lowest energy
+    keep_lowest(list_locations, beam_possibilities, acid_type)
+
+
+def keep_lowest(list_locations, beam_possibilities, acid_type):
+
+    previous_locations = []
+
+    # Initialize the temporary list that holds copies of the offocial proteins
+    # This list is needed as the official list can only be updated once all new
+    # proteins have been folded, otherwise we may lose the protein we wanted
+    # to continue folding as it may already have been replaced by a new folding
+    temporary_proteins = [0] * B_width
+
     # Set i to zero for indexing in the beam_list
     i = 0
 
@@ -140,6 +139,7 @@ def next_layer(the_protein, list_locations):
 
         # Retrieve the place of the protein in the previous locations list
         needed_protein = int(re.findall('\d+',key)[0])
+        protein = proteins[needed_protein]
 
         # Retrieve the direction of the acid
         needed_direction = ''.join(filter(str.isalpha, key))
@@ -152,14 +152,13 @@ def next_layer(the_protein, list_locations):
         needed_loc = needed_locations[needed_direction]
         previous_locations.append(needed_loc)
 
-        # Make a copy of the protein in the temporary list and add the new acid
+        # Make a copy of the protein in the temporary list, add the new acid & update energy
         temporary_proteins[i] = copy.deepcopy(proteins[needed_protein])
         previous_acid = temporary_proteins[i].acids[previous_loc[0], previous_loc[1], previous_loc[2]]
         previous_acid.add_connection(needed_direction)
         temporary_proteins[i].add_acid(acid_type, needed_loc, needed_direction)
-        needed_energy = temporary_proteins[i].check_energy(needed_loc, acid_type)
-        temporary_proteins[i].energy += needed_energy
-    
+        temporary_proteins[i].new_energy(needed_loc)
+
         # Add the direction and energy to the beam list and update the index
         beam_list[i] = beam_possibilities[key]
         beam_list[i] = [beam_list[i], key]
@@ -171,6 +170,6 @@ def next_layer(the_protein, list_locations):
 
     # Check if the protein is complete, if so return, if not continue searching
     if proteins[0].length == protein_length:
-        return(temporary_proteins)
+        return
     else:
-        next_layer(protein, previous_locations)
+        find_possibilities(previous_locations)

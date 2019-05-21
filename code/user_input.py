@@ -93,7 +93,7 @@ def ask_matrix_size(protein_length):
         # Ensure odd matrix_size
         if matrix_size % 2 == 0:
             matrix_size += 1
-            
+
         return matrix_size
 
 def print_list(list):
@@ -131,6 +131,6 @@ def get_choices(save_results, show_results, dimensions, algorithms, proteins):
     show = choose(show_results, f"Do you want to show/print the results [1-{len(show_results)}]?: ")
     dimension = choose(dimensions, f"Choose the dimensions [1-{len(dimensions)}]: ")
     algorithm = choose(algorithms, f"Choose an algorithm [1-{len(algorithms)}]: ")
-    protein = choose(proteins, f"Choose a protein [0-{len(proteins)}]: ")
+    protein = choose(proteins, f"Choose a protein [1-{len(proteins)}]: ")
 
     return [save, show, dimension, algorithm, protein]
