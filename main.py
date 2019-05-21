@@ -75,12 +75,10 @@ if __name__ == "__main__":
             row += f"{parameters['Matrix size']},"  # Matrix size
             row += f"{parameters['Iterations']},"   # Iterations
             row += f"{parameters['Look-aheads']},"  # Look-aheads
-            row += f"{parameters['Prob. above']},"  # Probability above average
             row += f"{parameters['Prob. below']},"  # Probability below average
+            row += f"{parameters['Prob. above']},"  # Probability above average
             row += f"{parameters['Beam width']},"   # Beam width
-            row += f"{parameters['???']},"          # Hillclimber parameter(s)?
-            row += f"{energies},"                   # Energies
-            row += f"{matrix_sizes}"                # Matrix sizes
+            row += f"{parameters['???']}"          # Hillclimber parameter(s)?
             row += "\n"
 
             file.write(row)
