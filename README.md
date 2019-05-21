@@ -35,6 +35,7 @@ Dan kan de gebruiker de volgende keuze maken:
 - Een algoritme
 - Een eiwit
 - Een matrix grootte
+
 Per algoritme kunnen er nog meer keuzes gemaakt worden:
 - De hoeveelheid iteraties (voor Random Walk, Greedy en Greedy Look-ahead)
 - De Beam width (voor Beam Search)
