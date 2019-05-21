@@ -90,6 +90,10 @@ def ask_matrix_size(protein_length):
 
         matrix_size = ask_number(lower_limit, upper_limit, "integer", f"What matrix_size to use [{lower_limit}-{upper_limit}]?: ")
 
+        # Ensure odd matrix_size
+        if matrix_size % 2 == 0:
+            matrix_size += 1
+            
         return matrix_size
 
 def print_list(list):
