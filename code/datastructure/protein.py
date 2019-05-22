@@ -140,8 +140,8 @@ class Protein:
 
     def _update_acid_connections(self, index, direction):
         acid = self.get_acid_index(index)
-        # 1 update the connection of the 
-        # 2 
+        # 1 update the connection of the
+        # 2
         pass
 
     def _update_acid_location(self, acid, location):
@@ -205,10 +205,12 @@ class Protein:
 
     def calculate_energy(self, location):
         '''
-        Calculates the energy of an Acid object and updates the energy property
+        Calculates the energy of an Acid object
         '''
         # Checks if the location contains an actual Acid object
         central_acid = self.get_acid(location)
+        energy = 0
+
         if not central_acid == 0:
 
             type = central_acid.type
@@ -229,25 +231,31 @@ class Protein:
                     acid = self.get_acid(location)
 
                     if not acid == 0 and not direction in central_connections:
-                        print("checking energy")
-                        # If the neighbor pair is H-H or H-C the energy decreases by 1
-                        if type == "H":
-                            if acid.type == "H" or acid.type == "C":
-                                return -1
+                        neighbor_type = acid.type
 
-                        # If the neighbor pair is C-H, the energy decreases by 1,
+                        # If the neighbor pair is #-P, the energy doesn't change
+                        if neighbor_type == "P":
+                            energy -= 0
+
+                        # If the neighbor pair is H-H or C-H, the energy decreases by 1
+                        elif neighbor_type == "H":
+                            energy -= 1
+
                         # If the neighbor pair is C-C, the energy decreases by 5
+                        # If the neighbor pair is C-H, the energy decreases by 1
+                        elif neighbor_type == "C":
+                            if type == "C":
+                                energy -= 5
+                            else:
+                                energy -= 1
+
                         else:
-                            if acid.type == "H":
-                                return -1
+                            exit(f"Error: Unknown amino acid type '{neighbor_type}'")
 
-                            elif acid.type == "C":
-                                return -5
             else:
-                print(f"Unknown amino acid type: '{type}'")
-                exit(1)
+                exit(f"Error: Unknown amino acid type '{type}'")
 
-        return 0
+        return energy
 
     def new_energy(self, location):
         """

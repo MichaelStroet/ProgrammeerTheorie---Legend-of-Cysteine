@@ -28,16 +28,16 @@ from protein import Protein
 
 from dict_average import dict_average
 
-def branch_n_bound(protein_string, prob_above_avg, prob_below_avg, dimension, matrix_size):
+def branch_n_bound(p_string, prob_above_avg, prob_below_avg, dimension, matrix_size):
     '''
 
     '''
     # Set global variables
-    global protein_str, prob_below_average, prob_above_average, length_total, energy_min_all, energy_min_partial
+    global protein_string, prob_below_average, prob_above_average, length_total, energy_min_all, energy_min_partial
 
     prob_below_average = prob_below_avg
     prob_above_average = prob_above_avg
-    protein_str = protein_string
+    protein_string = p_string
     length_total = len(protein_string)
 
     # Initialize global dictionaries
@@ -85,7 +85,7 @@ def next_acid(protein, previous_location):
         # Add the acid object to the protein and connect it to the previous acid
         for key_direction in possible_sites:
 
-            amino_acid = protein_str[protein.length]
+            amino_acid = protein_string[protein.length]
 
             previous_acid = protein.acids[previous_location[0], previous_location[1], previous_location[2]]
             previous_acid.add_connection(key_direction)

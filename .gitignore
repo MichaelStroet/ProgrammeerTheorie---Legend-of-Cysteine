@@ -3,3 +3,7 @@
 __pycache__
 test_stuff.py
 backup
+
+results
+figures
+results.csv
