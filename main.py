@@ -87,7 +87,7 @@ if __name__ == "__main__":
 
             file.write(row)
 
-            newfigurepath = os.path.join(directory, "results", "figures", f"{choice_algorithm}", f"{choice_protein}", f"{choice_dimension}", f"{start_time}")
+            newfigurepath = os.path.join(directory, "results", "figures", f"{choice_dimension}", f"{choice_algorithm}", f"{choice_protein}", f"{start_time}")
             if not os.path.exists(newfigurepath):
                 os.makedirs(newfigurepath)
 
