@@ -150,12 +150,14 @@ class Protein:
         """
         # update matrix location
         if acid.location:
-            self.acids[acid.location] = 0
+            x, y, z = acid.location
+            self.acids[x, y, z] = 0
 
         # update acid location
         acid.location = location
 
         if location:
+            x, y, z = location
             self.acids[location] = acid
 
     def neighbors(self, location):
