@@ -1,2 +1,2 @@
-Start time (UTC),Elapsed time,Dimension,Protein,Algorithm,Lowest energy,Matrix size,Iterations,Look-aheads,Probability below average,Probability above average,Beam width,Cut size
-21-05-2019_13-20-27,00:00:33,3D,PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP,Greedy,-16,13,1900,,,,,
+Start time (UTC),Elapsed time,Dimension,Protein,Algorithm,Lowest energy,Evaluations,Matrix size,Iterations,Look-aheads,Probability below average,Probability above average,Beam width,Cut size
+2019-05-22_07-00-32,00:00:00,2D,PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP,Random Walk,-7,765,57,1000,,,,,

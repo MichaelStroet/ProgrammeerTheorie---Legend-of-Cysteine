@@ -55,6 +55,9 @@ if __name__ == "__main__":
     results = run_algorithm(algorithms, choice_algorithm, choice_protein, choice_dimension)
     protein, energies, matrix_sizes, start, elapsed_time, parameters = results
 
+    # Determine the total protein solutions evaluated from the energies dictionary
+    total_evaluated = sum(energies.values())
+
     # Convert the unix timestamps to dates and/or hours, minutes and seconds)
     start_time = time.strftime("%Y-%m-%d_%H-%M-%S", time.gmtime(start))
     elapsed_HHMMSS = time.strftime("%H:%M:%S", time.gmtime(elapsed_time))
@@ -72,6 +75,7 @@ if __name__ == "__main__":
             row += f"{choice_protein},"             # Protein
             row += f"{choice_algorithm},"           # Algorithm
             row += f"{protein.energy},"             # Lowest energy
+            row += f"{total_evaluated},"            # Evaluations
             row += f"{parameters['Matrix size']},"  # Matrix size
             row += f"{parameters['Iterations']},"   # Iterations
             row += f"{parameters['Look-aheads']},"  # Look-aheads
@@ -100,6 +104,7 @@ if __name__ == "__main__":
         protein.visualise(choice_protein)
         plot_matrix_sizes(matrix_sizes, protein.matrix_size)
         print(f"Energies:\n{energies}")
+        print(f"Total proteins evaluated: {total_evaluated}")
         print(f"Matrix sizes:\n{matrix_sizes}")
 
         plt.show()
