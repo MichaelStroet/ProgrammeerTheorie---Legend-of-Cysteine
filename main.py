@@ -56,7 +56,7 @@ if __name__ == "__main__":
     protein, energies, matrix_sizes, start, elapsed_time, parameters = results
 
     # Convert the unix timestamps to dates and/or hours, minutes and seconds)
-    start_time = time.strftime("%d-%m-%Y_%H-%M-%S", time.gmtime(start))
+    start_time = time.strftime("%Y-%m-%d_%H-%M-%S", time.gmtime(start))
     elapsed_HHMMSS = time.strftime("%H:%M:%S", time.gmtime(elapsed_time))
 
     print(f"\nAlgorithm finished\nElapsed time: {elapsed_HHMMSS}")
