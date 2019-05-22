@@ -23,7 +23,7 @@ def beamsearch(p_string, width, dimension, matrix_size):
 
     '''
     # Set global variables
-    global best_nodes, protein_length, protein_string, energy_counter, beam_list, proteins, B_width, matrix_sizes, initial_protein
+    global best_nodes, protein_length, protein_string, energy_counter, proteins, B_width, matrix_sizes, initial_protein
 
     protein_string = p_string
     protein_length = len(protein_string)
@@ -44,9 +44,6 @@ def beamsearch(p_string, width, dimension, matrix_size):
     proteins = {}
     for i in range(B_width):
         proteins[i] = initial_protein
-
-    # Initialize the list that keeps the direction of new acids and energy of the protein
-    beam_list = [0] * B_width
 
     # Start the search
     find_possibilities(previous_location)
@@ -134,7 +131,7 @@ def keep_lowest(list_locations, beam_possibilities, acid_type):
     # to continue folding as it may already have been replaced by a new folding
     temporary_proteins = [0] * B_width
 
-    # Set i to zero for indexing in the beam_list
+    # Set i to zero for indexing
     i = 0
 
     # For each protein in the beam
@@ -163,13 +160,16 @@ def keep_lowest(list_locations, beam_possibilities, acid_type):
         temporary_proteins[i].new_energy(needed_loc)
 
         # Add the direction and energy to the beam list and update the index
-        #beam_list[i] = beam_possibilities[key]
-        #beam_list[i] = [beam_list[i], key]
         i+=1
 
     # Update the official proteins dictionary
     for i in range(B_width):
         proteins[i] = temporary_proteins[i]
+
+    del temporary_proteins
+
+    # Give the user an update
+    print(f"Currently placed {proteins[0].length} acids")
 
     # Check if the protein is complete, if so return, if not continue searching
     if proteins[0].length == protein_length:
