@@ -103,8 +103,11 @@ if __name__ == "__main__":
     if choice_show == "Yes":
         protein.visualise(choice_protein)
         plot_matrix_sizes(matrix_sizes, protein.matrix_size)
-        print(f"Energies:\n{energies}")
-        print(f"Total proteins evaluated: {total_evaluated}")
+
+        print(f"Lowest energy: {protein.energy}")
+        print(f"Total proteins evaluated: {total_evaluated}\n")
+
+        print(f"Energies:\n{energies}\n")
         print(f"Matrix sizes:\n{matrix_sizes}")
 
         plt.show()
