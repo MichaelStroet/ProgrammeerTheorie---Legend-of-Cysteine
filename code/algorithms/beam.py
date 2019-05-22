@@ -55,7 +55,7 @@ def beamsearch(p_string, width, dimension, matrix_size):
     protein_min = proteins[0]
     energy_min = protein_min.energy
 
-    return protein_min, energy_min, matrix_sizes
+    return protein_min, energy_counter, matrix_sizes
 
 # Function that calculates the next steps and chooses the ones with minimal energy
 def find_possibilities(list_locations):
@@ -68,9 +68,7 @@ def find_possibilities(list_locations):
 
     # For each location
     for i in range(len(list_locations)):
-        # Initialize dictionaries
-        #protein_energy ={}
-        #energy = {}
+        energy = {}
 
         previous_location = list_locations[i]
 
@@ -96,6 +94,7 @@ def find_possibilities(list_locations):
 
                 # Place the acid and store the energy
                 protein.add_acid(acid_type, site, direction)
+                protein.new_energy(site)
                 total_energy = protein.energy
 
                 # If the protein is complete, determine the smallest matrix size needed for this protein
@@ -103,6 +102,10 @@ def find_possibilities(list_locations):
                     min_matrix_size = protein.smallest_matrix()
                     matrix_sizes[total_energy] = matrix_sizes.get(total_energy, {})
                     matrix_sizes[total_energy][min_matrix_size] = matrix_sizes[total_energy].get(min_matrix_size, 0) + 1
+
+                    # Update the dictonary for histogram of solutions
+                    energy_counter[total_energy] = energy_counter.get(total_energy, 0) + 1
+
 
                 # Create a variable that remembers the place of the protein in the list (i) and the direction of the next acid
                 direction = str(i) + str(direction)
@@ -113,9 +116,9 @@ def find_possibilities(list_locations):
                 # Remove the acid
                 protein.remove_acid(previous_energy)
 
-            # Sort all the children and reconvert it into a dict
-            sorted_possibilities = sorted(beam_possibilities.items(), key=operator.itemgetter(1))
-            beam_possibilities = dict(sorted_possibilities)
+    # Sort all the children and reconvert it into a dict
+    sorted_possibilities = sorted(beam_possibilities.items(), key=operator.itemgetter(1))
+    beam_possibilities = dict(sorted_possibilities)
 
     # Call function that keeps only the proteins with the lowest energy
     keep_lowest(list_locations, beam_possibilities, acid_type)
@@ -160,12 +163,12 @@ def keep_lowest(list_locations, beam_possibilities, acid_type):
         temporary_proteins[i].new_energy(needed_loc)
 
         # Add the direction and energy to the beam list and update the index
-        beam_list[i] = beam_possibilities[key]
-        beam_list[i] = [beam_list[i], key]
+        #beam_list[i] = beam_possibilities[key]
+        #beam_list[i] = [beam_list[i], key]
         i+=1
 
     # Update the official proteins dictionary
-    for i in range(len(beam_list)):
+    for i in range(B_width):
         proteins[i] = temporary_proteins[i]
 
     # Check if the protein is complete, if so return, if not continue searching

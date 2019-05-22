@@ -51,8 +51,7 @@ In dit experiment proberen wij een eiwit zo stabiel mogelijk te vouwen. Dit gebe
 
 Wij hebben 6 verschillende algoritmes geimplementeerd:
 - Random Walk
-- Greedy
-- Greedy met look-ahead
+- Greedy (met look-ahead)
 - Beam Search
 - Branch and Bound
 - Hill Climber
@@ -65,10 +64,14 @@ Voor meer informatie zie: [code/algorithms/README.md](https://github.com/Michael
 
 ## References
 
-Engstler, J., & Giovambattista, N. (2018). Comparative Study of the Effects of Temperature and Pressure on the Water-Mediated Interactions between Apolar Nanoscale Solutes. The Journal of Physical Chemistry B, 123(5), 1116-1128.
+Engstler, J., & Giovambattista, N. (2018). Comparative Study of the
+    Effects of Temperature and Pressure on the Water-Mediated Interactions between Apolar Nanoscale Solutes. The Journal of Physical Chemistry B, 123(5), 1116-1128.
 
-Chen, M. & Huang, W. (2005). A Branch and Bound Algorithm for the Protein Folding Problem in the HP Lattice Model. Genomics, Proteomics & Bioinformatics, 3(4), 225-230.
+Chen, M. & Huang, W. (2005). A Branch and Bound Algorithm for the
+    Protein Folding Problem in the HP Lattice Model. Genomics, Proteomics & Bioinformatics, 3(4), 225-230.
 
-Selkoe, D. J. (2003). Folding proteins in fatal ways. Nature, 426(6968), 900.
+Selkoe, D. J. (2003). Folding proteins in fatal ways. Nature,
+    426(6968), 900.
 
-Zhang, Jinfeng, Samuel C. Kou, and Jun S. Liu. (2007). Biopolymer structure simulation and optimization via fragment regrowth Monte Carlo. Journal of Chemical Physics 126(22): 225101.
+Zhang, Jinfeng, Samuel C. Kou, and Jun S. Liu. (2007). Biopolymer
+    structure simulation and optimization via fragment regrowth Monte Carlo. Journal of Chemical Physics 126(22): 225101.
