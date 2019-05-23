@@ -4,10 +4,9 @@ Elk bestand bevat een eigen algoritme:
 
 
 ## **Random Walk**
+![Random Walk](assets/README-0e88c2fc.png)
 
-## **Greedy**
-
-## **Greedy Lookahead**
+## **Greedy (Look-ahead)**
 
 ![Greedy Lookahead](assets/README-73a621af.png)
 
