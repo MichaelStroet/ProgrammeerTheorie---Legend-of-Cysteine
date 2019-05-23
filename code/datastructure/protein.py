@@ -127,7 +127,7 @@ class Protein:
         self.energy -= self.calculate_energy(acid.location)
         self._update_acid_location(acid, None)
 
-    def add_acid_index(self, index, location):
+    def add_acid_index(self, index, location, direction):
         """
         Adds an acid object based on an index
         """
@@ -135,14 +135,25 @@ class Protein:
         self._update_acid_location(acid, location)
         self.energy += self.calculate_energy(acid.location)
         # Update connections
-        self._update_acid_connections(index)
-        pass
+        self._update_acid_connections(index, direction)
 
-    def _update_acid_connections(self, index, direction):
+    def _update_acid_connections(self, index: int, direction: str):
+        '''
+        Updates the connections of the acids
+        '''
         acid = self.get_acid_index(index)
-        # 1 update the connection of the
-        # 2
-        pass
+
+        # change the next connection of the previous acid
+        if self.get_acid_index(index - 1).location:
+            acid.connections["previous"] = direction
+            previous_acid = self.get_acid_index(index - 1)
+            previous_acid.connections["next"] = direction
+
+        # change the previous connection of the next acid
+        elif self.get_acid_index(index + 1).location:
+            acid.connections["next"] = direction
+            next_acid = self.get_acid_index(index + 1)
+            next_acid.connections["previous"] = direction
 
     def _update_acid_location(self, acid, location):
         """
@@ -158,7 +169,7 @@ class Protein:
 
         if location:
             x, y, z = location
-            self.acids[location] = acid
+            self.acids[x, y, z] = acid
 
     def neighbors(self, location):
         '''

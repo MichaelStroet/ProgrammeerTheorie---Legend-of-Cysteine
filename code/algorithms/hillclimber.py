@@ -10,112 +10,82 @@ from acid import Acid
 
 from functions import new_location
 
-def hillclimber(start_protein, iterations):
+def hillclimber(protein, iterations, cut_acids):
     """
     This algorithm will decrease the energy state of a random protein
     by refolding parts of the protein structure
-    The input is a random start_position of a protein
+    The input is a random start_position of a protein, the number of iterations and the number of acids to cut away
     """
-    print(start_protein)
-    print(start_protein.length)
- 
-    # first acid location
-    acid_z, acid_y, acid_x = start_protein.first_acid
-    energy = start_protein.energy
-    print([acid_z, acid_y, acid_x], energy)
+    print(protein)
+    cut_acids = 4
+    new_protein = copy.deepcopy(protein)
+    print([acid.location for acid in protein.acid_list])
+    acid_index = len(protein.acid_list) - 1
 
-    # retrieve the first acid
-    acid = start_protein.acids[acid_z, acid_y, acid_x]
-
-    # create a list to hold protein locations
-    acid_locations = []
-    
-    # fill the list with acid locations
-    # todo: check if I can get the connections more easily with just acid.location instead of connections
-    while not acid.connections["next"] == "":
-        acid = start_protein.acids[acid_z, acid_y, acid_x]
-        acid_z, acid_y, acid_x = acid.location
-        acid_locations.append([acid_z, acid_y, acid_x])
-
-        # todo: change matrix_length to matrix_size after push
-        acid_z, acid_y, acid_x = new_location([acid_z, acid_y, acid_x], acid.connections["next"], 1, start_protein.matrix_size)
-
-    print(acid_locations)
-    protein = copy.deepcopy(start_protein)
-
-    # remove and add acids every iteration
     for i in range(0, iterations):
-        protein_searched = copy.deepcopy(start_protein)
-        incomplete_protein, removed_acids, binding_sites = remove_acids(protein, acid_locations)
-        protein_searched = new_path(incomplete_protein, binding_sites, removed_acids, 0)
-        print("iteration:", i + 1)
+        # determine cuts in the protein, leaving atleast one acid
+        cut_start = random.randint(-1, acid_index - cut_acids)
+        cut_end = cut_start + cut_acids + 1
+        # remove the acids in between the cuts
+        remove_acids(new_protein, cut_start, cut_end)
+        add_acids(new_protein, cut_start, cut_end)
+        print(new_protein.energy)
+        # add new acids
+        # add acids
+        # compare energy
+        pass
 
+    pass
 
-def remove_acids(protein, acid_locations):
-    """
-    This function removes acids of a folded protein
-    """
-
-    # determine index and range
-    acid_index = len(acid_locations) - 1
-    cut_range = 2
-
-    # make two cuts in the protein, leaving atleast one acid
-    cut_start = random.randint(-1, acid_index - cut_range)
-    cut_end = cut_start + cut_range + 1
-
-    # remember the acids that the newly placed acids will need to be attached to
-    start, end = 0, 0
-
-    print("start ", cut_start,"; end: ", cut_end)
-
-    # determine the acid before the cut
-    if cut_start > -1:
-        start_layer, start_row, start_column = acid_locations[cut_start]
-        start = protein.acids[start_layer, start_row, start_column]
-
-        # remove the next connection
-        start.connections["next"] = ""
-
-    # determine the acid after the second cut
-    if cut_end < acid_index:
-        end_layer, end_row, end_column = acid_locations[cut_end]
-        end = protein.acids[end_layer, end_row, end_column]
-
-        # remove the previous connection
-        end.connections["previous"] = ""
-
-    # every acid between the start and end is removed
-    acids_removed = []
+def remove_acids(protein, cut_start, cut_end):
     for i in range(cut_start + 1 , cut_end):
-        acid_layer, acid_row, acid_column = acid_locations[i]
-        acid_removed = protein.acids[acid_layer, acid_row, acid_column]
-        acids_removed.append(acid_removed)
-        acid_removed = 0
+        protein.remove_acid_index(i)
 
     print(protein)
-    print("cut away acids:", len(acids_removed))
+    return(protein)
 
-    return protein, acids_removed, [start, end]
-
-
-def new_path(protein, binding_sites, removed_acids, index):
-    print("lets start a new journey, a path to the unknown")
-    start, end = binding_sites
-
+def add_acids(protein, start, end):
     # if there is a start and end acid outside of the cut
-    if not start == 0 and not end == 0:
-        print("start, end:", start.location, end.location)
+    acid_index_list = list(range(start + 1, end))
+    end_location = None
+    if start >= 0 and end <= protein.length - 1:
+        end_location = protein.get_acid_index(end).location
+        current_location = protein.get_acid_index(start).location
+
+        # this is the more intricate way:
+        # get possible locations from start
+        # calculate manhattan distance for every possible location
+        # remove locations that aren't viable
+
+        # while not possible locations 
 
     # when the last acid is cut off 
-    elif not start == 0:
-        print("start:", start.location)
+    elif start >= 0:
+        current_location = protein.get_acid_index(start).location
 
     # when the first acid is cut off
     else:
-        print("end:",end.location)
+        acid_index_list = acid_index_list[::-1]
+        current_location = protein.get_acid_index(end).location
+        
+    _add_acids(protein, acid_index_list, end_location, current_location, 0)
+
+    #for i in range(cut_start + 1, cut_end):
+    #    protein.add_acid_index(i)
     print(protein)
     return(protein)
 
 
-# for add acid I need: type, location and direction_previous
+def _add_acids(protein, acid_index_list: list, end_location: list, previous_location: list, depth: int):
+    print("acids:", acid_index_list, "end_location", end_location, "previous_location", previous_location, "depth", depth)
+    if depth == len(acid_index_list) - 1:
+        pass
+
+    else:
+        possible_sites = protein.possible_sites(previous_location)
+        print(possible_sites)
+        for direction in possible_sites:
+            location = possible_sites[direction]
+            print(direction)
+            protein.add_acid_index(acid_index_list[depth], location, direction)
+            return
