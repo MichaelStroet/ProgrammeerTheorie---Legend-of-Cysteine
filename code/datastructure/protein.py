@@ -207,7 +207,7 @@ class Protein:
             if self.get_acid(neighbor_location) == 0:
                 # If the current protein is a straight line down, remove symmetrical options
                 if current_row - first_row == self.length - 1:
-                    if direction in ["down", "left", "out"]:
+                    if direction in ["down", "right", "out"]:
                         possible_sites[direction] = neighbor_location
                 else:
                     possible_sites[direction] = neighbor_location
