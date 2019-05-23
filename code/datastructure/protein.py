@@ -116,9 +116,9 @@ class Protein:
         self.length -= 1
 
     def get_acid_index(self, index):
-        """
+        '''
         Returns an acid object from a list
-        """
+        '''
         return self.acid_list[index]
 
     def remove_acid_index(self, index):
@@ -145,31 +145,31 @@ class Protein:
 
         # change the next connection of the previous acid
         if self.get_acid_index(index - 1).location:
-            acid.connections["previous"] = direction
+            acid.connections["previous"] = opposite(direction)
             previous_acid = self.get_acid_index(index - 1)
             previous_acid.connections["next"] = direction
-
+            
         # change the previous connection of the next acid
         elif self.get_acid_index(index + 1).location:
-            acid.connections["next"] = direction
+            acid.connections["next"] = opposite(direction)
             next_acid = self.get_acid_index(index + 1)
             next_acid.connections["previous"] = direction
-
+            
     def _update_acid_location(self, acid, location):
         """
         Updates locations for an acid
         """
         # update matrix location
         if acid.location:
-            x, y, z = acid.location
-            self.acids[x, y, z] = 0
+            z, y, x = acid.location
+            self.acids[z, y, x] = 0
 
         # update acid location
         acid.location = location
 
         if location:
-            x, y, z = location
-            self.acids[x, y, z] = acid
+            z, y, x = location
+            self.acids[z, y, x] = acid
 
     def neighbors(self, location):
         '''
