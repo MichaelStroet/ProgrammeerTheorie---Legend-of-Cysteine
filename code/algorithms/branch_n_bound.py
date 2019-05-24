@@ -4,7 +4,7 @@
 
 """
 Probability based Branch and Bound
-This algorithm will fold a protein by adding new acids to the protein and saving
+This script will fold a protein by adding new acids to the protein and saving
 it if it has the lowest energy found until now. It will try to place all acids
 to that protein before exploring other folding options.
 
@@ -121,7 +121,7 @@ def next_acid(protein, previous_location):
                 # Update lowest energy among all completed proteins
                 if energy < energy_min_all:
                     energy_min_all = energy
-                    print("New minimum energy found : ",energy_min_all)
+                    print(f"New minimum energy found: {energy_min_all}")
                     protein_min = copy.deepcopy(protein)
 
                 # Determine the smallest matrix size needed for this protein

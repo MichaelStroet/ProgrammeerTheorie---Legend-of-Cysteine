@@ -55,7 +55,7 @@ def greedy(protein_string, look_aheads, N_tries, dimension, matrix_size):
             if energy < energy_min:
                 energy_min = energy
                 protein_min = copy.deepcopy(protein)
-                print(f"New minimum energy found : {energy_min}")
+                print(f"New minimum energy found: {energy_min}")
 
             # Update the dictonary for histogram of solutions
             energy_counter[energy] = energy_counter.get(energy, 0) + 1

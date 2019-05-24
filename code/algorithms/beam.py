@@ -4,8 +4,8 @@
 
 """
 Beam Search
-This algorithm will fold a protein by keeping track of several options per
-length and adding a new acid to each option before continuing.
+This script will fold a protein by keeping track of several options (beam width)
+per length and adding a new acid to each option before continuing.
 """
 
 import copy, operator, re
@@ -177,7 +177,7 @@ def keep_lowest(list_locations, beam_possibilities, acid_type):
     del temporary_proteins
 
     # Give the user an update
-    print(f"Currently placed {proteins[0].length} acids per protein")
+    print(f"New protein length: {proteins[0].length} acids ")
 
     # Check if the protein is complete, if so return, if not continue searching
     if proteins[0].length == protein_length:
