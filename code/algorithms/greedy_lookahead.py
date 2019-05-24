@@ -5,7 +5,8 @@
 """
 Greedy with look-ahead
 This algorithm will fold a protein using a greedy algorithm with look-ahead
-Greedy in this case means always placing an amino acid at the location that results in the lowest energy
+Greedy in this case means always placing an amino acid at the location that
+results in the lowest energy.
 """
 
 import copy
@@ -17,8 +18,11 @@ from protein import Protein
 
 def greedy(protein_string, look_aheads, N_tries, dimension, matrix_size):
     '''
-    The input is a string that represents the proteins amino acid sequence
-    The output is a protein folded by a greedy look_ahead algorithm
+    Runs a Greedy look-ahead algorithm in which N_tries proteins are randomly
+    created from a string of amino acid types. The best conformation,
+    the one that has the lowest energy, is saved and returned along with
+    a dictionary of all energy counts and the minimal matrix sizes for the folded
+    protein.
     '''
     # Create a protein object with a specific matrix size
     protein = Protein(matrix_size, dimension)
@@ -110,9 +114,7 @@ def look_ahead(protein, look_aheads, protein_string, acid_index):
 
 def greedy_fold(protein, protein_string, look_aheads):
     '''
-    The input is the protein matrix, string and length
-    and the location of the last placed amino acid
-    The ouput is a folded protein
+    
     '''
 
     # For every direction for the following amino acid

@@ -4,8 +4,8 @@
 
 """
 Beam Search
-
-This algorithm will fold a protein using a beam search algorithm
+This algorithm will fold a protein by keeping track of several options per
+length and adding a new acid to each option before continuing.
 """
 
 import copy
@@ -20,7 +20,11 @@ from operator import itemgetter
 
 def beamsearch(p_string, width, dimension, matrix_size):
     '''
-
+    Runs a Beam Search algorithm with a predetermined width which determies how
+    many proteins are kept at each new generation. The best conformation,
+    the one that has the lowest energy, is saved and returned along with
+    a dictionary of all energy counts and the minimal matrix sizes for the folded
+    protein.
     '''
     # Set global variables
     global best_nodes, protein_length, protein_string, energy_counter, proteins, B_width, matrix_sizes, initial_protein
@@ -123,6 +127,9 @@ def find_possibilities(list_locations):
 
 def keep_lowest(list_locations, beam_possibilities, acid_type):
 
+    '''
+    Keep only *B_width* number of children with the lowest energy among all
+    '''
     previous_locations = []
 
     # Initialize the temporary list that holds copies of the offocial proteins

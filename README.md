@@ -14,11 +14,9 @@ periode 5
 ## Aan de slag
 
 ### Vereisten
-Deze codebase is volledig geschreven in Python3.6.3 In requirements.txt staan alle benodigde packages om de code succesvol te draaien. Deze zijn gemakkelijk te installeren via pip dmv. de volgende instructie:
+Deze codebase is volledig geschreven in Python3.7 In requirements.txt staan alle benodigde packages om de code succesvol te draaien. Deze zijn gemakkelijk te installeren via pip dmv. de volgende instructie:
 
 `pip install -r requirements.txt`
-
-(I HAVE COPIED THIS FROM EXAMPLE WEBSITE )
 
 ### Structuur
 Alle Python scripts staan in de folder Code. In de map Data zitten alle input waardes en in de map Results worden alle resultaten opgeslagen door de code.
@@ -26,7 +24,7 @@ Alle Python scripts staan in de folder Code. In de map Data zitten alle input wa
 ### Test
 Om de code te draaien gebruik de instructie:
 
-`python3 main.py`
+`python main.py`
 
 Dan kan de gebruiker de volgende keuze maken:
 - Resultaten opslaan of niet

@@ -151,17 +151,17 @@ class Protein:
             acid.connections["previous"] = opposite(direction)
             previous_acid = self.get_acid_index(index - 1)
             previous_acid.connections["next"] = direction
-            
+
         # change the previous connection of the next acid
         elif self.get_acid_index(index + 1).location:
             acid.connections["next"] = opposite(direction)
             next_acid = self.get_acid_index(index + 1)
             next_acid.connections["previous"] = direction
-            
+
     def _update_acid_location(self, acid, location):
-        """
+        '''
         Updates locations for an acid
-        """
+        '''
         # update matrix location
         if acid.location:
             z, y, x = acid.location
@@ -202,9 +202,6 @@ class Protein:
         # Get the acid objects surrounding the last-placed acid
         neighbors = self.neighbors(location)
 
-        '''
-        TO DO: First step into a new dimension is symmetrical!
-        '''
         # Determine in which neighboring spots a new acid can be placed
         for direction, neighbor_location in neighbors.items():
             if self.get_acid(neighbor_location) == 0:
@@ -272,62 +269,10 @@ class Protein:
         return energy
 
     def new_energy(self, location):
-        """
+        '''
         Updates the energy of the protein
-        """
+        '''
         self.energy += self.calculate_energy(location)
-
-    def check_energy(self, location, type):
-        '''
-        Calculates the energy of an Acid object and returns an integer
-        TO DO: Remove type and make clear this can check any random acid
-        '''
-        # Checks if the location contains an actual Acid object
-        central_acid = self.get_acid(location)
-        if not central_acid == 0:
-
-            # If the acid is polar, the energy stays the same
-            if type == "P":
-                return 0
-
-            elif type == "H" or type == "C":
-
-                central_connections = central_acid.connections.values()
-
-                # Get the neighboring locations
-                neighbor_acids = self.neighbors(location)
-
-                new_energy = 0
-
-                # Loop over each neighbor and check the new energy
-                for direction, neighbor_location in neighbor_acids.items():
-                    acid = self.get_acid(neighbor_location)
-
-                    if not acid == 0 and not direction in central_connections:
-
-                        # If the neighbor pair is H-H, the energy decreases by 1,
-                        # If the neighbor pair is H-C, the energy decreases by 1,
-                        if type == "H":
-                            if acid.type == "H" or acid.type == "C":
-                                new_energy -= 1
-
-                        # If the neighbor pair is C-H, the energy decreases by 1,
-                        # If the neighbor pair is C-C, the energy decreases by 5
-                        else:
-                            if acid.type == "H":
-                                new_energy -= 1
-
-                            elif acid.type == "C":
-                                new_energy -= 5
-
-                return new_energy
-
-            else:
-                print(f"Unknown amino acid type: '{type}'")
-                exit(1)
-
-        else:
-            return 0
 
     def visualise(self, protein_string):
         '''

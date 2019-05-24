@@ -1,7 +1,12 @@
 # Ruby Bron       12474223
 # Sophie Stiekema 10992499
 # Michael Stroet  11293284
-
+"""
+Random walk
+This algorithm will fold a number of proteins randomly, without any regard for
+the lowest energy. It compleytely folds a protein one way before trying another
+option. 
+"""
 import copy
 import numpy as np
 
@@ -13,7 +18,8 @@ def random_walk(protein_string, N_tries, dimension, matrix_size):
     Runs a random walk algorithm in which N_tries proteins are randomly
     created from a string of amino acid types. The best conformation,
     the one that has the lowest energy, is saved and returned along with
-    a dictionary of all N_tries energy counts.
+    a dictionary of all N_tries energy counts and the minimal matrix sizes for
+    the folded protein.
     '''
     # Create a protein object with a specific matrix size
     protein = Protein(matrix_size, dimension)
