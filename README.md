@@ -26,7 +26,7 @@ Alle Python scripts staan in de folder Code. In de map Data zitten alle input wa
 ### Test
 Om de code te draaien gebruik de instructie:
 
-`python3 main.py`
+`python main.py`
 
 Dan kan de gebruiker de volgende keuze maken:
 - Resultaten opslaan of niet

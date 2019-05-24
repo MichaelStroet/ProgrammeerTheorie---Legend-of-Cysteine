@@ -2,26 +2,15 @@
 # Sophie Stiekema 10992499
 # Michael Stroet  11293284
 
-'''
+"""
 Probability based Branch and Bound
 
-This algorithm will fold a protein using a probability based version of the
-Branch and Bound algorithm.  If the probabilities for pruning are set to 1 and 1,
-this algorithm behaves as a depth-first alhorithm and searches the whole statespace
-for the best solution.
-
-This code was inspired by the pseudo-code from:
-
-Mao Chen, Wen-Qi Huang,
-A Branch and Bound Algorithm for the Protein Folding Problem in the HP Lattice Model,
-Genomics, Proteomics & Bioinformatics,
-Volume 3, Issue 4,
-2005,
-Pages 225-230
-'''
+This code was inspired by the pseudo-code from Mao Chen & Wen-Qi Huang, 2005.
+"""
 
 import numpy as np
 import copy
+import sys
 
 from acid import Acid
 from protein import Protein
@@ -30,7 +19,10 @@ from dict_average import dict_average
 
 def branch_n_bound(p_string, prob_above_avg, prob_below_avg, dimension, matrix_size):
     '''
-
+    This algorithm will fold a protein using a probability based version of the
+    Branch and Bound algorithm.  If the probabilities for pruning are set to 1 and 1,
+    this algorithm behaves as a depth-first alhorithm and searches the whole statespace
+    for the best solution.
     '''
     # Set global variables
     global protein_string, prob_below_average, prob_above_average, length_total, energy_min_all, energy_min_partial
@@ -41,7 +33,8 @@ def branch_n_bound(p_string, prob_above_avg, prob_below_avg, dimension, matrix_s
     length_total = len(protein_string)
 
     # Initialize global dictionaries
-    global energy_counter, matrix_sizes
+    global energy_counter, matrix_sizes, energy_tracker
+    energy_tracker = [{} for i in range(length_total)]
     energy_counter = {}
     matrix_sizes = {}
 
@@ -61,18 +54,19 @@ def branch_n_bound(p_string, prob_above_avg, prob_below_avg, dimension, matrix_s
     # Call next_acid function to place a new amino acid
     next_acid(protein, previous_location)
 
+    print(energy_tracker)
+    print(energy_counter)
+    print(sum(energy_counter.values()))
     return best_protein, energy_counter, matrix_sizes
 
 # Function that places an amino acid
 def next_acid(protein, previous_location):
-
+    '''
+    Places the next acid and sees how the energy of the (partial) protein compares
+    to the average. There is a random element in the decision  to continue adding
+    acids to this protein or to prune this branch.
+    '''
     global energy_min_all, best_protein
-
-    '''
-    Check possible sites for the next amino acid,
-    see whether the matrix box left, up & right are empty,
-    if so store their locations and direction in a dictionnary
-    '''
 
     # Get the possible sites for placing a new acid
     possible_sites = protein.possible_sites(protein.last_acid)
@@ -97,8 +91,10 @@ def next_acid(protein, previous_location):
             protein.new_energy(protein.last_acid)
 
             # Add the energy to the dictionary counter & calculate the average
-            energy_counter[protein.energy] = energy_counter.get(protein.energy, 0) + 1
-            average_energy = dict_average(energy_counter)
+            index = protein.length - 1
+            energy_tracker[index][protein.energy] = energy_tracker[index].get(protein.energy, 0) + 1
+
+            average_energy = dict_average(energy_tracker[index])
 
             # Update lowest energy in the partial proteins list
             if protein.energy <= energy_min_partial[protein.length - 1]:
@@ -111,7 +107,10 @@ def next_acid(protein, previous_location):
 
             # If it is the last amino acid of the protein string
             if protein.length == length_total:
+
                 energy = protein.energy
+                energy_counter[energy] = energy_counter.get(energy, 0) + 1
+
 
                 # Update lowest energy among all completed proteins
                 if energy < energy_min_all:
@@ -123,6 +122,13 @@ def next_acid(protein, previous_location):
                 min_matrix_size = protein.smallest_matrix()
                 matrix_sizes[energy] = matrix_sizes.get(energy, {})
                 matrix_sizes[energy][min_matrix_size] = matrix_sizes[energy].get(min_matrix_size, 0) + 1
+                if sum(energy_counter.values()) == 21216:
+                    #print(best_protein)
+                    print(energy_tracker)
+                    print(energy_counter)
+                    print(sum(energy_counter.values()))
+                    print(energy_counter.values())
+                    sys.quit(0)
 
             # If it is a polar amino acid, add a new acid
             elif amino_acid == "P":
