@@ -4,6 +4,9 @@
 
 """
 Probability based Branch and Bound
+This algorithm will fold a protein by adding new acids to the protein and saving
+it if it has the lowest energy found until now. It will try to place all acids
+to that protein before exploring other folding options.
 
 This code was inspired by the pseudo-code from Mao Chen & Wen-Qi Huang, 2005.
 """
@@ -122,13 +125,6 @@ def next_acid(protein, previous_location):
                 min_matrix_size = protein.smallest_matrix()
                 matrix_sizes[energy] = matrix_sizes.get(energy, {})
                 matrix_sizes[energy][min_matrix_size] = matrix_sizes[energy].get(min_matrix_size, 0) + 1
-                if sum(energy_counter.values()) == 21216:
-                    #print(best_protein)
-                    print(energy_tracker)
-                    print(energy_counter)
-                    print(sum(energy_counter.values()))
-                    print(energy_counter.values())
-                    sys.quit(0)
 
             # If it is a polar amino acid, add a new acid
             elif amino_acid == "P":
