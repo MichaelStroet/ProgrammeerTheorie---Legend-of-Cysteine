@@ -100,8 +100,8 @@ def next_acid(protein, previous_location):
             average_energy = dict_average(energy_tracker[index])
 
             # Update lowest energy in the partial proteins list
-            if protein.energy <= energy_min_partial[protein.length - 1]:
-                energy_min_partial[protein.length - 1] = protein.energy
+            if protein.energy <= energy_min_partial[index]:
+                energy_min_partial[index] = protein.energy
 
             '''
             Now we will see whether to continue adding acids to this protein
@@ -135,7 +135,7 @@ def next_acid(protein, previous_location):
 
                 # If the curent energy is equal to or below the lowest energy of
                 # the partial protein, add a new amino acid
-                if protein.energy <= energy_min_partial[protein.length - 1]:
+                if protein.energy <= energy_min_partial[index]:
                     next_acid(protein, location)
 
                 # If the curent energy is below the average energy of

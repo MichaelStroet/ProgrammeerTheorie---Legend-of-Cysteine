@@ -4,9 +4,10 @@
 
 """
 Greedy with look-ahead
-This algorithm will fold a protein using a greedy algorithm with look-ahead
+This algorithm will fold a number of proteins using a greedy algorithm with look-ahead
 Greedy in this case means always placing an amino acid at the location that
-results in the lowest energy.
+results in the lowest energy. It compleytely folds a protein one way before
+trying another option. 
 """
 
 import copy
@@ -31,7 +32,7 @@ def greedy(protein_string, look_aheads, N_tries, dimension, matrix_size):
     protein.place_first_two(protein_string)
     location = protein.last_acid
 
-    energy_min = -1
+    energy_min = 0
 
     energy_counter = {}
     matrix_sizes = {}
@@ -53,7 +54,7 @@ def greedy(protein_string, look_aheads, N_tries, dimension, matrix_size):
             energy = protein.energy
 
             # When its energy is lower than lowest energy found, save the protein
-            if energy <= energy_min:
+            if energy < energy_min:
                 energy_min = energy
                 protein_min = copy.deepcopy(protein)
                 print(f"found new lowest energy: {energy_min}")
@@ -66,11 +67,12 @@ def greedy(protein_string, look_aheads, N_tries, dimension, matrix_size):
             matrix_sizes[energy] = matrix_sizes.get(energy, {})
             matrix_sizes[energy][min_matrix_size] = matrix_sizes[energy].get(min_matrix_size, 0) + 1
 
+
     return protein_min, energy_counter, matrix_sizes
 
 def look_ahead(protein, look_aheads, protein_string, acid_index):
     '''
-    Looks ahead of the protein and saves the energy
+
     '''
     # If there are no more steps to be taken, return the current energy
     if look_aheads < 1 or acid_index >= len(protein_string):
@@ -114,7 +116,7 @@ def look_ahead(protein, look_aheads, protein_string, acid_index):
 
 def greedy_fold(protein, protein_string, look_aheads):
     '''
-    
+
     '''
 
     # For every direction for the following amino acid
