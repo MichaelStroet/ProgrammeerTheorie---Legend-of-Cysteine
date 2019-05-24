@@ -2,16 +2,16 @@
 # Sophie Stiekema 10992499
 # Michael Stroet  11293284
 
-import time
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
+import time
 
 # Import algorithms
-from random_walk import random_walk
-from greedy_lookahead import greedy
 from beam import beamsearch
 from branch_n_bound import branch_n_bound
+from greedy_lookahead import greedy
 from hillclimber import hillclimber
+from random_walk import random_walk
 
 # Import visualisation functions
 from graph1D import plot1D

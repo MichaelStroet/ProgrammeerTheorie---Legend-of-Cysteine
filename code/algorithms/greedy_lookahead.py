@@ -9,9 +9,8 @@ Greedy means always placing the next amino acid at the location that has the low
 The algorithm keeps placing amino acids until the protein is complete or if it gets stuck.
 """
 
-import copy
+import copy, random
 import numpy as np
-import random
 
 from acid import Acid
 from protein import Protein
