@@ -9,7 +9,7 @@
 
 ## **Random Walk**<a name="Randomwalk"></a>
 
-Random Walk, ookwel Random Sampling genoemd, is het willekeurig creëren van oplossingen in de hoop dat er een goede oplossing uit komt. Bij het vouwen van eitwitten worden er één voor één aminozuren op een willekeurig naastliggende locatie geplaatst. Voor elk geplaatst aminozuur wordt de energie bijdrage daarvan bepaald en opgeteld bij het totaal. Dit wordt herhaald totdat alle aminozuren zijn geplaatst of totdat er geen locaties meer zijn om een nieuw aminozuur te plaatsen (bijvoorbeeld midden in een spiraal).
+Random Walk, ookwel Random Sampling genoemd, is het willekeurig creëren van oplossingen in de hoop dat er een goede oplossing uit komt. Bij het vouwen van eiwitten worden er één voor één aminozuren op een willekeurig naastliggende locatie geplaatst. Voor elk geplaatst aminozuur wordt de energie bijdrage daarvan bepaald en opgeteld bij het totaal. Dit wordt herhaald totdat alle aminozuren zijn geplaatst of totdat er geen locaties meer zijn om een nieuw aminozuur te plaatsen (bijvoorbeeld midden in een spiraal).
 
 De random walk wordt een aantal keer herhaald, bepaald door de gebruiker, en retourneert daarna de beste oplossing.
 
