@@ -1,11 +1,12 @@
 # Code
 
-In de algorithms map zijn alle bestanden te vinden voor alle algoritmes die aangeroepen worden in main.
+In de [algorithms](/algorithms/README.md) map bevinden zich alle algoritmes die aangeroepen kunnen worden in main.
 
-In de datastructure map zijn er twee bestanden die de Protein en Acid clas aanmaken en nog een betsand die meerdere functies bevat die in andere bestanden gebruikt worden.
+In de [datastructure](/datastructure/README.md) map bevinden zich de bestanden die de Protein en Acid classes aanmaken. Er is ook een extra bestand met hulpfuncties voor de Protein class.
 
-In de visualisations map zijn de betsanden te vinden die zorgen voor het maken van de grafieken van de eiwitten in 1D, 2D en 3D.
+In de [visualisations](/visualisations/README.md) map bevinden zich de bestanden die de resultaten kunnen visualiseren.
 
-In deze code map zijn er nog 3 losse bestanden: dict_average retourneert het gemiddelde van een dictionnary die bepaalde waardes opslaat en bijhoudt hoe vaak deze opkomen.
-Run_algorithm wordt door main aangeroepen en roept zelf een specifiek algoritme aan.
-User_input bevat meerdere functies die gebruikt worden als het programma getsart wordt door de user.
+Verder bevat deze map drie extra bestanden
+- dict_average: Berekent het gemiddelde waarde van dictionaries met een specifieke vorm. De keys zijn de getallen waarvan het gemiddelde berekent wordt en de bijbehoorende waardes zijn de frequentie van die getallen.
+- Run_algorithm: Wordt in main aangeroepen nadat de gebruiker zijn/haar keuzes heeft gemaakt en voert deze keuzes uit.
+- User_input: Bevat meerdere functies die de gebruiker om getallen kan vragen. Alleen geldige invoeringen worden geaccepteerd.
