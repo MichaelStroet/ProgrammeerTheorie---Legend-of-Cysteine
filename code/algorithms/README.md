@@ -1,10 +1,10 @@
 # Algoritmes
 
-1. [Random Walk](#Randomwalk)
-2. [Greedy (Look-ahead)](#Greedy)
-3. [Beam Search](#Beam)
-4. [Probability based Branch and Bound](#BranchnBound)
-5. [Hill Climber](#Hillclimber)
+1. [Random Walk](#random-walk)
+2. [Greedy (Look-ahead)](#greedy-look-ahead)
+3. [Beam Search](#beam-search)
+4. [Probability based Branch and Bound](#probability-based-branch-and-bound)
+5. [Hill Climber](#hill-climber)
 
 
 ## **Random Walk**<a name="Randomwalk"></a>

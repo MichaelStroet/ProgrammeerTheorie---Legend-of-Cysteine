@@ -1,6 +1,7 @@
 # Programmeer Theorie - Legend of Cysteine
 
 UvA minor programmeren 2019 - ProgrammeerTheorie / Heuristiek (5062PRTH6Y)
+
 periode 5
 
 ### Auteurs
