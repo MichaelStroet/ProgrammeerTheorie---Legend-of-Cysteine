@@ -1,12 +1,14 @@
 # Ruby Bron       12474223
 # Sophie Stiekema 10992499
 # Michael Stroet  11293284
+
 """
 Random walk
-This algorithm will fold a number of proteins randomly, without any regard for
-the lowest energy. It compleytely folds a protein one way before trying another
-option.
+This script will fold a number of proteins using a random walk.
+The location of the next amino acid will be randomly selected.
+The algorithm keeps placing amino acids until the protein is complete or if it gets stuck.
 """
+
 import copy
 import numpy as np
 

@@ -4,10 +4,9 @@
 
 """
 Greedy with look-ahead
-This algorithm will fold a number of proteins using a greedy algorithm with look-ahead
-Greedy in this case means always placing an amino acid at the location that
-results in the lowest energy. It compleytely folds a protein one way before
-trying another option.
+This script will fold a number of proteins using a greedy algorithm with look-ahead.
+Greedy means always placing the next amino acid at the location that has the lowest energy.
+The algorithm keeps placing amino acids until the protein is complete or if it gets stuck.
 """
 
 import copy
@@ -72,7 +71,8 @@ def greedy(protein_string, look_aheads, N_tries, dimension, matrix_size):
 
 def look_ahead(protein, look_aheads, protein_string, acid_index):
     '''
-
+    Determines the lowest energy reachable from this protein after looking several
+    steps ahead and returns it
     '''
     # If there are no more steps to be taken, return the current energy
     if look_aheads < 1 or acid_index >= len(protein_string):
@@ -116,7 +116,7 @@ def look_ahead(protein, look_aheads, protein_string, acid_index):
 
 def greedy_fold(protein, protein_string, look_aheads):
     '''
-
+    Folds a single protein with a greedy algorithm with look-ahead
     '''
 
     # For every direction for the following amino acid
@@ -171,11 +171,11 @@ def greedy_fold(protein, protein_string, look_aheads):
             protein.add_acid(acid_type, location, loc_choice)
             protein.new_energy(location)
 
-        # Protein incomplete, abort folding
+        # Protein stuck, abort folding
         else:
             break
 
-    # Return the folded protein
+    # Determine if the folding is completed and return the protein
     if protein.length == len(protein_string):
         return(True, protein)
     else:
