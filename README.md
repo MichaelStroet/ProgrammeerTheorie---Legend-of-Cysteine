@@ -59,7 +59,7 @@ Wij hebben 5 verschillende algoritmes geïmplementeerd:
 Voor meer informatie zie: [code/algorithms/README.md](https://github.com/MichaelStroet/ProgrammeerTheorie---Legend-of-Cysteine/blob/master/code/algorithms/README.md)
 
 ## Dankwoord
-
+Graag willen wij de hele staff van de Minor Programmeren bedanken, die altijd voor ons klaar stonden. Het is ongelofelijk hoeveel wij in zo’n korte periode geleerd hebben. Het begon allemaal met David van Harvard, die ons de basis leerde tijdens Programmeren 1 en 2. Tijdens Data Processing hebben wij van Sander en Nigel geleerd om hoogwaardige grafieken te tekenen, en dankzij hun hebben wij mooie 1D, 2D en 3D eiwitten gevisualiseerd. Ook zijn wij Daan erg dankbaar voor zijn interessante en uitdagende colleges. Verder willen wij Bas en Okke bedanken voor al hun hulp met het programmeren en presenteren.
 
 ## References
 
