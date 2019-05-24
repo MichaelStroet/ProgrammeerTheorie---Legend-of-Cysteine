@@ -7,12 +7,12 @@ Greedy with look-ahead
 This algorithm will fold a number of proteins using a greedy algorithm with look-ahead
 Greedy in this case means always placing an amino acid at the location that
 results in the lowest energy. It compleytely folds a protein one way before
-trying another option. 
+trying another option.
 """
 
 import copy
-import random
 import numpy as np
+import random
 
 from acid import Acid
 from protein import Protein
@@ -57,7 +57,7 @@ def greedy(protein_string, look_aheads, N_tries, dimension, matrix_size):
             if energy < energy_min:
                 energy_min = energy
                 protein_min = copy.deepcopy(protein)
-                print(f"found new lowest energy: {energy_min}")
+                print(f"New minimum energy found : {energy_min}")
 
             # Update the dictonary for histogram of solutions
             energy_counter[energy] = energy_counter.get(energy, 0) + 1

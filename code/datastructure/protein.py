@@ -2,12 +2,19 @@
 # Sophie Stiekema 10992499
 # Michael Stroet  11293284
 
+"""
+The Protein class is a matrix that will contain several acids that make up the
+protein. It has several attributes of which the most important are its length,
+energy and the acids it contains.
+It contains several fuctions to access specific locations within this matrix,
+add new acids, access pre-placed acids and (re)move them, calculate the energy...
+"""
 import numpy as np
 
 from acid import Acid
+from functions import opposite, new_location
 from graph2D import plot2D
 from graph3D import plot3D
-from functions import opposite, new_location
 
 
 class Protein:
@@ -145,7 +152,7 @@ class Protein:
         Updates the connections of the acids
         '''
         acid = self.get_acid_index(index)
-        
+
         # change the next connection of the previous acid
         if self.get_acid_index(index - 1).location:
             acid.connections["previous"] = opposite(direction)

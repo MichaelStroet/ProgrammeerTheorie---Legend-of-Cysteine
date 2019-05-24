@@ -11,8 +11,8 @@ to that protein before exploring other folding options.
 This code was inspired by the pseudo-code from Mao Chen & Wen-Qi Huang, 2005.
 """
 
-import numpy as np
 import copy
+import numpy as np
 import sys
 
 from acid import Acid

@@ -1,6 +1,9 @@
 # Ruby Bron       12474223
 # Sophie Stiekema 10992499
 # Michael Stroet  11293284
+"""
+This file contains two functions that are called in protein.py
+"""
 
 def opposite(direction):
     '''

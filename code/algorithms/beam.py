@@ -9,13 +9,13 @@ length and adding a new acid to each option before continuing.
 """
 
 import copy
-import re
 import operator
+import re
 
 from acid import Acid
-from protein import Protein
 from functions import new_location
 from operator import itemgetter
+from protein import Protein
 
 
 def beamsearch(p_string, width, dimension, matrix_size):
@@ -176,7 +176,7 @@ def keep_lowest(list_locations, beam_possibilities, acid_type):
     del temporary_proteins
 
     # Give the user an update
-    print(f"Currently placed {proteins[0].length} acids")
+    print(f"Currently placed {proteins[0].length} acids per protein")
 
     # Check if the protein is complete, if so return, if not continue searching
     if proteins[0].length == protein_length:

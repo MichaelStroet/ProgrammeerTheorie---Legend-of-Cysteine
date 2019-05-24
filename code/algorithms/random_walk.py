@@ -5,7 +5,7 @@
 Random walk
 This algorithm will fold a number of proteins randomly, without any regard for
 the lowest energy. It compleytely folds a protein one way before trying another
-option. 
+option.
 """
 import copy
 import numpy as np
@@ -55,7 +55,7 @@ def random_walk(protein_string, N_tries, dimension, matrix_size):
             if energy < energy_min:
                 energy_min = energy
                 protein_min = copy.deepcopy(protein)
-                print(f"Found new lowest energy: {energy_min}")
+                print(f"New minimum energy found : {energy_min}")
 
             # Add the energy to a dictionary counter
             energy_counter[energy] = energy_counter.get(energy, 0) + 1
