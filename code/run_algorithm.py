@@ -39,11 +39,12 @@ def run_algorithm(algorithms, algorithm, protein_string, dimension):
         "Prob. below" : "",
         "Prob. above" : "",
         "Beam width" : "",
-        "Cut size" : ""}
+        "Cut acids" : ""}
 
     # Ask the user for the matrix size to use
     matrix_size = ask_matrix_size(len(protein_string))
     parameters["Matrix size"] = f"{matrix_size}"
+    matrix_sizes = {}
 
     # Run a random walk
     if algorithm == algorithms[0]:
@@ -102,14 +103,17 @@ def run_algorithm(algorithms, algorithm, protein_string, dimension):
     # Run a hill climber
     elif algorithm == algorithms[4]:
 
-        # Ask the user for
+        # Ask the user for the number of acids they want to cut out
+        cut_acids = ask_number(4, 6, "integer", "Choose the number of acids that will be cut out of the protein and re-folded [4-6]: ")
+        parameters["Cut acids"] = f"{cut_acids}"
 
-        parameters["Cut size"] = ""
+        # Ask the user for the number of iterations that they want to re-fold a part of the protein
+        iterations = ask_number(0, 1E100, "integer", "Choose the number of parts that will be cut out of the protein and re-folded: [1-∞]: ")
+        parameters["Iterations"] = f"{iterations}"
 
         # Run the algorithm and keep track of the time
         start_time = time.time()
-        print("Hill Climber not yet implemented")
-        protein, energies, matrix_sizes = [1,2,3]#hillclimber(protein_string, dimension, matrix_size)
+        protein, energies, matrix_sizes = hillclimber(protein_string, dimension, matrix_size, iterations, cut_acids)
         elapsed_time = time.time() - start_time
 
     return protein, energies, matrix_sizes, start_time, elapsed_time, parameters

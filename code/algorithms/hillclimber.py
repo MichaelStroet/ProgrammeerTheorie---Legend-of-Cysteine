@@ -7,21 +7,25 @@ import random
 import numpy as np
 
 from acid import Acid
+from protein import Protein
+from greedy_lookahead import greedy
 
 from functions import new_location
 
-def hillclimber(protein, iterations, cut_acids):
+def hillclimber(protein_string: str, dimension: str, matrix_size: int, iterations: int, cut_acids: int):
     """
-    This algorithm will decrease the energy state of a random protein
-    by refolding parts of the protein structure
-    The input is a random start_position of a protein, the number of iterations and the number of acids to cut away
+    This algorithm will re-fold parts of the protein structure and return it
     """
-    print(protein)
-    iterations = 1
-    cut_acids = 4
+    matrix_size = len(protein_string)
+
+    # initialize a single greedy protein without look-ahead
+    protein, energy_counter, matrix_sizes = greedy(protein_string, 0, 1, dimension, matrix_size)
     new_protein = copy.deepcopy(protein)
+    energy_old = copy.deepcopy(protein.energy)
     acid_locations = [acid.location for acid in protein.acid_list]
     acid_index = len(protein.acid_list) - 1
+    energy_counter = {}
+    matrix_sizes = {}
 
     # every iteration a change is made to the folded protein
     for i in range(0, iterations):
@@ -40,30 +44,37 @@ def hillclimber(protein, iterations, cut_acids):
         acid_locations = [acid.location for acid in protein.acid_list]
         for acid_location in acid_locations:
             new_protein.new_energy(acid_location)
-            print(new_protein.energy, protein.energy)
         new_protein.energy = int(new_protein.energy / 2)
+        energy = new_protein.energy
+        energy_counter[energy] = energy_counter.get(energy, 0) + 1
+
+        # determine the smallest matrix size needed for this protein
+        protein.first_acid = protein.get_acid_index(0).location
+        min_matrix_size = protein.smallest_matrix()
+        matrix_sizes[energy] = matrix_sizes.get(energy, {})
+        matrix_sizes[energy][min_matrix_size] = matrix_sizes[energy].get(min_matrix_size, 0) + 1
 
         # compare the energy between the old and new protein
-        print("new protein and its energy:", new_protein, new_protein.energy)
         if new_protein.energy < protein.energy:
             print("lets keep this one")
+            print(energy)
             new_protein = copy.deepcopy(new_protein)
             protein = copy.deepcopy(new_protein)
         else:
-            print("discard this one, it's rubbisch!")
             new_protein = copy.deepcopy(protein)
 
-        print([acid.connections for acid in protein.acid_list])
 
-def remove_acids(protein, cut_start, cut_end):
+
+    return protein, energy_counter, matrix_sizes
+
+def remove_acids(protein: Protein, cut_start: int, cut_end: int):
     '''
     Removes acids between two points
     '''
-    print([cut_start, cut_end])
     for i in range(cut_start + 1 , cut_end):
         protein.remove_acid_index(i)
 
-def add_acids(protein, start, end):
+def add_acids(protein: Protein, start: int, end: int):
     '''
     Adds acids that were previously removed between the start and end point
     '''
@@ -84,33 +95,42 @@ def add_acids(protein, start, end):
         acid_index_list = acid_index_list[::-1]
         current_location = protein.get_acid_index(end).location
     
-    # 
+    # add acids
     _add_acids(protein, acid_index_list, end_location, current_location, 0)
 
 
 def _add_acids(protein, acid_index_list: list, end_location: list, previous_location: list, depth: int):
-    # print("acids:", acid_index_list, "end_location", end_location, "previous_location", previous_location, "depth", depth)
+    '''
+    Adds acids from a list and returns the protein if a valid path is found
+    '''
+    # if the end of the list is reached, check if the path is valid
     if depth == len(acid_index_list):
-        print("depth, energy:",protein, protein.energy)
         surrounding_locations = protein.neighbors(previous_location)
+        # if there is no end location
         if not end_location:
-            print("valid path found without end")
+            protein.state_space_visited()
+            last_acid = protein.get_acid_index(protein.length - 1)
+            last_acid.connections["next"] = ""
+
+            # set energy to zero after finding soluting, while energy bug exists
             protein.energy = 0
             return True
 
+        # if the last placed acid can be connected to the rest of the protein
         elif end_location in surrounding_locations.values():
-            print("valid path found")
+            protein.state_space_visited()
             direction = list(surrounding_locations.keys())[list(surrounding_locations.values()).index(end_location)]
-            print(direction)
             protein.add_acid_index(acid_index_list[depth-1] + 1, end_location, direction)
+
+            # set energy to zero after finding soluting
             protein.energy = 0
             return True
 
         else:
-            print("return traveler, for thou arth lost")
+            protein.state_space_visited()
             return False
 
-    # when
+    # 
     else:
         possible_sites = protein.possible_sites(previous_location)
         directions = list(protein.possible_sites(previous_location).keys())

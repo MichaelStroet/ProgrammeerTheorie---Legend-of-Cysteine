@@ -38,6 +38,7 @@ class Protein:
         self.matrix_size = matrix_size
         self.energy = 0
         self.length = 0
+        self.visited_states = 0
 
     def __str__(self):
         '''
@@ -144,7 +145,7 @@ class Protein:
         Updates the connections of the acids
         '''
         acid = self.get_acid_index(index)
-
+        
         # change the next connection of the previous acid
         if self.get_acid_index(index - 1).location:
             acid.connections["previous"] = opposite(direction)
@@ -373,22 +374,10 @@ class Protein:
         start_layer = location[0]
         start_index = location[1]
 
-        acids_x = []
-        acids_y = []
-        acids_z = []
-
         # Loop over each acid in the protein and add its info to the data lists
-        acid = self.get_acid(location)
-        while not acid.connections["next"] == "":
-            acid = self.get_acid(location)
-            layer, row, column = location
-
-            acids_x.append(column - start_index)
-            acids_y.append(row - start_index)
-            acids_z.append(layer - start_layer)
-
-            # Adjust the layer, row and column for the next acid
-            location = new_location(location, acid.connections["next"], self.layer_size, self.matrix_size)
+        acids_z = [acid.location[0] - start_layer for acid in self.acid_list]
+        acids_y = [acid.location[1] - start_index for acid in self.acid_list]
+        acids_x = [acid.location[2] - start_index for acid in self.acid_list]
 
         # Determine the minimal and maximum value of each dimension
         min_x, max_x = [min(acids_x), max(acids_x)]
@@ -401,3 +390,6 @@ class Protein:
 
         # Return the minimal matrix size
         return (max_distance * 2) + 1
+
+    def state_space_visited(self):
+        self.visited_states += 1
