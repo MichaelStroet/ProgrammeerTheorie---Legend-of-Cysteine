@@ -8,9 +8,7 @@ This algorithm will fold a protein by keeping track of several options per
 length and adding a new acid to each option before continuing.
 """
 
-import copy
-import operator
-import re
+import copy, operator, re
 
 from acid import Acid
 from functions import new_location

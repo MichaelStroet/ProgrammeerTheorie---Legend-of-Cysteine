@@ -2,15 +2,14 @@
 # Sophie Stiekema 10992499
 # Michael Stroet  11293284
 
-import copy
-import random
+import copy, random
 import numpy as np
 
 from acid import Acid
+from functions import new_location
 from protein import Protein
 from greedy_lookahead import greedy
 
-from functions import new_location
 
 def hillclimber(protein_string: str, dimension: str, matrix_size: int, iterations: int, cut_acids: int):
     """
@@ -86,7 +85,7 @@ def add_acids(protein: Protein, start: int, end: int):
         end_location = protein.get_acid_index(end).location
         current_location = protein.get_acid_index(start).location
 
-    # when the last acid is cut off 
+    # when the last acid is cut off
     elif start >= 0:
         current_location = protein.get_acid_index(start).location
 
@@ -94,7 +93,7 @@ def add_acids(protein: Protein, start: int, end: int):
     else:
         acid_index_list = acid_index_list[::-1]
         current_location = protein.get_acid_index(end).location
-    
+
     # add acids
     _add_acids(protein, acid_index_list, end_location, current_location, 0)
 
@@ -130,7 +129,7 @@ def _add_acids(protein, acid_index_list: list, end_location: list, previous_loca
             protein.state_space_visited()
             return False
 
-    # 
+    #
     else:
         possible_sites = protein.possible_sites(previous_location)
         directions = list(protein.possible_sites(previous_location).keys())

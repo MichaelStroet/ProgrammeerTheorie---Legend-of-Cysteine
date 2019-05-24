@@ -2,8 +2,8 @@
 # Sophie Stiekema 10992499
 # Michael Stroet  11293284
 
-import matplotlib.pyplot as plt
 from dict_average import dict_average
+import matplotlib.pyplot as plt
 
 def plot_matrix_sizes(matrix_sizes, used_size):
         '''
