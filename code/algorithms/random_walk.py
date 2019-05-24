@@ -57,7 +57,7 @@ def random_walk(protein_string, N_tries, dimension, matrix_size):
             if energy < energy_min:
                 energy_min = energy
                 protein_min = copy.deepcopy(protein)
-                print(f"New minimum energy found : {energy_min}")
+                print(f"New minimum energy found: {energy_min}")
 
             # Add the energy to a dictionary counter
             energy_counter[energy] = energy_counter.get(energy, 0) + 1
