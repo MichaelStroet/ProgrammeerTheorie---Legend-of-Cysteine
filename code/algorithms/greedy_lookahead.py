@@ -31,7 +31,7 @@ def greedy(protein_string, look_aheads, N_tries, dimension, matrix_size):
     protein.place_first_two(protein_string)
     location = protein.last_acid
 
-    energy_min = 0
+    energy_min = 1
 
     energy_counter = {}
     matrix_sizes = {}
@@ -67,7 +67,10 @@ def greedy(protein_string, look_aheads, N_tries, dimension, matrix_size):
             matrix_sizes[energy][min_matrix_size] = matrix_sizes[energy].get(min_matrix_size, 0) + 1
 
 
-    return protein_min, energy_counter, matrix_sizes
+    if not protein_min:
+        exit("Error: No protein 'protein_min' to return")
+    else:
+        return protein_min, energy_counter, matrix_sizes
 
 def look_ahead(protein, look_aheads, protein_string, acid_index):
     '''

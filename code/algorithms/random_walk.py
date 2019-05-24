@@ -67,7 +67,10 @@ def random_walk(protein_string, N_tries, dimension, matrix_size):
             matrix_sizes[energy] = matrix_sizes.get(energy, {})
             matrix_sizes[energy][min_matrix_size] = matrix_sizes[energy].get(min_matrix_size, 0) + 1
 
-    return protein_min, energy_counter, matrix_sizes
+    if not protein_min:
+        exit("Error: No protein 'protein_min' to return")
+    else:
+        return protein_min, energy_counter, matrix_sizes
 
 
 def walk(protein, protein_string, previous_location):

@@ -45,7 +45,7 @@ def branch_n_bound(p_string, prob_above_avg, prob_below_avg, dimension, matrix_s
     protein = Protein(matrix_size, dimension)
 
     # Initialize energy variable that keeps the lowest energy for a complete protein
-    energy_min_all = 0
+    energy_min_all = 1
 
     # Initialize energy variable that keeps the lowest energy for a protein of each length
     energy_min_partial = [0] * length_total
@@ -60,7 +60,11 @@ def branch_n_bound(p_string, prob_above_avg, prob_below_avg, dimension, matrix_s
     print(energy_tracker)
     print(energy_counter)
     print(sum(energy_counter.values()))
-    return best_protein, energy_counter, matrix_sizes
+
+    if not protein_min:
+        exit("Error: No protein 'protein_min' to return")
+    else:
+        return protein_min, energy_counter, matrix_sizes
 
 # Function that places an amino acid
 def next_acid(protein, previous_location):
@@ -69,7 +73,7 @@ def next_acid(protein, previous_location):
     to the average. There is a random element in the decision  to continue adding
     acids to this protein or to prune this branch.
     '''
-    global energy_min_all, best_protein
+    global energy_min_all, protein_min
 
     # Get the possible sites for placing a new acid
     possible_sites = protein.possible_sites(protein.last_acid)
@@ -119,7 +123,7 @@ def next_acid(protein, previous_location):
                 if energy < energy_min_all:
                     energy_min_all = energy
                     print("New minimum energy found : ",energy_min_all)
-                    best_protein = copy.deepcopy(protein)
+                    protein_min = copy.deepcopy(protein)
 
                 # Determine the smallest matrix size needed for this protein
                 min_matrix_size = protein.smallest_matrix()
