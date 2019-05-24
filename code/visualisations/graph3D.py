@@ -8,12 +8,9 @@ from matplotlib.lines import Line2D
 
 def plot3D(acid_data, protein_string, protein_energy):
     '''
-    Draws a plot of a folded protein in 3D and it's minimal matrix sizes per energy found
+    Draws a plot of a folded protein in 3D
     '''
-
-    '''
-    This figure contains the 3D folded protein
-    '''
+    # Define the figure for the 3D protein
     fig = plt.figure("3D folded protein")
     ax = fig.add_subplot(111, projection='3d')
 
@@ -21,7 +18,7 @@ def plot3D(acid_data, protein_string, protein_energy):
     colors = {
         "H" : "red",
         "P" : "blue",
-        "C" : "yellow",
+        "C" : "yellow"
     }
 
     # Create lists to contain the color and coordinates of each amino acid

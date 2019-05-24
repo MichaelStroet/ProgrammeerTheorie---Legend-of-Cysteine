@@ -5,17 +5,15 @@
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 
-
 def plot1D(protein_string):
     '''
     Draws a plot of a 'folded' protein in 1D
     '''
-
     # Assign each amino acid a color
     colors = {
         "H" : "red",
         "P" : "blue",
-        "C" : "yellow",
+        "C" : "yellow"
     }
 
     # Create lists to contain the color and coordinates of each amino acid
@@ -33,10 +31,7 @@ def plot1D(protein_string):
     x_max = max(protein_x) + 1
     y_min = -0.5
     y_max = 0.5
-
-    '''
-    This figure contains the 1D protein line
-    '''
+    # Define the figure for the 1D line
     plt.figure("Line protein", figsize = (10,4))
 
     # Draw the acid connections

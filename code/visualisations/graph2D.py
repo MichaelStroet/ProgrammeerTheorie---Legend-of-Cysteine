@@ -5,17 +5,15 @@
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 
-
 def plot2D(acid_data, protein_string, protein_energy):
     '''
-    Draws a plot of a folded protein in 2D and it's minimal matrix sizes per energy found
+    Draws a plot of a folded protein in 2D
     '''
-
     # Assign each amino acid a color
     colors = {
         "H" : "red",
         "P" : "blue",
-        "C" : "yellow",
+        "C" : "yellow"
     }
 
     # Create lists to contain the color and coordinates of each amino acid
@@ -35,9 +33,7 @@ def plot2D(acid_data, protein_string, protein_energy):
     y_min = min(protein_y) - 1
     y_max = max(protein_y) + 1
 
-    '''
-    This figure contains the 2D folded protein
-    '''
+    # Define the figure for the 2D protein
     plt.figure("2D folded protein", figsize = (x_max - x_min, y_max - y_min))
 
     # Draw the protein

@@ -3,14 +3,12 @@
 # Michael Stroet  11293284
 
 import matplotlib.pyplot as plt
-
 from dict_average import dict_average
 
 def plot_matrix_sizes(matrix_sizes, used_size):
         '''
         Draws a plot of the matrix size range per energy
         '''
-
         # Dictionaries for the range of matrix sizes per energy
         smallest_matrix_sizes = {}
         average_matrix_sizes = {}
