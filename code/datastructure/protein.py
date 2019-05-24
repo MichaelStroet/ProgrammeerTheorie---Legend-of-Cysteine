@@ -122,15 +122,17 @@ class Protein:
         return self.acid_list[index]
 
     def remove_acid_index(self, index):
-        """Removes an acid object and updates the energy"""
+        '''
+        Removes an acid object and updates the energy
+        '''
         acid = self.get_acid_index(index)
         self.energy -= self.calculate_energy(acid.location)
         self._update_acid_location(acid, None)
 
     def add_acid_index(self, index, location, direction):
-        """
+        '''
         Adds an acid object based on an index
-        """
+        '''
         acid = self.get_acid_index(index)
         self._update_acid_location(acid, location)
         self.energy += self.calculate_energy(acid.location)
