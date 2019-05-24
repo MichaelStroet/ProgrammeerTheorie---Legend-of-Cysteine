@@ -27,7 +27,7 @@ def greedy(protein_string, look_aheads, N_tries, dimension, matrix_size):
     protein.place_first_two(protein_string)
     location = protein.last_acid
 
-    energy_min = 0
+    energy_min = -1
 
     energy_counter = {}
     matrix_sizes = {}
@@ -49,7 +49,7 @@ def greedy(protein_string, look_aheads, N_tries, dimension, matrix_size):
             energy = protein.energy
 
             # When its energy is lower than lowest energy found, save the protein
-            if energy < energy_min:
+            if energy <= energy_min:
                 energy_min = energy
                 protein_min = copy.deepcopy(protein)
                 print(f"found new lowest energy: {energy_min}")
@@ -62,12 +62,11 @@ def greedy(protein_string, look_aheads, N_tries, dimension, matrix_size):
             matrix_sizes[energy] = matrix_sizes.get(energy, {})
             matrix_sizes[energy][min_matrix_size] = matrix_sizes[energy].get(min_matrix_size, 0) + 1
 
-
     return protein_min, energy_counter, matrix_sizes
 
 def look_ahead(protein, look_aheads, protein_string, acid_index):
     '''
-
+    Looks ahead of the protein and saves the energy
     '''
     # If there are no more steps to be taken, return the current energy
     if look_aheads < 1 or acid_index >= len(protein_string):
