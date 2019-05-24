@@ -4,7 +4,7 @@
 
 """
 Probability based Branch and Bound
-This algorithm will fold a protein by adding new acids to the protein and saving
+This script will fold a protein by adding new acids to the protein and saving
 it if it has the lowest energy found until now. It will try to place all acids
 to that protein before exploring other folding options.
 
