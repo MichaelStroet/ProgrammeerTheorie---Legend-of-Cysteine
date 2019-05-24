@@ -104,11 +104,11 @@ def run_algorithm(algorithms, algorithm, protein_string, dimension):
     elif algorithm == algorithms[4]:
 
         # Ask the user for the number of acids they want to cut out
-        cut_acids = ask_number(4, 6, "integer", "Choose the number of acids that will be cut out of the protein and re-folded [4-6]: ")
+        cut_acids = ask_number(4, 6, "integer", "How many acids will be cut out of the protein each time[4-6]: ")
         parameters["Cut acids"] = f"{cut_acids}"
 
         # Ask the user for the number of iterations that they want to re-fold a part of the protein
-        iterations = ask_number(0, 1E100, "integer", "Choose the number of parts that will be cut out of the protein and re-folded: [1-∞]: ")
+        iterations = ask_number(1, 1E100, "integer", "How many times will the protein be cut and re-folded(iterations): [1-∞]: ")
         parameters["Iterations"] = f"{iterations}"
 
         # Run the algorithm and keep track of the time
