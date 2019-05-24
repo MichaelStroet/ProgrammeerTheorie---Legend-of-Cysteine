@@ -1,4 +1,8 @@
 # Visualisaties
 
-Elk betsand bevat functies om een eiwit in 1D, 2D, of 3D te visualiseren.
-Minimal_size.py berekent de minimale grootte van de matrix voor een bepaald eiwit. 
+Aan de hand van de keuzes in main.py kunnen er verschillende figuren gemaakt worden om de resultaten te visualiseren.
+
+* [graph1D](graph1D.py) Een 1D gevouwen proteïne
+* [graph2D](graph2D.py) Een 2D gevouwen proteïne
+* [graph3D](graph3D.py) Een 3D gevouwen proteïne
+* [minimal_sizes](minimal_sizes.py) De spreiding van matrix groottes van alle gevonden oplossingen van een algoritme
