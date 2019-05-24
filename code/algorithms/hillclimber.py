@@ -62,7 +62,11 @@ def hillclimber(protein_string: str, dimension: str, matrix_size: int, iteration
 
         # Compare the energy between the old and new protein
         if new_protein.energy < protein.energy:
+<<<<<<< HEAD
             print(f"New minimum energy found : {energy}")
+=======
+            print(f"New minimum energy found: {new_protein.energy}")
+>>>>>>> 9f0b51895575dfd4b919777b6d99ba47556ae95d
             new_protein = copy.deepcopy(new_protein)
             protein = copy.deepcopy(new_protein)
         else:
