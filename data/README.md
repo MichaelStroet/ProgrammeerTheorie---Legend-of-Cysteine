@@ -1,3 +1,3 @@
 # Data
 
-In de input.txt file zijn de 9 eiwit strings die wij van de [Heuristieken website](http://heuristieken.nl/wiki/index.php?title=Protein_Pow(d)er) gehaald hebben.
+In het [input](input.txt) bestand staan de negen eiwiten die wij moeten vouwen. Deze zijn afkomstig van de [Heuristieken website](http://heuristieken.nl/wiki/index.php?title=Protein_Pow(d)er).
