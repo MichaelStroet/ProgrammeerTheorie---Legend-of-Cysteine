@@ -54,10 +54,10 @@ def beamsearch(p_string, width, dimension, matrix_size):
     protein_min = proteins[0]
     energy_min = protein_min.energy
 
-    if not protein_min:
-        exit("Error: No protein 'protein_min' to return")
-    else:
+    if protein_min:
         return protein_min, energy_counter, matrix_sizes
+    else:
+        exit("Error: No protein 'protein_min' to return")
 
 # Function that calculates the next steps and chooses the ones with minimal energy
 def find_possibilities(list_locations):

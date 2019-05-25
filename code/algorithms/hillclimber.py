@@ -24,8 +24,8 @@ def hillclimber(protein_string: str, dimension: str, matrix_size: int, iteration
     '''
     matrix_size = len(protein_string)
 
-    # Initialize a single greedy protein without look-ahead
-    protein, energy_counter, matrix_sizes = greedy(protein_string, 0, 1, dimension, matrix_size)
+    # Initialize a protein from greedy without look-ahead
+    protein, energy_counter, matrix_sizes = greedy(protein_string, 0, 5, dimension, matrix_size)
     new_protein = copy.deepcopy(protein)
     energy_old = copy.deepcopy(protein.energy)
     acid_locations = [acid.location for acid in protein.acid_list]
@@ -35,6 +35,10 @@ def hillclimber(protein_string: str, dimension: str, matrix_size: int, iteration
 
     # Every iteration a change is made to the folded protein
     for i in range(0, iterations):
+
+        # Print an update for every 1000th iteration
+        if (i + 1) % 1000 == 0:
+            print(f"{i + 1}th iteration done")
 
         # Determine cuts in the protein, leaving atleast one acid
         cut_start = random.randint(-1, acid_index - cut_acids)
@@ -68,10 +72,11 @@ def hillclimber(protein_string: str, dimension: str, matrix_size: int, iteration
         else:
             new_protein = copy.deepcopy(protein)
 
-    if not protein:
-        exit("Error: No protein 'protein' to return")
-    else:
+    if protein:
         return protein, energy_counter, matrix_sizes
+    else:
+        exit("Error: No protein 'protein' to return")
+
 
 
 def remove_acids(protein: Protein, cut_start: int, cut_end: int):
@@ -140,7 +145,7 @@ def _add_acids(protein, acid_index_list: list, end_location: list, previous_loca
             protein.state_space_visited()
             return False
 
-    # Place acids 
+    # Place acids
     else:
         possible_sites = protein.possible_sites(previous_location)
         directions = list(protein.possible_sites(previous_location).keys())

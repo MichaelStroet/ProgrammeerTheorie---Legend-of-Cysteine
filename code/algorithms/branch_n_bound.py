@@ -60,10 +60,10 @@ def branch_n_bound(p_string, prob_above_avg, prob_below_avg, dimension, matrix_s
     print(energy_counter)
     print(sum(energy_counter.values()))
 
-    if not protein_min:
-        exit("Error: No protein 'protein_min' to return")
-    else:
+    if protein_min:
         return protein_min, energy_counter, matrix_sizes
+    else:
+        exit("Error: No protein 'protein_min' to return")
 
 # Function that places an amino acid
 def next_acid(protein, previous_location):

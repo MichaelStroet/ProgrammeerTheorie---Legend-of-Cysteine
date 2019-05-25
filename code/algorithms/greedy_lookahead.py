@@ -66,10 +66,10 @@ def greedy(protein_string, look_aheads, N_tries, dimension, matrix_size):
             matrix_sizes[energy][min_matrix_size] = matrix_sizes[energy].get(min_matrix_size, 0) + 1
 
 
-    if not protein_min:
-        exit("Error: No protein 'protein_min' to return")
-    else:
+    if protein_min:
         return protein_min, energy_counter, matrix_sizes
+    else:
+        exit("Error: No protein 'protein_min' to return")
 
 def look_ahead(protein, look_aheads, protein_string, acid_index):
     '''
