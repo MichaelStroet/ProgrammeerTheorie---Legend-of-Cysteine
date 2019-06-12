@@ -1,0 +1,5 @@
+# Zhang, Jinfeng, Samuel C. Kou, and Jun S. Liu. (2007)
+# Biopolymer structure simulation and optimization via fragment regrowth Monte Carlo.
+# Journal of Chemical Physics 126(22): 225101.
+# http://dx.doi.org/10.1063/1.2736681
+HHHHPPPPHHHHHHHHHHHHPPPPPPHHHHHHHHHHHHPPPHHHHHHHHHHHHPPPHHHHHHHHHHHHPPPHPPHHPPHHPPHPH

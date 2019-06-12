@@ -49,6 +49,12 @@ def random_walk(protein_string, N_tries, dimension, matrix_size):
         # Run the next random walk
         solution_found, protein = walk(protein, protein_string, location)
 
+        while not solution_found:
+            while protein.length > 2:
+                protein.remove_acid(0)
+
+            solution_found, protein = walk(protein, protein_string, location)
+
         # When a complete protein has been created, get its energy
         if solution_found:
             energy = protein.energy

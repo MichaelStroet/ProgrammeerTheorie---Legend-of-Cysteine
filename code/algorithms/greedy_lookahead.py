@@ -47,6 +47,12 @@ def greedy(protein_string, look_aheads, N_tries, dimension, matrix_size):
 
         solution_found, protein = greedy_fold(protein, protein_string, look_aheads)
 
+        while not solution_found:
+            while protein.length > 2:
+                protein.remove_acid(0)
+
+            solution_found, protein = greedy_fold(protein, protein_string, look_aheads)
+
         # When a protein is created save its energy
         if solution_found:
             energy = protein.energy

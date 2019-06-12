@@ -134,3 +134,25 @@ def get_choices(save_results, show_results, dimensions, algorithms, proteins):
     protein = choose(proteins, f"Choose a protein [1-{len(proteins)}]: ")
 
     return [save, show, dimension, algorithm, protein]
+
+def get_choices_competition(algorithms, protein_files):
+    '''
+    Asks the user to choose from multiple lists of options and returns the answers as a list - COMPETITION EDITION
+    '''
+
+    protein_file = choose(protein_files, f"Choose a protein [1-{len(protein_files)}]: ")
+
+    with open(f"data/proteins/{protein_file}", "r") as file:
+        for line in file:
+            if not line[0] == "#" and line[0] in ["P", "H", "C"]:
+                protein = line.rstrip()
+                print(f"protein:\n>{protein}\n")
+                break
+
+    dimension = protein_file[8:10]
+    print(f"dimension:\n>{dimension}\n")
+
+    algorithm = choose(algorithms, f"Choose an algorithm [1-{len(algorithms)}]: ")
+
+
+    return [algorithm, protein, dimension, protein_file]
