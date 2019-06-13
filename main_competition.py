@@ -22,7 +22,7 @@ sys.path.append(os.path.join(directory, "results"))
 
 # Import auxiliary functions
 from user_input import get_choices_competition as get_choices
-from run_algorithm_competition import run_algorithm
+from run_algorithm import run_algorithm
 
 def parse_data():
     '''
@@ -36,10 +36,49 @@ def parse_data():
 
     return file_lines
 
-def save_result(protein, protein_file, algorithm):
+def save_result(protein, protein_string, protein_file, algorithm, parameters):
+    file_path = f"data/folded_proteins/{protein_file}"
 
-    with open(f"data/folded_proteins/{protein_file}", "w") as file:
-        pass
+    if not os.path.isfile(file_path):
+        file_empty = True
+    else:
+        with open(file_path, "r") as file:
+            if os.stat(file_path).st_size == 0:
+                file_empty = True
+            else:
+                file_empty = False
+                file_lines = file.readlines()
+                file_energy = int(file_lines[10][10:-1])
+                print(protein.energy, file_energy)
+                print(parameters.items())
+
+    # Check if an existing file already has a lower or equal energy
+    if not file_empty:
+        if protein.energy >= file_energy:
+            return f"Protein energy ({protein.energy}) is larger or equal to the file energy ({file_energy}. '{protein_file}' unchanged)"
+
+    # Create/Update the text file
+    with open(file_path, "w") as file:
+        file.write("# An afternoon of algorithmic protein folding - competition\n\n")
+
+        file.write("# The Legend of Cysteine:\n")
+        file.write("# Ruby Bron\n")
+        file.write("# Michael Stroet\n")
+        file.write("# Sophie Stiekema\n\n")
+
+        file.write(f"{protein_string}\n")
+        file.write("[w,o,r,k,i,n,p,r,o,g,r,e,s,s]\n\n")
+
+        file.write(f"# Energy: {protein.energy}\n")
+        file.write(f"# Algorithm: {algorithm}\n\n")
+
+        file.write("# Parameters:\n")
+
+        for parameter in parameters.items():
+            if len(parameter[1]) > 0:
+                file.write(f"# {parameter[0]}: {parameter[1]}\n")
+
+        return f"Created/Updated '{protein_file}' in data/folded_proteins"
 
 if __name__ == "__main__":
 
@@ -53,7 +92,7 @@ if __name__ == "__main__":
 
     # Run the chosen algorithm
     results = run_algorithm(algorithms, choice_algorithm, choice_protein, dimension)
-    protein, energies, start, elapsed_time, parameters = results
+    protein, energies, matrix_sizes, start, elapsed_time, parameters = results
 
     # Determine the total protein solutions evaluated from the energies dictionary
     total_evaluated = sum(energies.values())
@@ -68,6 +107,6 @@ if __name__ == "__main__":
     protein.visualise(choice_protein)
     print(f"Lowest energy: {protein.energy}")
 
-    save_result(protein, protein_file, choice_algorithm)
+    print(save_result(protein, choice_protein, protein_file, choice_algorithm, parameters))
 
     plt.show()

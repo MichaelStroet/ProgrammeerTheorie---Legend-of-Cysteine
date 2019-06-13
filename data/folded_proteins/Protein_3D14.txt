@@ -8,7 +8,7 @@
 HHPHHHPHPHHHPH
 [w,o,r,k,i,n,p,r,o,g,r,e,s,s]
 
-# Energy: -6
+# Energy: -7
 # Algorithm: Beam Search
 
 # Parameters:
