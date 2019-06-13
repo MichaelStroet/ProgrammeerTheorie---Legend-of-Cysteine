@@ -36,7 +36,7 @@ def parse_data():
 
     return file_lines
 
-def save_result(protein, protein_string, protein_file, algorithm, parameters):
+def save_result(protein, protein_string, protein_file, elapsed_HHMMSS, algorithm, parameters):
     file_path = f"data/folded_proteins/{protein_file}"
 
     if not os.path.isfile(file_path):
@@ -49,8 +49,6 @@ def save_result(protein, protein_string, protein_file, algorithm, parameters):
                 file_empty = False
                 file_lines = file.readlines()
                 file_energy = int(file_lines[10][10:-1])
-                print(protein.energy, file_energy)
-                print(parameters.items())
 
     # Check if an existing file already has a lower or equal energy
     if not file_empty:
@@ -67,9 +65,10 @@ def save_result(protein, protein_string, protein_file, algorithm, parameters):
         file.write("# Sophie Stiekema\n\n")
 
         file.write(f"{protein_string}\n")
-        file.write("[w,o,r,k,i,n,p,r,o,g,r,e,s,s]\n\n")
+        file.write(f"{protein.competition_format()}\n\n")
 
         file.write(f"# Energy: {protein.energy}\n")
+        file.write(f"# Elapsed time: {elapsed_HHMMSS}\n")
         file.write(f"# Algorithm: {algorithm}\n\n")
 
         file.write("# Parameters:\n")
@@ -103,10 +102,10 @@ if __name__ == "__main__":
 
     print(f"\nAlgorithm finished\nElapsed time: {elapsed_HHMMSS}")
 
+    print(save_result(protein, choice_protein, protein_file, elapsed_HHMMSS, choice_algorithm, parameters))
+
     # Displays and prints the results
     protein.visualise(choice_protein)
     print(f"Lowest energy: {protein.energy}")
-
-    print(save_result(protein, choice_protein, protein_file, choice_algorithm, parameters))
 
     plt.show()

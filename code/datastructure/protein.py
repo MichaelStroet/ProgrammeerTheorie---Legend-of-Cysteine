@@ -345,3 +345,35 @@ class Protein:
 
     def state_space_visited(self):
         self.visited_states += 1
+
+    def competition_format(self):
+
+        direction_to_number = {
+            "up" : 2,
+            "down" : -2,
+            "left" : -1,
+            "right" : 1,
+            "in" : 3,
+            "out" : -3
+        }
+
+        steps = []
+
+        location = self.first_acid
+
+        # Loop over each acid in the protein and add the next step to the list
+        acid = self.get_acid(location)
+        next_connection = acid.connections["next"]
+
+        while not next_connection == "":
+
+            steps.append(direction_to_number[next_connection])
+
+            # Determine the location of the next acid
+            location = new_location(location, acid.connections["next"], self.layer_size, self.matrix_size)
+
+            acid = self.get_acid(location)
+            next_connection = acid.connections["next"]
+
+        print(steps)
+        return steps

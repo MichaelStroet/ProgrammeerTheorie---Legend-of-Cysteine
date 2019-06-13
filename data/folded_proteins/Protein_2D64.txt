@@ -1,0 +1,17 @@
+# An afternoon of algorithmic protein folding - competition
+
+# The Legend of Cysteine:
+# Ruby Bron
+# Michael Stroet
+# Sophie Stiekema
+
+HHHHHHHHHHHHPHPHPPHHPPHHPPHPPHHPPHHPPHPPHHPPHHPPHPHPHHHHHHHHHHHH
+[-2, 1, 2, 2, -1, -1, -2, -2, -2, 1, 1, 1, 2, 2, 2, 1, 2, -1, -1, 2, -1, -2, -1, 2, -1, -2, -1, -2, 1, -2, -1, -2, 1, -2, -1, -2, 1, -2, 1, 2, 1, -2, 1, 2, 1, -2, 1, 2, 2, 2, 2, 1, -2, -2, -2, 1, 2, 2, 2, 1, -2, -2, -2]
+
+# Energy: -36
+# Elapsed time: 00:00:22
+# Algorithm: Beam Search
+
+# Parameters:
+# Matrix size: 33
+# Beam width: 50
