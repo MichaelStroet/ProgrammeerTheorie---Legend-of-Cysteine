@@ -36,6 +36,11 @@ def parse_data():
 
     return file_lines
 
+def save_result(protein, protein_file, algorithm):
+
+    with open(f"data/folded_proteins/{protein_file}", "w") as file:
+        pass
+
 if __name__ == "__main__":
 
     # Lists of options for user input
@@ -62,5 +67,7 @@ if __name__ == "__main__":
     # Displays and prints the results
     protein.visualise(choice_protein)
     print(f"Lowest energy: {protein.energy}")
+
+    save_result(protein, protein_file, choice_algorithm)
 
     plt.show()
