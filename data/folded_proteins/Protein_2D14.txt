@@ -9,9 +9,9 @@ HHPHHHPHPHHHPH
 [-2, 1, 2, 2, -1, 2, 1, 1, -2, -2, -2, 1, 2]
 
 # Energy: -6
-# Elapsed time: 00:00:00
+# Elapsed time: 00:00:07
 # Algorithm: Beam Search
 
 # Parameters:
 # Matrix size: 7
-# Beam width: 10
+# Beam width: 10000

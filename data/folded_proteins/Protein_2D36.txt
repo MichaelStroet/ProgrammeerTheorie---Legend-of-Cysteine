@@ -6,12 +6,13 @@
 # Sophie Stiekema
 
 PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP
-[-2, -2, -2, -2, -2, 1, 2, 2, 2, 2, 1, -2, 1, -2, -1, -2, 1, -2, -1, -2, -2, 1, 2, 1, -2, 1, 2, 2, -1, 2, 1, 2, -1, 2, 2]
+[-2, 1, 2, 1, -2, 1, 2, 1, 1, 2, 1, 2, -1, -1, -2, -1, 2, -1, -2, -1, -1, 2, 1, 2, -1, 2, 1, 1, -2, 1, 2, 1, -2, 1, 1]
 
-# Energy: -13
-# Elapsed time: 00:00:09
-# Algorithm: Beam Search
+# Energy: -14
+# Elapsed time: 00:00:44
+# Algorithm: Greedy - Look-ahead
 
 # Parameters:
 # Matrix size: 19
-# Beam width: 100
+# Iterations: 3000
+# Look-aheads: 2

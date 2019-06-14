@@ -6,12 +6,13 @@
 # Sophie Stiekema
 
 PPPPPPPPPPPPPPHPPPPPPPPPPPPPPPPPPPPPPHPPPPPPPPHPPPPPPPPPPPPPPPPHPPPPHPHPPPPPPPPP
-[-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 1, 2, 2, 1, -2, -2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+[-2, -2, 1, -2, -1, -2, -1, -1, -1, -2, -1, 2, -1, -1, 2, 1, 1, 1, 2, 1, 2, 2, -1, 2, -1, 2, -1, -2, -2, -1, -2, 1, -2, -1, -1, -2, -2, -1, -2, -1, -2, -2, 1, 2, 1, 2, 1, 1, -2, -1, -2, -1, -2, -2, 1, 2, 1, 1, 2, 2, 1, 1, -2, -1, -2, -2, 1, 2, 1, 2, 1, 2, 1, -2, -2, -1, -2, 1, 1]
 
-# Energy: -2
-# Elapsed time: 00:00:37
-# Algorithm: Beam Search
+# Energy: -4
+# Elapsed time: 00:06:54
+# Algorithm: Greedy - Look-ahead
 
 # Parameters:
-# Matrix size: 41
-# Beam width: 50
+# Matrix size: 19
+# Iterations: 10
+# Look-aheads: 10

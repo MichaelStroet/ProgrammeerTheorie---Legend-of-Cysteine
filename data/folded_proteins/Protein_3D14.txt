@@ -5,13 +5,13 @@
 # Michael Stroet
 # Sophie Stiekema
 
-HPHPPHHPHPPHPHHPPHPH
-[-2, 1, 1, 2, -1, 2, 1, 2, 2, -1, -2, -1, -2, -1, 2, -1, -2, -2, 1]
+HHPHHHPHPHHHPH
+[-2, 1, 2, 3, -1, 3, 1, -2, -3, -1, -2, -1, 2]
 
-# Energy: -9
-# Elapsed time: 00:00:56
+# Energy: -7
+# Elapsed time: 00:00:48
 # Algorithm: Beam Search
 
 # Parameters:
-# Matrix size: 11
+# Matrix size: 7
 # Beam width: 10000

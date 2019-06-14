@@ -26,7 +26,7 @@ from run_algorithm import run_algorithm
 
 def parse_data():
     '''
-    Parses the  text file containing proteins represented as a string
+    Parses the text file containing proteins represented as a string
     '''
 
     # Opens the file as a list of strings and returns it
@@ -96,7 +96,7 @@ if __name__ == "__main__":
     # Determine the total protein solutions evaluated from the energies dictionary
     total_evaluated = sum(energies.values())
 
-    # Convert the unix timestamps to dates and/or hours, minutes and seconds)
+    # Convert the unix timestamps to dates and/or hours, minutes and seconds
     start_time = time.strftime("%Y-%m-%d_%H-%M-%S", time.gmtime(start))
     elapsed_HHMMSS = time.strftime("%H:%M:%S", time.gmtime(elapsed_time))
 
