@@ -376,4 +376,4 @@ class Protein:
             next_connection = acid.connections["next"]
 
         print(steps)
-        return steps
+        return str(steps)[1:-1]

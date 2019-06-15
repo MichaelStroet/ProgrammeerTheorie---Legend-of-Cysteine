@@ -6,7 +6,7 @@
 # Sophie Stiekema
 
 HHPHHHPHPHHHPH
-[-2, 1, 2, 3, -1, 3, 1, -2, -3, -1, -2, -1, 2]
+-2, 1, 2, 3, -1, 3, 1, -2, -3, -1, -2, -1, 2
 
 # Energy: -7
 # Elapsed time: 00:00:48

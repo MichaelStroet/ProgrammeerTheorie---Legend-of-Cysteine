@@ -6,10 +6,10 @@
 # Sophie Stiekema
 
 HHPHHHPHPHHHPH
-[-2, 1, 2, 2, -1, 2, 1, 1, -2, -2, -2, 1, 2]
+-2, 1, 2, 2, -1, 2, 1, 1, -2, -2, -2, 1, 2
 
 # Energy: -6
-# Elapsed time: 00:00:07
+# Elapsed time: 00:00:06
 # Algorithm: Beam Search
 
 # Parameters:

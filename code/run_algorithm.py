@@ -50,7 +50,7 @@ def run_algorithm(algorithms, algorithm, protein_string, dimension):
     if algorithm == algorithms[0]:
 
         # Ask the user for the number of runs
-        N_runs = ask_number(2, 1E100, "integer", "How many proteins to fold [2-∞]?: ")
+        N_runs = ask_number(1, 1E100, "integer", "How many proteins to fold [2-∞]?: ")
         parameters["Iterations"] = f"{N_runs}"
 
         # Run the algorithm and keep track of the time
@@ -62,7 +62,7 @@ def run_algorithm(algorithms, algorithm, protein_string, dimension):
     elif algorithm == algorithms[1]:
 
         # Ask the user for the number of runs and look-aheads
-        N_runs = ask_number(2, 1E100, "integer", "How many proteins to fold [2-∞]?: ")
+        N_runs = ask_number(1, 1E100, "integer", "How many proteins to fold [1-∞]?: ")
         parameters["Iterations"] = f"{N_runs}"
 
         look_aheads = ask_number(0, 1E100, "integer", "How many steps to look ahead [0-∞]?: ")
