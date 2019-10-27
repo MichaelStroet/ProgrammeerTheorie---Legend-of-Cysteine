@@ -150,6 +150,8 @@ def get_choices_competition(algorithms, protein_files):
                 break
 
     dimension = protein_file[8:10]
+    if dimension == "10":
+        dimension = "3D"
     print(f"dimension:\n>{dimension}\n")
 
     algorithm = choose(algorithms, f"Choose an algorithm [1-{len(algorithms)}]: ")

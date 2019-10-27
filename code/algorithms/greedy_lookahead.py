@@ -38,7 +38,7 @@ def greedy(protein_string, look_aheads, N_tries, dimension, matrix_size):
     # Try to fold N_tries protein greedy like
     for i in range(N_tries):
 
-        if (i + 1) % 1000 == 0:
+        if (i + 1) % 1 == 0:
             print(f"{i + 1}th protein folded")
 
         # Remove acids until only the first two are left
